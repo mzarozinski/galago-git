@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashSet;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * This acts as the client-side stub for forwarding requests across 

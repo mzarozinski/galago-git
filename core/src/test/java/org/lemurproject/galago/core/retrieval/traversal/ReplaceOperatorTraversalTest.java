@@ -5,7 +5,7 @@ package org.lemurproject.galago.core.retrieval.traversal;
 
 import junit.framework.TestCase;
 import org.lemurproject.galago.core.retrieval.query.Node;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

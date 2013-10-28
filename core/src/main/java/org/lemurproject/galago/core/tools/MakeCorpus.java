@@ -17,14 +17,15 @@ import org.lemurproject.galago.core.index.corpus.KeyValuePairToDocument;
 import org.lemurproject.galago.core.parse.DocumentNumberer;
 import org.lemurproject.galago.core.types.DocumentSplit;
 import org.lemurproject.galago.core.types.KeyValuePair;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.tupleflow.TupleFlowUtility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.execution.ConnectionAssignmentType;
 import org.lemurproject.galago.tupleflow.execution.InputStep;
 import org.lemurproject.galago.tupleflow.execution.Job;
 import org.lemurproject.galago.tupleflow.execution.OutputStep;
 import org.lemurproject.galago.tupleflow.execution.Stage;
 import org.lemurproject.galago.tupleflow.execution.Step;
+import org.lemurproject.galago.utility.Parameters;
 
 /*
  * @author sjh
@@ -65,7 +66,7 @@ public class MakeCorpus extends AppFunction {
     stage.add(new Step(DocumentNumberer.class));
 
     stage.add(new Step(DocumentToKeyValuePair.class));
-    stage.add(Utility.getSorter(new KeyValuePair.KeyOrder()));
+    stage.add(TupleFlowUtility.getSorter(new KeyValuePair.KeyOrder()));
     stage.add(new Step(KeyValuePairToDocument.class));
     p = new Parameters();
     p.set("filename", outputCorpus);
@@ -90,7 +91,7 @@ public class MakeCorpus extends AppFunction {
     stage.add(BuildStageTemplates.getTokenizerStep(corpusParameters));
     stage.add(new Step(DocumentNumberer.class));
     stage.add(new Step(CorpusFolderWriter.class, corpusWriterParameters.clone()));
-    stage.add(Utility.getSorter(new KeyValuePair.KeyOrder()));
+    stage.add(TupleFlowUtility.getSorter(new KeyValuePair.KeyOrder()));
     stage.add(new OutputStep("indexData"));
     return stage;
   }

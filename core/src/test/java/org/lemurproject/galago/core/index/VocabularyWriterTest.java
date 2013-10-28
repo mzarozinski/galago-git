@@ -8,7 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.util.Arrays;
 import junit.framework.TestCase;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

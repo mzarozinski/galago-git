@@ -10,13 +10,13 @@ import org.lemurproject.galago.tupleflow.IncompatibleProcessorException;
 import org.lemurproject.galago.tupleflow.InputClass;
 import org.lemurproject.galago.tupleflow.Linkage;
 import org.lemurproject.galago.tupleflow.OutputClass;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.Processor;
 import org.lemurproject.galago.tupleflow.Source;
 import org.lemurproject.galago.tupleflow.Step;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.execution.Verified;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * Writes documents to a file - new output file is created in the folder

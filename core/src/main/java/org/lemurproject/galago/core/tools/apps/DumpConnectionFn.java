@@ -8,9 +8,9 @@ import java.util.Arrays;
 import org.lemurproject.galago.core.tools.AppFunction;
 import org.lemurproject.galago.tupleflow.FileOrderedReader;
 import org.lemurproject.galago.tupleflow.OrderedCombiner;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.TypeReader;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

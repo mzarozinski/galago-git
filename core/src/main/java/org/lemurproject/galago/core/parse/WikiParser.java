@@ -13,7 +13,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.lemurproject.galago.core.types.DocumentSplit;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;

@@ -13,8 +13,8 @@ import org.lemurproject.galago.core.tools.SearchWebHandler;
 import org.lemurproject.galago.core.tools.StreamContextHandler;
 import org.lemurproject.galago.core.tools.URLMappingHandler;
 import org.lemurproject.galago.core.tools.XMLContextHandler;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 import org.mortbay.jetty.Server;
 
 /**

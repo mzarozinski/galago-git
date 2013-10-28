@@ -19,11 +19,11 @@ import org.lemurproject.galago.core.tools.AppFunction;
 import org.lemurproject.galago.core.types.DocumentFeature;
 import org.lemurproject.galago.core.types.DocumentIndicator;
 import org.lemurproject.galago.core.types.KeyValuePair;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.tupleflow.TupleFlowUtility;
 import org.lemurproject.galago.tupleflow.execution.Job;
 import org.lemurproject.galago.tupleflow.execution.Stage;
 import org.lemurproject.galago.tupleflow.execution.Step;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * Reads a file in a standard format Writes an indicator index from the data in
@@ -56,7 +56,7 @@ public class BuildSpecialPart extends AppFunction {
     Stage stage = new Stage(jobName);
     stage.add(new Step(FileLineParser.class, parserParams));
     stage.add(new Step(LineSplitter.class, splitterParams));
-    stage.add(Utility.getSorter(new KeyValuePair.KeyOrder()));
+    stage.add(TupleFlowUtility.getSorter(new KeyValuePair.KeyOrder()));
     stage.add(new Step(NumberKeyValuePairs.class, indexParams));
 
     return stage;
@@ -72,7 +72,7 @@ public class BuildSpecialPart extends AppFunction {
 
     // add final steps
     stage.add(new Step(IndicatorExtractor.class, p));
-    stage.add(Utility.getSorter(new DocumentIndicator.DocumentOrder()));
+    stage.add(TupleFlowUtility.getSorter(new DocumentIndicator.DocumentOrder()));
 
     Parameters writerParams = new Parameters();
     writerParams.set("filename", indexPath + File.separator + p.getString("partName"));
@@ -94,7 +94,7 @@ public class BuildSpecialPart extends AppFunction {
     Stage stage = getSpecialJobStage("priorIndexer", p);
 
     stage.add(new Step(PriorExtractor.class, p));
-    stage.add(Utility.getSorter(new DocumentFeature.DocumentOrder()));
+    stage.add(TupleFlowUtility.getSorter(new DocumentFeature.DocumentOrder()));
 
     Parameters writerParams = new Parameters();
     writerParams.set("filename", indexPath + File.separator + p.getString("partName"));

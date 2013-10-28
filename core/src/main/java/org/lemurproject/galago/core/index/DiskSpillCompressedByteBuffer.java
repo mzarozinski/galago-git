@@ -32,7 +32,7 @@ import java.io.OutputStream;
 import java.io.FileOutputStream;
 import java.io.File;
 import java.util.ArrayList;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 public class DiskSpillCompressedByteBuffer extends OutputStream {
 

@@ -14,8 +14,8 @@ import org.lemurproject.galago.core.retrieval.iterator.disk.DiskExtentIterator;
 import org.lemurproject.galago.core.retrieval.iterator.disk.SourceIterator;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeType;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * Reads a simple positions-based index, where each inverted list in the index

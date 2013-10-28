@@ -11,7 +11,7 @@ import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeType;
 import org.lemurproject.galago.core.retrieval.iterator.ScoreIterator;
 import org.lemurproject.galago.core.retrieval.iterator.disk.DiskScoreIterator;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * Retrieves lists of floating point numbers which can be used as document

@@ -11,8 +11,8 @@ import junit.framework.TestCase;
 import org.lemurproject.galago.contrib.util.TestingUtils;
 import org.lemurproject.galago.core.retrieval.Retrieval;
 import org.lemurproject.galago.core.retrieval.RetrievalFactory;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

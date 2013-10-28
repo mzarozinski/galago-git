@@ -9,12 +9,12 @@ import java.util.List;
 import org.lemurproject.galago.core.parse.Document;
 import org.lemurproject.galago.tupleflow.IncompatibleProcessorException;
 import org.lemurproject.galago.tupleflow.Linkage;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.Processor;
 import org.lemurproject.galago.tupleflow.Source;
 import org.lemurproject.galago.tupleflow.Step;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
 import org.lemurproject.galago.tupleflow.execution.ErrorStore;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * 

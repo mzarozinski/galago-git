@@ -2,14 +2,12 @@
 package org.lemurproject.galago.core.parse;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 import org.lemurproject.galago.tupleflow.InputClass;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.OutputClass;
 import org.lemurproject.galago.tupleflow.StandardStep;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
 import org.lemurproject.galago.tupleflow.execution.Verified;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * For G3.1, we moved to JSON-modeled parameters. The new way to specify conflated fields is:

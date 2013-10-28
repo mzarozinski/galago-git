@@ -1,7 +1,6 @@
 package org.lemurproject.galago.contrib.parse.kba;
 
 import java.io.DataInputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,8 +8,6 @@ import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TIOStreamTransport;
@@ -18,7 +15,7 @@ import org.apache.thrift.transport.TTransportException;
 import org.lemurproject.galago.core.parse.Document;
 import org.lemurproject.galago.core.parse.DocumentStreamParser;
 import org.lemurproject.galago.core.types.DocumentSplit;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 public class TrecKBAParser extends DocumentStreamParser {
 

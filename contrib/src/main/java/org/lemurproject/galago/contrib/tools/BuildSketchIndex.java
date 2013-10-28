@@ -14,7 +14,6 @@ import org.lemurproject.galago.core.index.ExtractIndexDocumentNumbers;
 import org.lemurproject.galago.core.index.stats.FieldStatistics;
 import org.lemurproject.galago.core.parse.DocumentSource;
 import org.lemurproject.galago.core.parse.stem.KrovetzStemmer;
-import org.lemurproject.galago.core.parse.stem.Porter2Stemmer;
 import org.lemurproject.galago.core.retrieval.LocalRetrieval;
 import org.lemurproject.galago.core.tools.AppFunction;
 import org.lemurproject.galago.core.tools.apps.BuildStageTemplates;
@@ -22,14 +21,14 @@ import org.lemurproject.galago.core.types.DocumentSplit;
 import org.lemurproject.galago.core.types.NumberWordCount;
 import org.lemurproject.galago.core.window.ReduceNumberWordCount;
 import org.lemurproject.galago.core.window.WindowProducer;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.tupleflow.TupleFlowUtility;
 import org.lemurproject.galago.tupleflow.execution.ConnectionAssignmentType;
 import org.lemurproject.galago.tupleflow.execution.InputStep;
 import org.lemurproject.galago.tupleflow.execution.Job;
 import org.lemurproject.galago.tupleflow.execution.OutputStep;
 import org.lemurproject.galago.tupleflow.execution.Stage;
 import org.lemurproject.galago.tupleflow.execution.Step;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *
@@ -154,7 +153,7 @@ public class BuildSketchIndex extends AppFunction {
     }
     stage.add(new Step(WindowProducer.class, p2));
     stage.add(new Step(WindowHasher.class, buildParameters));
-    stage.add(Utility.getSorter(new NumberWordCount.WordDocumentOrder()));
+    stage.add(TupleFlowUtility.getSorter(new NumberWordCount.WordDocumentOrder()));
     stage.add(new Step(ReduceNumberWordCount.class));
 
     stage.add(new OutputStep("postings"));

@@ -2,7 +2,7 @@
 package org.lemurproject.galago.core.retrieval.iterator;
 
 import org.lemurproject.galago.core.util.ExtentArray;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * Special class to allow iterator over an array of extents

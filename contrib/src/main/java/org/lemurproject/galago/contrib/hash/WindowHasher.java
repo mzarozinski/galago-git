@@ -10,11 +10,11 @@ import org.lemurproject.galago.core.types.NumberWordCount;
 import org.lemurproject.galago.core.window.Window;
 import org.lemurproject.galago.tupleflow.InputClass;
 import org.lemurproject.galago.tupleflow.OutputClass;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.StandardStep;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
-import org.lemurproject.galago.tupleflow.VByteOutput;
+import org.lemurproject.galago.utility.compression.VByteOutput;
 import org.lemurproject.galago.tupleflow.execution.Verified;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

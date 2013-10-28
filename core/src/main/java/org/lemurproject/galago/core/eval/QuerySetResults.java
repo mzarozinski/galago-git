@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -15,8 +14,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.lemurproject.galago.core.eval.stat.NaturalOrderComparator;
 import org.lemurproject.galago.core.retrieval.ScoredDocument;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * This class holds retrieval results for a set of queries. Each query

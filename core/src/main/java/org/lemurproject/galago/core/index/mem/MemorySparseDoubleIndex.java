@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.lemurproject.galago.core.index.KeyIterator;
 import org.lemurproject.galago.core.index.CompressedByteBuffer;
-import org.lemurproject.galago.core.retrieval.iterator.disk.DiskIterator;
 import org.lemurproject.galago.core.index.disk.SparseFloatListWriter;
 import org.lemurproject.galago.core.parse.Document;
 import org.lemurproject.galago.core.parse.stem.Stemmer;
@@ -18,9 +17,9 @@ import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeType;
 import org.lemurproject.galago.core.retrieval.processing.ScoringContext;
 import org.lemurproject.galago.tupleflow.FakeParameters;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
-import org.lemurproject.galago.tupleflow.Utility.ByteArrComparator;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
+import org.lemurproject.galago.utility.Utility.ByteArrComparator;
 
 
 /*

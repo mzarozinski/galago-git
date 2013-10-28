@@ -9,13 +9,13 @@ import org.lemurproject.galago.tupleflow.CompressionType;
 import org.lemurproject.galago.tupleflow.Counter;
 import org.lemurproject.galago.tupleflow.FileOrderedWriter;
 import org.lemurproject.galago.tupleflow.Order;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.Processor;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
 import org.lemurproject.galago.tupleflow.Type;
 import org.lemurproject.galago.tupleflow.execution.ErrorStore;
 import org.lemurproject.galago.tupleflow.execution.Verification;
 import org.lemurproject.galago.tupleflow.execution.Verified;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

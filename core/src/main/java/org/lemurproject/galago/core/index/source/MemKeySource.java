@@ -4,7 +4,7 @@ package org.lemurproject.galago.core.index.source;
 import java.io.IOException;
 import java.util.NavigableMap;
 import java.util.TreeMap;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * This class treats a TreeMap or at least the keys of a BTree as a data

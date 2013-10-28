@@ -7,11 +7,11 @@ import org.lemurproject.galago.core.index.merge.DocumentNameMerger;
 import org.lemurproject.galago.core.types.NumberedDocumentData;
 import org.lemurproject.galago.tupleflow.Counter;
 import org.lemurproject.galago.tupleflow.InputClass;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.Processor;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.execution.ErrorStore;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * Writes a btree mapping from document names to document numbers

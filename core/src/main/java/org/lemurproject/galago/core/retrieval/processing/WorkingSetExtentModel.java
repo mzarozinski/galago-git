@@ -14,7 +14,7 @@ import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.StructuredQuery;
 import org.lemurproject.galago.core.util.ExtentArray;
 import org.lemurproject.galago.core.util.FixedSizeMinHeap;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * Performs extent-level retrieval scoring. Scores each named extent in the

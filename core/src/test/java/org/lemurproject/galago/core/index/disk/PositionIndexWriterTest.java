@@ -8,8 +8,8 @@ import static junit.framework.Assert.assertEquals;
 import junit.framework.TestCase;
 import org.lemurproject.galago.core.index.disk.PositionIndexReader.KeyIterator;
 import org.lemurproject.galago.tupleflow.FakeParameters;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

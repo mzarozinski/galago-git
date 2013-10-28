@@ -24,6 +24,8 @@ import javax.management.NotificationEmitter;
 import javax.management.NotificationListener;
 import org.lemurproject.galago.tupleflow.execution.ErrorStore;
 import org.lemurproject.galago.tupleflow.execution.Verification;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * <p> This class sorts an incoming stream of objects in some specified order.

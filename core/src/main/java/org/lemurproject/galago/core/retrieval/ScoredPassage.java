@@ -2,7 +2,7 @@
 package org.lemurproject.galago.core.retrieval;
 
 import java.util.Comparator;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * An extension to the ScoredDocument class, to include a begin and end over

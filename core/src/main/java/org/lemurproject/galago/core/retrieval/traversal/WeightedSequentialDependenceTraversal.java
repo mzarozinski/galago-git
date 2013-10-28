@@ -14,8 +14,8 @@ import org.lemurproject.galago.core.retrieval.query.MalformedQueryException;
 import org.lemurproject.galago.core.retrieval.Retrieval;
 import org.lemurproject.galago.core.retrieval.query.NodeParameters;
 import org.lemurproject.galago.core.util.TextPartAssigner;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Parameters.Type;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Parameters.Type;
 
 /**
  * Weighted Sequential Dependency Model model is structurally similar to the

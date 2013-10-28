@@ -24,8 +24,8 @@ import org.lemurproject.galago.core.types.FieldLengthData;
 import org.lemurproject.galago.core.util.Bytes;
 import org.lemurproject.galago.core.util.IntArray;
 import org.lemurproject.galago.tupleflow.FakeParameters;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 public class MemoryDocumentLengths implements MemoryIndexPart, LengthsReader {
 

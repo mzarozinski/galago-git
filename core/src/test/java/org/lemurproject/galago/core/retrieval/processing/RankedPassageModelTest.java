@@ -4,7 +4,6 @@
 package org.lemurproject.galago.core.retrieval.processing;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import junit.framework.TestCase;
 import org.lemurproject.galago.core.retrieval.LocalRetrieval;
@@ -13,8 +12,8 @@ import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.StructuredQuery;
 import org.lemurproject.galago.core.tools.App;
 import org.lemurproject.galago.core.tools.AppTest;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

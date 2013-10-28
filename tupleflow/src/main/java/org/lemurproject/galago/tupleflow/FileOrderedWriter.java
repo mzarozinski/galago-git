@@ -4,6 +4,8 @@ package org.lemurproject.galago.tupleflow;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.zip.GZIPOutputStream;
+import org.lemurproject.galago.utility.FileUtility;
+import org.lemurproject.galago.utility.compression.VByteOutput;
 
 /**
  *
@@ -20,7 +22,7 @@ public class FileOrderedWriter<T> implements Processor<T> {
         this.filename = filename;
         this.order = order;
 
-        dataStream = StreamCreator.realOutputStream(filename);
+        dataStream = FileUtility.realOutputStream(filename);
         // write the compression type (un compressed)
         dataStream.writeByte(CompressionType.toByte(c));
         

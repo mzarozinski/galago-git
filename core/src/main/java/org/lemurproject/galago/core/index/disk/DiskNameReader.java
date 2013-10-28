@@ -13,7 +13,7 @@ import org.lemurproject.galago.core.retrieval.iterator.disk.DiskDataIterator;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeType;
 
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * Reads a binary file of document names produced by DocumentNameWriter2

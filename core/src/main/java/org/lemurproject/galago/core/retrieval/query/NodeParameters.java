@@ -9,13 +9,12 @@ import gnu.trove.map.hash.TObjectLongHashMap;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Set;
-import org.lemurproject.galago.tupleflow.Parameters.Type;
+import org.lemurproject.galago.utility.Parameters.Type;
 
 /**
  * Currently the parameters that are attached to query Nodes are not quite the

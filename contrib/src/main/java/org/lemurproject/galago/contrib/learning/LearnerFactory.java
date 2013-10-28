@@ -6,7 +6,7 @@ package org.lemurproject.galago.contrib.learning;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import org.lemurproject.galago.core.retrieval.Retrieval;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

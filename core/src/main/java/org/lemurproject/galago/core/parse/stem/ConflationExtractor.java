@@ -3,6 +3,7 @@
  */
 package org.lemurproject.galago.core.parse.stem;
 
+import org.lemurproject.galago.utility.Utility;
 import java.io.IOException;
 import org.lemurproject.galago.core.parse.Document;
 import org.lemurproject.galago.core.types.KeyValuePair;

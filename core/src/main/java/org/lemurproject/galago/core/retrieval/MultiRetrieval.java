@@ -2,7 +2,6 @@
 package org.lemurproject.galago.core.retrieval;
 
 import java.io.IOException;
-import java.lang.String;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,7 +24,7 @@ import org.lemurproject.galago.core.retrieval.iterator.BaseIterator;
 import org.lemurproject.galago.core.retrieval.iterator.ScoreIterator;
 import org.lemurproject.galago.core.retrieval.iterator.ScoringFunctionIterator;
 import org.lemurproject.galago.core.retrieval.traversal.Traversal;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * This class allows searching over a set of Retrievals.

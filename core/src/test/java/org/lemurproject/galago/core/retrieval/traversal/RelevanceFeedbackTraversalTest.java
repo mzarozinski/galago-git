@@ -13,8 +13,8 @@ import org.lemurproject.galago.core.retrieval.prf.RelevanceModel1;
 import org.lemurproject.galago.core.retrieval.prf.RelevanceModel3;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.StructuredQuery;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * This test is seriously a pain so all traversals that make use of 2 rounds of

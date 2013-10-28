@@ -2,6 +2,7 @@
 package org.lemurproject.galago.tupleflow;
 
 import java.io.IOException;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

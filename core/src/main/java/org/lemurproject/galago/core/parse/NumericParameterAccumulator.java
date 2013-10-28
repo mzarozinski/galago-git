@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.TypeReader;
 import org.lemurproject.galago.tupleflow.types.SerializedParameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

@@ -32,7 +32,7 @@ import org.lemurproject.galago.core.parse.Document.DocumentComponents;
 import org.lemurproject.galago.core.retrieval.iterator.BaseIterator;
 import org.lemurproject.galago.core.retrieval.iterator.DataIterator;
 import org.lemurproject.galago.core.retrieval.iterator.LengthsIterator;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * This is the main class for a disk based index structure

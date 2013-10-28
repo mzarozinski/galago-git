@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.lemurproject.galago.core.retrieval.Retrieval;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * Very simple grid search learning algorithm - divides the n dimensional space

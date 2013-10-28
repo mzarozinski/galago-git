@@ -2,14 +2,11 @@
 package org.lemurproject.galago.core.index.mem;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import org.lemurproject.galago.core.index.KeyIterator;
-import org.lemurproject.galago.core.index.KeyToListIterator;
 import org.lemurproject.galago.core.retrieval.iterator.disk.DiskIterator;
 import org.lemurproject.galago.core.index.corpus.CorpusFileWriter;
 import org.lemurproject.galago.core.index.corpus.DocumentReader;
@@ -20,13 +17,12 @@ import org.lemurproject.galago.core.retrieval.iterator.DataIterator;
 import org.lemurproject.galago.core.retrieval.iterator.BaseIterator;
 import org.lemurproject.galago.core.retrieval.iterator.disk.DiskDataIterator;
 import org.lemurproject.galago.core.retrieval.processing.ScoringContext;
-import org.lemurproject.galago.core.retrieval.query.AnnotatedNode;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeType;
 import org.lemurproject.galago.tupleflow.FakeParameters;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
-import org.lemurproject.galago.tupleflow.Utility.ByteArrComparator;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
+import org.lemurproject.galago.utility.Utility.ByteArrComparator;
 
 public class MemoryCorpus implements DocumentReader, MemoryIndexPart {
 

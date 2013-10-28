@@ -25,11 +25,11 @@ import org.lemurproject.galago.core.tools.AppTest;
 import org.lemurproject.galago.core.types.FieldLengthData;
 import org.lemurproject.galago.core.types.NumberedDocumentData;
 import org.lemurproject.galago.tupleflow.IncompatibleProcessorException;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.FakeParameters;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.Sorter;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

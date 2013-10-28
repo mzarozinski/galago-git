@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.PrintStream;
 import junit.framework.TestCase;
 import org.lemurproject.galago.core.tools.App;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

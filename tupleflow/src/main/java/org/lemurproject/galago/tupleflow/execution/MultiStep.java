@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * Represents a multi block in a TupleFlow stage.

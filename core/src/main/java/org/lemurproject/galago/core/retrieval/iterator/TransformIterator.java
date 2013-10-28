@@ -3,7 +3,7 @@ package org.lemurproject.galago.core.retrieval.iterator;
 
 import java.io.IOException;
 import org.lemurproject.galago.core.retrieval.processing.ScoringContext;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

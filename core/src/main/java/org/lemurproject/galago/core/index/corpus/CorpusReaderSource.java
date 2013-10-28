@@ -10,7 +10,7 @@ import org.lemurproject.galago.core.index.source.DataSource;
 import org.lemurproject.galago.core.parse.Document;
 import org.lemurproject.galago.core.parse.Document.DocumentComponents;
 import org.lemurproject.galago.core.parse.Tokenizer;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

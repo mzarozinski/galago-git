@@ -14,13 +14,13 @@ import org.lemurproject.galago.core.parse.UniversalParser;
 import org.lemurproject.galago.core.tools.AppFunction;
 import org.lemurproject.galago.core.tools.apps.BuildStageTemplates;
 import org.lemurproject.galago.core.types.DocumentSplit;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.execution.ConnectionAssignmentType;
 import org.lemurproject.galago.tupleflow.execution.InputStep;
 import org.lemurproject.galago.tupleflow.execution.Job;
 import org.lemurproject.galago.tupleflow.execution.Stage;
 import org.lemurproject.galago.tupleflow.execution.Step;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

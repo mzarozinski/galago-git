@@ -1,8 +1,10 @@
 // BSD License (http://lemurproject.org/galago-license)
-package org.lemurproject.galago.tupleflow;
+package org.lemurproject.galago.utility.compression;
 
 import java.io.DataOutput;
 import java.io.IOException;
+import org.lemurproject.galago.utility.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

@@ -15,7 +15,7 @@ import org.lemurproject.galago.core.retrieval.query.AnnotatedNode;
 import org.lemurproject.galago.core.retrieval.query.NodeParameters;
 import org.lemurproject.galago.core.retrieval.RequiredParameters;
 import org.lemurproject.galago.core.retrieval.RequiredStatistics;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * Implements PL2 retrieval model from the DFR framework.

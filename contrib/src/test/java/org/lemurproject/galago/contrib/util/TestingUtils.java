@@ -6,7 +6,7 @@ package org.lemurproject.galago.contrib.util;
 import java.io.File;
 import junit.framework.Assert;
 import org.lemurproject.galago.core.tools.App;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

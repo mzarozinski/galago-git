@@ -12,9 +12,9 @@ import org.lemurproject.galago.core.types.DocumentMappingData;
 import org.lemurproject.galago.core.types.DocumentSplit;
 import org.lemurproject.galago.core.types.NumberedDocumentData;
 import org.lemurproject.galago.tupleflow.FakeParameters;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.Processor;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

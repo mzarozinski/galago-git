@@ -5,10 +5,10 @@ package org.lemurproject.galago.core.parse;
 import java.io.IOException;
 import java.util.HashSet;
 import org.lemurproject.galago.tupleflow.InputClass;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.OutputClass;
 import org.lemurproject.galago.tupleflow.StandardStep;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

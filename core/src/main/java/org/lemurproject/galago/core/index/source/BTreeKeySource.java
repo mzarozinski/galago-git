@@ -3,7 +3,7 @@ package org.lemurproject.galago.core.index.source;
 
 import java.io.IOException;
 import org.lemurproject.galago.core.index.BTreeReader;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * This class treats an empty BTree or at least the keys of a BTree as a data

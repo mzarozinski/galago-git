@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import org.lemurproject.galago.core.types.DocumentMappingData;
 import org.lemurproject.galago.tupleflow.TypeReader;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * Maps a docid key (bytes) to a new docid key (bytes)

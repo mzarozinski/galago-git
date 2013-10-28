@@ -8,7 +8,7 @@ import org.lemurproject.galago.core.index.disk.DiskNameWriter;
 import org.lemurproject.galago.core.types.NumberedDocumentData;
 import org.lemurproject.galago.tupleflow.Processor;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

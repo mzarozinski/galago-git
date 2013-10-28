@@ -5,6 +5,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
+import org.lemurproject.galago.utility.FileUtility;
+import org.lemurproject.galago.utility.compression.VByteInput;
 
 /**
  *
@@ -26,7 +28,7 @@ public class FileOrderedReader<T> implements ReaderSource<T> {
 
   public FileOrderedReader(String filename, int bufferSize) throws IOException {
     // set up the input stream and get its length in bytes
-    dataStream = StreamCreator.bufferedInputStream(filename);
+    dataStream = FileUtility.bufferedInputStream(filename);
     byte comp = (byte) dataStream.read();
     c = CompressionType.fromByte( comp );
 

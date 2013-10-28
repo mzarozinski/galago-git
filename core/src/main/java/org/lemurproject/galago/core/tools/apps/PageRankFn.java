@@ -24,8 +24,8 @@ import org.lemurproject.galago.tupleflow.CompressionType;
 import org.lemurproject.galago.tupleflow.FileSource;
 import org.lemurproject.galago.tupleflow.IncompatibleProcessorException;
 import org.lemurproject.galago.tupleflow.Order;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.tupleflow.TupleFlowUtility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.execution.ConnectionAssignmentType;
 import org.lemurproject.galago.tupleflow.execution.ErrorStore;
 import org.lemurproject.galago.tupleflow.execution.InputStep;
@@ -37,6 +37,7 @@ import org.lemurproject.galago.tupleflow.execution.Stage;
 import org.lemurproject.galago.tupleflow.execution.Step;
 import org.lemurproject.galago.tupleflow.types.FileName;
 import org.lemurproject.galago.tupleflow.types.TupleflowLong;
+import org.lemurproject.galago.utility.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -287,7 +288,7 @@ public class PageRankFn extends AppFunction {
 
     // fork 2 - write score ordered output
     fork.addGroup("scores");
-    fork.addToGroup("scores", Utility.getSorter(new PageRankScore.DescScoreOrder()));
+    fork.addToGroup("scores", TupleFlowUtility.getSorter(new PageRankScore.DescScoreOrder()));
     Parameters writerParams2 = new Parameters();
     writerParams2.set("output", scoreOutput.getAbsolutePath());
     fork.addToGroup("scores", new Step(FinalPageRankScoreWriter.class, writerParams2));
@@ -396,7 +397,7 @@ public class PageRankFn extends AppFunction {
     Parameters inParams = new Parameters();
     inParams.set("input", folder.getAbsolutePath());
     stage.add(new Step(FileSource.class, inParams));
-    stage.add(Utility.getSorter(new FileName.FilenameOrder()));
+    stage.add(TupleFlowUtility.getSorter(new FileName.FilenameOrder()));
     stage.add(new OutputStep(outputName));
 
     return stage;
@@ -435,7 +436,7 @@ public class PageRankFn extends AppFunction {
     rndWalk.set("lambda", p.getDouble("lambda"));
     rndWalk.set("docCount", p.getLong("docCount")); // extraJump needs to be divided evenly across all documents
     stage.add(new Step(ComputeRandomWalk.class, rndWalk));
-    stage.add(Utility.getSorter(new PageRankScore.DocNameOrder(), CompressionType.GZIP));
+    stage.add(TupleFlowUtility.getSorter(new PageRankScore.DocNameOrder(), CompressionType.GZIP));
     stage.add(new OutputStep("outputPartialScores"));
 
     return stage;
@@ -458,7 +459,7 @@ public class PageRankFn extends AppFunction {
     stage.add(new Step(ComputeRandomJump.class, rndJumpParams));
 
     // should only emit one item, but still...
-    stage.add(Utility.getSorter(new PageRankJumpScore.ScoreOrder(), CompressionType.GZIP));
+    stage.add(TupleFlowUtility.getSorter(new PageRankJumpScore.ScoreOrder(), CompressionType.GZIP));
     stage.add(new OutputStep("outputCumulativeJump"));
 
     return stage;
@@ -478,7 +479,7 @@ public class PageRankFn extends AppFunction {
     combinerParams.set("jumpStream1", "outputCumulativeJump");
     combinerParams.set("scoreStream", "outputPartialScores");
     stage.add(new Step(PageRankScoreCombiner.class, combinerParams));
-    stage.add(Utility.getSorter(new PageRankScore.DocNameOrder(), CompressionType.GZIP));
+    stage.add(TupleFlowUtility.getSorter(new PageRankScore.DocNameOrder(), CompressionType.GZIP));
 
     MultiStep processingFork = new MultiStep();
     processingFork.addGroup("writer");

@@ -4,7 +4,7 @@
   <groupId>org.lemurproject</groupId>
   <artifactId>galago</artifactId>
   <packaging>pom</packaging>
-  <version>3.5</version>
+  <version>6.0</version>
   <name>galago</name>
   <url>http://lemurproject.org/galago.php</url>
   <description>
@@ -54,6 +54,7 @@
     <module>core</module>
     <module>tupleflow</module>
     <module>tupleflow-typebuilder</module>
+    <module>utility</module>
   </modules>
   <dependencies>
     <dependency>

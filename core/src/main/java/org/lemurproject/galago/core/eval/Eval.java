@@ -13,9 +13,8 @@ import org.lemurproject.galago.core.eval.compare.QuerySetComparator;
 import org.lemurproject.galago.core.eval.compare.QuerySetComparatorFactory;
 import org.lemurproject.galago.core.tools.AppFunction;
 import org.lemurproject.galago.core.tools.apps.BatchSearch;
-import org.lemurproject.galago.core.tools.apps.BatchSearch;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Parameters.Type;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Parameters.Type;
 
 /**
  * Main method for retrieval evaluation. Evaluates query results using a set of

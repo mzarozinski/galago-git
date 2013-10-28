@@ -9,7 +9,7 @@ import static org.lemurproject.galago.core.index.source.BTreeValueSource.HAS_SKI
 import org.lemurproject.galago.core.index.source.CountSource;
 import org.lemurproject.galago.core.index.stats.NodeStatistics;
 import org.lemurproject.galago.tupleflow.DataStream;
-import org.lemurproject.galago.tupleflow.VByteInput;
+import org.lemurproject.galago.utility.compression.VByteInput;
 
 /**
  * @author sjh, jfoley

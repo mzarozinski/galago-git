@@ -11,7 +11,7 @@ import org.lemurproject.galago.core.index.IndexElement;
 import org.lemurproject.galago.core.types.KeyValuePair;
 import org.lemurproject.galago.tupleflow.InputClass;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.execution.Verified;
 
 /**

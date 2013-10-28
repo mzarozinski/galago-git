@@ -3,6 +3,7 @@
  */
 package org.lemurproject.galago.tupleflow;
 
+import org.lemurproject.galago.utility.Utility;
 import java.io.File;
 import junit.framework.TestCase;
 import org.lemurproject.galago.tupleflow.types.TupleflowString;

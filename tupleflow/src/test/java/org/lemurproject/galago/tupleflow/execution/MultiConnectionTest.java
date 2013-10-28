@@ -8,12 +8,12 @@ import junit.framework.TestCase;
 import org.lemurproject.galago.tupleflow.ExNihiloSource;
 import org.lemurproject.galago.tupleflow.IncompatibleProcessorException;
 import org.lemurproject.galago.tupleflow.Linkage;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.Processor;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
 import org.lemurproject.galago.tupleflow.TypeReader;
 import org.lemurproject.galago.tupleflow.types.TupleflowString;
 import org.lemurproject.galago.tupleflow.types.XMLFragment;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *  Tests the connection of two stages with multiple connections between them.

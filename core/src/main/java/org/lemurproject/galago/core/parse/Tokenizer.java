@@ -3,21 +3,19 @@ package org.lemurproject.galago.core.parse;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.lemurproject.galago.core.index.corpus.CorpusReader;
 import org.lemurproject.galago.tupleflow.FakeParameters;
 import org.lemurproject.galago.tupleflow.IncompatibleProcessorException;
 import org.lemurproject.galago.tupleflow.InputClass;
 import org.lemurproject.galago.tupleflow.Linkage;
 import org.lemurproject.galago.tupleflow.NullProcessor;
 import org.lemurproject.galago.tupleflow.OutputClass;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.Processor;
 import org.lemurproject.galago.tupleflow.Source;
 import org.lemurproject.galago.tupleflow.Step;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

@@ -16,7 +16,7 @@ import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeType;
 import org.lemurproject.galago.core.retrieval.query.QueryType;
 import org.lemurproject.galago.core.retrieval.traversal.Traversal;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * Provides a facility to map labels to an abstract retrieval. Therefore, if you

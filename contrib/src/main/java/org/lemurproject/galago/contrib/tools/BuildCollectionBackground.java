@@ -1,3 +1,4 @@
+
 /*
  *  BSD License (http://lemurproject.org/galago-license)
  */
@@ -16,14 +17,14 @@ import org.lemurproject.galago.core.tools.AppFunction;
 import org.lemurproject.galago.core.tools.apps.BuildStageTemplates;
 import org.lemurproject.galago.core.types.DocumentSplit;
 import org.lemurproject.galago.core.types.WordCount;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.tupleflow.TupleFlowUtility;
 import org.lemurproject.galago.tupleflow.execution.ConnectionAssignmentType;
 import org.lemurproject.galago.tupleflow.execution.InputStep;
 import org.lemurproject.galago.tupleflow.execution.Job;
 import org.lemurproject.galago.tupleflow.execution.OutputStep;
 import org.lemurproject.galago.tupleflow.execution.Stage;
 import org.lemurproject.galago.tupleflow.execution.Step;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * builds a background language model from a set of documents - mapping from
@@ -48,7 +49,7 @@ public class BuildCollectionBackground extends AppFunction {
     }
 
     stage.add(new Step(WordCounter.class));
-    stage.add(Utility.getSorter(new WordCount.WordOrder()));
+    stage.add(TupleFlowUtility.getSorter(new WordCount.WordOrder()));
     stage.add(new Step(WordCountReducer.class));
     stage.add(new OutputStep(outputName));
 

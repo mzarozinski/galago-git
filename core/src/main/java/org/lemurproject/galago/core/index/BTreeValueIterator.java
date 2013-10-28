@@ -4,7 +4,7 @@ package org.lemurproject.galago.core.index;
 import org.lemurproject.galago.core.retrieval.iterator.disk.DiskIterator;
 import java.io.IOException;
 import org.lemurproject.galago.core.retrieval.iterator.BaseIterator;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * This is the base type of most Iterators (previously KeyListReader.ListIterator)

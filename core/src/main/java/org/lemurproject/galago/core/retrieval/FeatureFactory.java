@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import org.lemurproject.galago.core.retrieval.Retrieval;
 import org.lemurproject.galago.core.retrieval.iterator.*;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeParameters;
@@ -26,7 +25,7 @@ import org.lemurproject.galago.core.retrieval.traversal.optimize.ExtentsToCountL
 import org.lemurproject.galago.core.retrieval.traversal.optimize.FlattenCombineTraversal;
 import org.lemurproject.galago.core.retrieval.traversal.optimize.FlattenWindowTraversal;
 import org.lemurproject.galago.core.retrieval.traversal.optimize.MergeCombineChildrenTraversal;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * @author trevor

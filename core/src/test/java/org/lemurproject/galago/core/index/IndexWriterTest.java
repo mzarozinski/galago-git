@@ -10,8 +10,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Random;
 import junit.framework.TestCase;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

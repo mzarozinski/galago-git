@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import org.lemurproject.galago.core.index.BTreeReader;
 import org.lemurproject.galago.core.index.source.BTreeKeySource;
 import org.lemurproject.galago.core.index.source.BooleanSource;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

@@ -12,11 +12,11 @@ import org.lemurproject.galago.core.index.IndexElement;
 import org.lemurproject.galago.core.index.merge.WindowIndexMerger;
 import org.lemurproject.galago.core.types.NumberedExtent;
 import org.lemurproject.galago.tupleflow.InputClass;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.execution.ErrorStore;
 import org.lemurproject.galago.tupleflow.execution.Verification;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * 12/14/2010 (irmarc): Adding a skip list to this structure. It's pretty

@@ -9,12 +9,12 @@ import org.lemurproject.galago.core.index.merge.CorpusMerger;
 import org.lemurproject.galago.core.parse.Document;
 import org.lemurproject.galago.tupleflow.Counter;
 import org.lemurproject.galago.tupleflow.InputClass;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.Processor;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.execution.ErrorStore;
 import org.lemurproject.galago.tupleflow.execution.Verification;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * Writes document text and metadata to an index file. The output files are in

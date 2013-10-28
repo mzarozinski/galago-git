@@ -14,9 +14,9 @@ import junit.framework.TestCase;
 import org.lemurproject.galago.core.types.DocumentUrl;
 import org.lemurproject.galago.core.types.ExtractedLink;
 import org.lemurproject.galago.tupleflow.OrderedCombiner;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.TypeReader;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

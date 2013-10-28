@@ -4,7 +4,7 @@ package org.lemurproject.galago.core.retrieval.query;
 import org.lemurproject.galago.core.retrieval.traversal.Traversal;
 import junit.framework.TestCase;
 import java.util.ArrayList;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

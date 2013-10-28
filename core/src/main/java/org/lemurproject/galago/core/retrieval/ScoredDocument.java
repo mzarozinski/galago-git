@@ -4,7 +4,7 @@ package org.lemurproject.galago.core.retrieval;
 import java.io.Serializable;
 import java.util.Comparator;
 import org.lemurproject.galago.core.retrieval.query.AnnotatedNode;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * Basic retrieval unit. The results returned by the Retrieval.runQuery typically return

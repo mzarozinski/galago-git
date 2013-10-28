@@ -4,7 +4,7 @@ package org.lemurproject.galago.core.index;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

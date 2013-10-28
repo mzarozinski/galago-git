@@ -11,7 +11,7 @@ import org.lemurproject.galago.core.retrieval.RequiredParameters;
 import org.lemurproject.galago.core.retrieval.RequiredStatistics;
 import org.lemurproject.galago.core.retrieval.iterator.scoring.PL2FieldScorer;
 import org.lemurproject.galago.core.retrieval.iterator.scoring.ScoringFunction;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

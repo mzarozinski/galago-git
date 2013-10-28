@@ -5,7 +5,7 @@ package org.lemurproject.galago.core.retrieval.processing;
 
 import java.util.Comparator;
 import org.lemurproject.galago.core.retrieval.iterator.DeltaScoringIterator;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * Sorts iterators by the maximum change in score:

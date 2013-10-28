@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import junit.framework.TestCase;
 import org.lemurproject.galago.core.index.KeyIterator;
-import org.lemurproject.galago.core.retrieval.iterator.disk.DiskIterator;
 import org.lemurproject.galago.core.index.disk.CountIndexReader;
 import org.lemurproject.galago.core.index.disk.CountIndexWriter;
 import org.lemurproject.galago.core.index.disk.SparseFloatListReader;
@@ -23,9 +22,9 @@ import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.types.NumberWordCount;
 import org.lemurproject.galago.core.window.ReduceNumberWordCount;
 import org.lemurproject.galago.tupleflow.FakeParameters;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.Sorter;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

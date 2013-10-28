@@ -4,15 +4,13 @@ package org.lemurproject.galago.core.index;
 import org.lemurproject.galago.core.index.disk.DiskNameWriter;
 import org.lemurproject.galago.core.index.disk.DiskNameReader;
 import java.io.File;
-
 import junit.framework.TestCase;
-
 import org.lemurproject.galago.core.index.disk.DiskNameReverseReader;
 import org.lemurproject.galago.core.index.disk.DiskNameReverseWriter;
 import org.lemurproject.galago.core.types.NumberedDocumentData;
 import org.lemurproject.galago.tupleflow.FakeParameters;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

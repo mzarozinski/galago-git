@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 import org.lemurproject.galago.core.parse.Document;
 import org.lemurproject.galago.core.types.KeyValuePair;
 import org.lemurproject.galago.tupleflow.Processor;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

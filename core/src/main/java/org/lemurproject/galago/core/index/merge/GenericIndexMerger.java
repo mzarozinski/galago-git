@@ -11,7 +11,7 @@ import org.lemurproject.galago.core.index.KeyIterator;
 import org.lemurproject.galago.core.index.IndexPartReader;
 import org.lemurproject.galago.tupleflow.Processor;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

@@ -15,7 +15,7 @@ import org.lemurproject.galago.core.parse.TagTokenizer;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.tools.App;
 import org.lemurproject.galago.core.tools.AppTest;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

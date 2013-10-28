@@ -1,11 +1,9 @@
 // BSD License (http://lemurproject.org/galago-license)
 package org.lemurproject.galago.core.retrieval.iterator.scoring;
 
-import org.lemurproject.galago.core.retrieval.iterator.scoring.JelinekMercerScorer;
 import java.io.IOException;
 import junit.framework.TestCase;
 import org.lemurproject.galago.core.retrieval.query.NodeParameters;
-import org.lemurproject.galago.tupleflow.Parameters;
 
 /**
  *

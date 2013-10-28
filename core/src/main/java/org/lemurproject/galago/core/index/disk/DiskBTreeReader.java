@@ -10,8 +10,8 @@ import org.lemurproject.galago.core.index.BTreeReader;
 import org.lemurproject.galago.core.index.disk.VocabularyReader.IndexBlockInfo;
 import org.lemurproject.galago.tupleflow.BufferedFileDataStream;
 import org.lemurproject.galago.tupleflow.DataStream;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * <p>This implements the core functionality for all inverted list readers. It

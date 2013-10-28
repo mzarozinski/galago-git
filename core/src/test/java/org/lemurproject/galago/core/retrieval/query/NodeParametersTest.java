@@ -3,12 +3,9 @@
  */
 package org.lemurproject.galago.core.retrieval.query;
 
-import org.lemurproject.galago.core.retrieval.query.StructuredQuery;
-import org.lemurproject.galago.core.retrieval.query.Node;
-import org.lemurproject.galago.core.retrieval.query.NodeParameters;
 import java.util.ArrayList;
 import junit.framework.TestCase;
-import org.lemurproject.galago.tupleflow.Parameters.Type;
+import org.lemurproject.galago.utility.Parameters.Type;
 
 /**
  *

@@ -4,11 +4,10 @@ package org.lemurproject.galago.contrib.parse;
 import org.lemurproject.galago.core.parse.Document;
 import org.lemurproject.galago.core.parse.DocumentStreamParser;
 import org.lemurproject.galago.core.types.DocumentSplit;
-import org.lemurproject.galago.tupleflow.Parameters;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * Reads documents delimited by a line delimiter.

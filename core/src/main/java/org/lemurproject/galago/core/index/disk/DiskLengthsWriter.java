@@ -1,14 +1,23 @@
 // BSD License (http://lemurproject.org/galago-license)
 package org.lemurproject.galago.core.index.disk;
 
-import java.io.*;
-
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
 import org.lemurproject.galago.core.index.IndexElement;
 import org.lemurproject.galago.core.index.merge.DocumentLengthsMerger;
 import org.lemurproject.galago.core.types.FieldLengthData;
-import org.lemurproject.galago.tupleflow.*;
+import org.lemurproject.galago.tupleflow.Counter;
+import org.lemurproject.galago.tupleflow.InputClass;
+import org.lemurproject.galago.tupleflow.Processor;
+import org.lemurproject.galago.tupleflow.TupleFlowParameters;
 import org.lemurproject.galago.tupleflow.execution.ErrorStore;
 import org.lemurproject.galago.tupleflow.execution.Verification;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
+import org.lemurproject.galago.utility.FileUtility;
 
 /**
  * Writes the document lengths file, - stores the length data for each field,
@@ -122,7 +131,7 @@ public class DiskLengthsWriter implements Processor<FieldLengthData> {
     public LengthsList(byte[] key) throws IOException {
       //this.lengthsData = new CompressedRawByteBuffer();
       tempFile = Utility.createTemporary();
-      stream = StreamCreator.realOutputStream(tempFile.getAbsolutePath());
+      stream = FileUtility.realOutputStream(tempFile.getAbsolutePath());
       this.field = key;
 
       this.totalDocumentCount = 0;

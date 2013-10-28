@@ -4,11 +4,11 @@
 package org.lemurproject.galago.core.tools;
 
 import java.io.PrintStream;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.execution.ErrorStore;
 import org.lemurproject.galago.tupleflow.execution.Job;
 import org.lemurproject.galago.tupleflow.execution.JobExecutor;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * General interface for all galago applications.

@@ -19,14 +19,14 @@ import org.lemurproject.galago.core.types.NumberedDocumentData;
 import org.lemurproject.galago.core.types.NumberedExtent;
 import org.lemurproject.galago.core.types.NumberedField;
 import org.lemurproject.galago.tupleflow.Order;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.tupleflow.TupleFlowUtility;
 import org.lemurproject.galago.tupleflow.execution.ConnectionPointType;
 import org.lemurproject.galago.tupleflow.execution.InputStep;
 import org.lemurproject.galago.tupleflow.execution.OutputStep;
 import org.lemurproject.galago.tupleflow.execution.Stage;
 import org.lemurproject.galago.tupleflow.execution.StageConnectionPoint;
 import org.lemurproject.galago.tupleflow.execution.Step;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *
@@ -40,8 +40,8 @@ public class BuildStageTemplates {
 
   public static void writeManifest(String indexPath, Parameters jobP) throws IOException {
       File manifest = new File(indexPath, "buildManifest.json");
-      Utility.makeParentDirectories(manifest);
-      Utility.copyStringToFile(jobP.toPrettyString(), manifest);
+      org.lemurproject.galago.utility.Utility.makeParentDirectories(manifest);
+      org.lemurproject.galago.utility.Utility.copyStringToFile(jobP.toPrettyString(), manifest);
   }
 
   public static Stage getGenericWriteStage(String stageName, File destination, String inputPipeName,
@@ -72,7 +72,7 @@ public class BuildStageTemplates {
   public static ArrayList<Step> getExtractionSteps(String outputName, Class extractionClass, Order sortOrder) {
     ArrayList<Step> steps = new ArrayList<Step>();
     steps.add(new Step(extractionClass));
-    steps.add(Utility.getSorter(sortOrder));
+    steps.add(TupleFlowUtility.getSorter(sortOrder));
     steps.add(new OutputStep(outputName));
     return steps;
   }
@@ -80,7 +80,7 @@ public class BuildStageTemplates {
   public static ArrayList<Step> getExtractionSteps(String outputName, Class extractionClass, Parameters p, Order sortOrder) {
     ArrayList<Step> steps = new ArrayList<Step>();
     steps.add(new Step(extractionClass, p));
-    steps.add(Utility.getSorter(sortOrder));
+    steps.add(TupleFlowUtility.getSorter(sortOrder));
     steps.add(new OutputStep(outputName));
     return steps;
   }
@@ -171,7 +171,7 @@ public class BuildStageTemplates {
     }
 
     stage.add(new Step(sourceClass, p));
-    stage.add(Utility.getSorter(order));
+    stage.add(TupleFlowUtility.getSorter(order));
     stage.add(new OutputStep("splits"));
     return stage;
   }

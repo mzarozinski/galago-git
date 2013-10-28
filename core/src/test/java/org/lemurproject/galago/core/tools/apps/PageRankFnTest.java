@@ -5,8 +5,8 @@ package org.lemurproject.galago.core.tools.apps;
 
 import java.io.File;
 import junit.framework.TestCase;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

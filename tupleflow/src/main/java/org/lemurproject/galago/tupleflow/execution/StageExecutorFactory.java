@@ -2,7 +2,7 @@
  
 package org.lemurproject.galago.tupleflow.execution;
 
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import java.util.Arrays;
 
 /**

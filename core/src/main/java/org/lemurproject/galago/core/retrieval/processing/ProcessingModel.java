@@ -3,12 +3,12 @@ package org.lemurproject.galago.core.retrieval.processing;
 
 import org.lemurproject.galago.core.retrieval.ScoredDocument;
 import org.lemurproject.galago.core.retrieval.query.Node;
-import org.lemurproject.galago.tupleflow.Parameters;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.util.PriorityQueue;
 import org.lemurproject.galago.core.retrieval.LocalRetrieval;
 import org.lemurproject.galago.core.util.FixedSizeMinHeap;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * An interface that defines the contract for processing a query. There's one

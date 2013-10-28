@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import org.lemurproject.galago.core.parse.Document;
 import org.lemurproject.galago.core.parse.Tag;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

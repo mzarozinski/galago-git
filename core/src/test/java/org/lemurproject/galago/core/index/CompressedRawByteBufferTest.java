@@ -9,7 +9,7 @@ import java.io.ByteArrayInputStream;
 import junit.framework.TestCase;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
-import org.lemurproject.galago.tupleflow.VByteInput;
+import org.lemurproject.galago.utility.compression.VByteInput;
 
 /**
  *

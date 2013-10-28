@@ -9,8 +9,8 @@ import java.io.InputStreamReader;
 import java.util.zip.GZIPInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.lemurproject.galago.core.types.DocumentSplit;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.StreamCreator;
+import org.lemurproject.galago.utility.FileUtility;
+import org.lemurproject.galago.utility.Parameters;
 import org.tukaani.xz.XZInputStream;
 
 /**
@@ -31,7 +31,7 @@ public abstract class DocumentStreamParser {
   /*** static functions for opening files ***/
 
   public static BufferedReader getBufferedReader(DocumentSplit split) throws IOException {
-    FileInputStream stream = StreamCreator.realInputStream(split.fileName);
+    FileInputStream stream = FileUtility.realInputStream(split.fileName);
     BufferedReader reader;
 
     if (split.isCompressed) {
@@ -50,7 +50,7 @@ public abstract class DocumentStreamParser {
   }
 
   public static BufferedInputStream getBufferedInputStream(DocumentSplit split) throws IOException {
-    FileInputStream fileStream = StreamCreator.realInputStream(split.fileName);
+    FileInputStream fileStream = FileUtility.realInputStream(split.fileName);
     BufferedInputStream stream;
 
     if (split.isCompressed) {

@@ -33,8 +33,8 @@ import org.lemurproject.galago.core.types.NumberedDocumentData;
 import org.lemurproject.galago.core.types.NumberedExtent;
 import org.lemurproject.galago.core.types.NumberedField;
 import org.lemurproject.galago.tupleflow.Order;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.tupleflow.TupleFlowUtility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.execution.ConnectionAssignmentType;
 import org.lemurproject.galago.tupleflow.execution.InputStep;
 import org.lemurproject.galago.tupleflow.execution.Job;
@@ -42,6 +42,7 @@ import org.lemurproject.galago.tupleflow.execution.MultiStep;
 import org.lemurproject.galago.tupleflow.execution.OutputStep;
 import org.lemurproject.galago.tupleflow.execution.Stage;
 import org.lemurproject.galago.tupleflow.execution.Step;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *
@@ -120,7 +121,7 @@ public class BuildIndex extends AppFunction {
     if (buildParameters.getBoolean("corpus")) {
       Parameters corpusParameters = buildParameters.getMap("corpusParameters").clone();
       processingFork.addGroup("corpus").addToGroup("corpus", new Step(CorpusFolderWriter.class, corpusParameters.clone()))
-              .addToGroup("corpus", Utility.getSorter(new KeyValuePair.KeyOrder()))
+              .addToGroup("corpus", TupleFlowUtility.getSorter(new KeyValuePair.KeyOrder()))
               .addToGroup("corpus", new OutputStep("corpusKeys"));
     }
     if (buildParameters.getBoolean("nonStemmedPostings")) {
@@ -150,7 +151,7 @@ public class BuildIndex extends AppFunction {
                 BuildStageTemplates.getStemmerStep(new Parameters(),
                 Class.forName(buildParameters.getMap("stemmerClass").getString(stemmer))))
                 .addToGroup(name, new Step(NumberedPostingsPositionExtractor.class))
-                .addToGroup(name, Utility.getSorter(new NumberWordPosition.WordDocumentPositionOrder()))
+                .addToGroup(name, TupleFlowUtility.getSorter(new NumberWordPosition.WordDocumentPositionOrder()))
                 .addToGroup(name, new OutputStep("numberedStemmedPostings-" + stemmer));
       }
     }
@@ -170,7 +171,7 @@ public class BuildIndex extends AppFunction {
                   BuildStageTemplates.getStemmerStep(new Parameters(),
                   Class.forName(buildParameters.getMap("stemmerClass").getString(stemmer))))
                   .addToGroup(name, new Step(NumberedExtentPostingsExtractor.class))
-                  .addToGroup(name, Utility.getSorter(new FieldNumberWordPosition.FieldWordDocumentPositionOrder()))
+                  .addToGroup(name, TupleFlowUtility.getSorter(new FieldNumberWordPosition.FieldWordDocumentPositionOrder()))
                   .addToGroup(name, new OutputStep("numberedExtentPostings-" + stemmer));
         }
       }

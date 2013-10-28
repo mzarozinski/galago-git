@@ -1,11 +1,7 @@
 package org.lemurproject.galago.tupleflow;
 
-import org.lemurproject.galago.tupleflow.Sorter;
-import org.lemurproject.galago.tupleflow.IncompatibleProcessorException;
-import org.lemurproject.galago.tupleflow.NullProcessor;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.FakeParameters;
-import junit.framework.*;
+import junit.framework.TestCase;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

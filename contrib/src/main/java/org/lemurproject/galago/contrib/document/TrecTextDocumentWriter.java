@@ -8,12 +8,12 @@ import java.io.File;
 import java.io.IOException;
 import org.lemurproject.galago.core.parse.Document;
 import org.lemurproject.galago.tupleflow.InputClass;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.Processor;
-import org.lemurproject.galago.tupleflow.StreamCreator;
+import org.lemurproject.galago.utility.FileUtility;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.execution.Verified;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *
@@ -79,9 +79,9 @@ public class TrecTextDocumentWriter implements Processor<Document> {
     String path = String.format("%s%s%s.%04d.%04d.trectext", folder, File.separator, shardName, uniqId, currentFileId);
 //            folder + File.separator + shardName + "." + uniqId + "." + currentFileId + ".trectext";
     if (compress) {
-      currentWriter = new BufferedOutputStream(StreamCreator.openOutputStream(path + ".gz"));
+      currentWriter = new BufferedOutputStream(FileUtility.openOutputStream(path + ".gz"));
     } else {
-      currentWriter = new BufferedOutputStream(StreamCreator.openOutputStream(path));
+      currentWriter = new BufferedOutputStream(FileUtility.openOutputStream(path));
     }
     
     currentFileId+=1;

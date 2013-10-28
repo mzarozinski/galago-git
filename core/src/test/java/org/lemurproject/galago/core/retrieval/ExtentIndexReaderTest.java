@@ -10,14 +10,14 @@ package org.lemurproject.galago.core.retrieval;
 import org.lemurproject.galago.core.index.disk.DiskBTreeReader;
 import org.lemurproject.galago.core.index.disk.WindowIndexWriter;
 import org.lemurproject.galago.core.retrieval.iterator.ExtentArrayIterator;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.core.util.ExtentArray;
 import java.io.File;
 import junit.framework.TestCase;
 import org.lemurproject.galago.core.index.disk.WindowIndexReader;
 import org.lemurproject.galago.core.retrieval.iterator.ExtentIterator;
 import org.lemurproject.galago.core.retrieval.processing.ScoringContext;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

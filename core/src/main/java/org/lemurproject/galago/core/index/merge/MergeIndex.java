@@ -13,17 +13,16 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.lemurproject.galago.core.index.disk.DiskIndex;
-import org.lemurproject.galago.core.tools.App;
 import org.lemurproject.galago.core.tools.AppFunction;
 import org.lemurproject.galago.core.types.DocumentMappingData;
 import org.lemurproject.galago.core.types.DocumentSplit;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.execution.ConnectionAssignmentType;
 import org.lemurproject.galago.tupleflow.execution.InputStep;
 import org.lemurproject.galago.tupleflow.execution.Job;
 import org.lemurproject.galago.tupleflow.execution.OutputStep;
 import org.lemurproject.galago.tupleflow.execution.Stage;
 import org.lemurproject.galago.tupleflow.execution.Step;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Random;
 import junit.framework.TestCase;
 import org.lemurproject.galago.core.tools.App;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

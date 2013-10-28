@@ -11,8 +11,8 @@ import org.lemurproject.galago.core.index.disk.DiskBTreeReader;
 import org.lemurproject.galago.core.index.disk.VocabularyReader;
 import org.lemurproject.galago.tupleflow.BufferedFileDataStream;
 import org.lemurproject.galago.tupleflow.DataStream;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.StreamCreator;
+import org.lemurproject.galago.utility.FileUtility;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * Split index reader
@@ -199,7 +199,7 @@ public class SplitBTreeReader extends BTreeReader {
       valueLength = stream.readLong();
 
       if (dataFiles[file] == null) {
-        dataFiles[file] = StreamCreator.inputStream(indexFolder + File.separator + file);
+        dataFiles[file] = FileUtility.inputStream(indexFolder + File.separator + file);
       }
     }
   }
@@ -301,7 +301,7 @@ public class SplitBTreeReader extends BTreeReader {
     if (keys.exists()
             && data.exists()
             && DiskBTreeReader.isBTree(keys)) {
-      RandomAccessFile reader = StreamCreator.inputStream(data.getAbsolutePath());
+      RandomAccessFile reader = FileUtility.inputStream(data.getAbsolutePath());
       reader.seek(reader.length() - 8);
       magic = reader.readLong();
       reader.close();

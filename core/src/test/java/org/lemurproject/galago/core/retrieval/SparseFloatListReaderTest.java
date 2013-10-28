@@ -8,7 +8,7 @@
 package org.lemurproject.galago.core.retrieval;
 
 import org.lemurproject.galago.core.index.disk.SparseFloatListReader;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.core.index.disk.SparseFloatListWriter;
 import org.lemurproject.galago.tupleflow.FakeParameters;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
@@ -20,7 +20,7 @@ import org.lemurproject.galago.core.index.FakeLengthIterator;
 import org.lemurproject.galago.core.retrieval.processing.ScoringContext;
 import org.lemurproject.galago.core.retrieval.iterator.ScoreIterator;
 import org.lemurproject.galago.core.retrieval.query.Node;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

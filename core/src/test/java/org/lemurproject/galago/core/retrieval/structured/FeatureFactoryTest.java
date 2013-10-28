@@ -12,7 +12,7 @@ import org.lemurproject.galago.core.retrieval.iterator.NullExtentIterator;
 import org.lemurproject.galago.core.retrieval.iterator.ScoreCombinationIterator;
 import org.lemurproject.galago.core.retrieval.iterator.SynonymIterator;
 import org.lemurproject.galago.core.retrieval.query.NodeParameters;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

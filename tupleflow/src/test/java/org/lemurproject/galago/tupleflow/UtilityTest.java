@@ -4,7 +4,7 @@
  */
 package org.lemurproject.galago.tupleflow;
 
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import java.io.*;
 import junit.framework.TestCase;
 

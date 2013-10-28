@@ -7,7 +7,7 @@ import java.io.IOException;
 import org.lemurproject.galago.core.index.source.MemValueSource;
 import org.lemurproject.galago.core.index.source.ScoreSource;
 import org.lemurproject.galago.core.index.stats.NodeStatistics;
-import org.lemurproject.galago.tupleflow.VByteInput;
+import org.lemurproject.galago.utility.compression.VByteInput;
 
 /**
  * @author sjh

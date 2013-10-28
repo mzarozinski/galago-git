@@ -21,8 +21,8 @@ import static org.lemurproject.galago.core.retrieval.processing.ProcessingModel.
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeType;
 import org.lemurproject.galago.core.util.FixedSizeMinHeap;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * Implements A variant of Weak-And processing model (Broder et al. 2003)

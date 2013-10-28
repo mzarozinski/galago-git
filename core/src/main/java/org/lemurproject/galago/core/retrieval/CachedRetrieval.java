@@ -8,10 +8,9 @@ import java.util.HashMap;
 import org.lemurproject.galago.core.index.mem.*;
 import org.lemurproject.galago.core.index.stats.AggregateStatistic;
 import org.lemurproject.galago.core.retrieval.iterator.*;
-import org.lemurproject.galago.core.retrieval.processing.ScoringContext;
 import org.lemurproject.galago.core.retrieval.query.Node;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * The CacbedRetrieval object exists in a retrieval - it allows in-memory

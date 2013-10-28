@@ -1,14 +1,10 @@
 // BSD License (http://lemurproject.org/galago-license)
 package org.lemurproject.galago.core.parse;
 
-import info.bliki.wiki.tags.SourceTag;
 import org.lemurproject.galago.core.types.DocumentSplit;
-import org.lemurproject.galago.tupleflow.Parameters;
-
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.lang.Error;
-import java.lang.String;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * Reads documents delimited by a line delimiter.

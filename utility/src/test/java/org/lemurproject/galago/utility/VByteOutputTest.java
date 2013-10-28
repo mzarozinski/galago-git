@@ -3,13 +3,13 @@
  * and open the template in the editor.
  */
 
-package org.lemurproject.galago.tupleflow;
+package org.lemurproject.galago.utility;
 
-import org.lemurproject.galago.tupleflow.VByteOutput;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import junit.framework.TestCase;
+import org.lemurproject.galago.utility.compression.VByteOutput;
 
 /**
  *

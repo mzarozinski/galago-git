@@ -1,10 +1,12 @@
 package org.lemurproject.galago.tupleflow;
 
+import org.lemurproject.galago.utility.Utility;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import junit.framework.TestCase;
 import org.lemurproject.galago.tupleflow.types.FileName;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

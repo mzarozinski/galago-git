@@ -4,11 +4,9 @@
 package org.lemurproject.galago.contrib.hash;
 
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

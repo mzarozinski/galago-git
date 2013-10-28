@@ -5,7 +5,7 @@ package org.lemurproject.galago.contrib.learning;
 
 import gnu.trove.map.hash.TObjectDoubleHashMap;
 import java.util.List;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

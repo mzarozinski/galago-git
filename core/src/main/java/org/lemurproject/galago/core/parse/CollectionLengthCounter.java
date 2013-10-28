@@ -4,11 +4,11 @@ package org.lemurproject.galago.core.parse;
 import java.io.IOException;
 import org.lemurproject.galago.tupleflow.InputClass;
 import org.lemurproject.galago.tupleflow.OutputClass;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.StandardStep;
 import org.lemurproject.galago.tupleflow.execution.Verified;
 import org.lemurproject.galago.core.types.NumberedDocumentData;
 import org.lemurproject.galago.tupleflow.types.SerializedParameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

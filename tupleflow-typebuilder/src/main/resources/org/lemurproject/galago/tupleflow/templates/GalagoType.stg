@@ -3,7 +3,7 @@ group GalagoType;
 type(typeName, fields, orders) ::= <<
 package <package>;
 
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.ArrayInput;
 import org.lemurproject.galago.tupleflow.ArrayOutput;
 import org.lemurproject.galago.tupleflow.Order;   

@@ -4,8 +4,8 @@ package org.lemurproject.galago.core.parse;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import org.lemurproject.galago.core.types.DocumentSplit;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  * Parses ARC files, like those produced by the Heretrix web crawler.

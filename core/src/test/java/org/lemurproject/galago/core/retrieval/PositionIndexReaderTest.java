@@ -8,10 +8,9 @@
 package org.lemurproject.galago.core.retrieval;
 
 import org.lemurproject.galago.core.index.disk.PositionIndexReader;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.core.index.disk.PositionIndexWriter;
 import org.lemurproject.galago.core.retrieval.iterator.ExtentArrayIterator;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.core.util.ExtentArray;
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +21,7 @@ import org.lemurproject.galago.core.index.stats.NodeStatistics;
 import org.lemurproject.galago.core.retrieval.iterator.ExtentIterator;
 import org.lemurproject.galago.core.retrieval.iterator.disk.DiskCountIterator;
 import org.lemurproject.galago.core.retrieval.processing.ScoringContext;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

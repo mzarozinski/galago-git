@@ -6,7 +6,7 @@ import org.lemurproject.galago.core.index.BTreeReader.BTreeIterator;
 import org.lemurproject.galago.core.index.source.BTreeValueSource;
 import org.lemurproject.galago.core.index.source.ScoreSource;
 import org.lemurproject.galago.tupleflow.DataStream;
-import org.lemurproject.galago.tupleflow.VByteInput;
+import org.lemurproject.galago.utility.compression.VByteInput;
 
 /**
  * Retrieves lists of floating point numbers which can be used as document

@@ -1,3 +1,4 @@
+
 // BSD License (http://lemurproject.org/galago-license)
 package org.lemurproject.galago.core.tools.apps;
 
@@ -28,9 +29,8 @@ import org.lemurproject.galago.core.window.WindowFilter;
 import org.lemurproject.galago.core.window.WindowProducer;
 import org.lemurproject.galago.core.window.WindowToNumberWordCount;
 import org.lemurproject.galago.core.window.WindowToNumberedExtent;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Parameters.Type;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.tupleflow.TupleFlowUtility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.execution.ConnectionAssignmentType;
 import org.lemurproject.galago.tupleflow.execution.ConnectionPointType;
 import org.lemurproject.galago.tupleflow.execution.InputStep;
@@ -39,6 +39,8 @@ import org.lemurproject.galago.tupleflow.execution.OutputStep;
 import org.lemurproject.galago.tupleflow.execution.Stage;
 import org.lemurproject.galago.tupleflow.execution.StageConnectionPoint;
 import org.lemurproject.galago.tupleflow.execution.Step;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Parameters.Type;
 
 /**
  *
@@ -102,7 +104,7 @@ public class BuildWindowIndex extends AppFunction {
     stage.add(new Step(WindowProducer.class, p2));
 
     stage.add(new Step(WindowFeaturer.class));
-    stage.add(Utility.getSorter(new TextFeature.FeatureOrder()));
+    stage.add(TupleFlowUtility.getSorter(new TextFeature.FeatureOrder()));
     stage.add(new OutputStep("featureData"));
 
     return stage;
@@ -123,7 +125,7 @@ public class BuildWindowIndex extends AppFunction {
     p.set("threshold", threshold);
     stage.add(new Step(TextFeatureThresholder.class, p));
 
-    stage.add(Utility.getSorter(new TextFeature.FileFilePositionOrder()));
+    stage.add(TupleFlowUtility.getSorter(new TextFeature.FileFilePositionOrder()));
 
     // discards feature data - leaving only locations (data = byte[0]).
     stage.add(new Step(ExtractLocations.class));
@@ -186,10 +188,10 @@ public class BuildWindowIndex extends AppFunction {
 
     if (this.positionalIndex) {
       stage.add(new Step(WindowToNumberedExtent.class));
-      stage.add(Utility.getSorter(new NumberedExtent.ExtentNameNumberBeginOrder()));
+      stage.add(TupleFlowUtility.getSorter(new NumberedExtent.ExtentNameNumberBeginOrder()));
     } else {
       stage.add(new Step(WindowToNumberWordCount.class));
-      stage.add(Utility.getSorter(new NumberWordCount.WordDocumentOrder()));
+      stage.add(TupleFlowUtility.getSorter(new NumberWordCount.WordDocumentOrder()));
       stage.add(new Step(ReduceNumberWordCount.class));
     }
 

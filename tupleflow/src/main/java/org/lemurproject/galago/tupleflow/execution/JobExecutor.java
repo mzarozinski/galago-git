@@ -4,7 +4,7 @@ package org.lemurproject.galago.tupleflow.execution;
 import java.io.BufferedReader;
 import java.net.UnknownHostException;
 import org.mortbay.jetty.Server;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.execution.StageGroupDescription.DataPipeRegion;
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
 import org.lemurproject.galago.tupleflow.CompressionType;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * <p>This class is responsible for executing TupleFlow jobs.</p>

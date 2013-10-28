@@ -14,7 +14,7 @@ import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeParameters;
 import org.lemurproject.galago.core.retrieval.traversal.Traversal;
 import org.lemurproject.galago.core.util.TextPartAssigner;
-import org.lemurproject.galago.tupleflow.Parameters;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  * Transforms a #pl2f( text1 text2 ) node into the fully expanded PL2F model

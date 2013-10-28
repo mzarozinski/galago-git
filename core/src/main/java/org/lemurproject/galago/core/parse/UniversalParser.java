@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.lemurproject.galago.tupleflow.Counter;
 import org.lemurproject.galago.tupleflow.InputClass;
@@ -25,11 +24,11 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
-import org.lemurproject.galago.tupleflow.StreamCreator;
+import org.lemurproject.galago.utility.FileUtility;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
 import org.lemurproject.galago.core.types.DocumentSplit;
-import org.lemurproject.galago.tupleflow.Parameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Parameters;
+import org.lemurproject.galago.utility.Utility;
 import org.tukaani.xz.XZInputStream;
 
 /**
@@ -248,7 +247,7 @@ public class UniversalParser extends StandardStep<DocumentSplit, Document> {
   }
 
   public static BufferedReader getBufferedReader(String filename, boolean isCompressed) throws IOException {
-    FileInputStream stream = StreamCreator.realInputStream(filename);
+    FileInputStream stream = FileUtility.realInputStream(filename);
     BufferedReader reader;
 
     if (isCompressed) {
@@ -267,7 +266,7 @@ public class UniversalParser extends StandardStep<DocumentSplit, Document> {
   }
 
   public static BufferedReader getBufferedReader(DocumentSplit split) throws IOException {
-    FileInputStream stream = StreamCreator.realInputStream(split.fileName);
+    FileInputStream stream = FileUtility.realInputStream(split.fileName);
     BufferedReader reader;
 
     if (split.isCompressed) {
@@ -292,7 +291,7 @@ public class UniversalParser extends StandardStep<DocumentSplit, Document> {
   }
 
   public static BufferedInputStream getBufferedInputStream(DocumentSplit split) throws IOException {
-    FileInputStream fileStream = StreamCreator.realInputStream(split.fileName);
+    FileInputStream fileStream = FileUtility.realInputStream(split.fileName);
     BufferedInputStream stream;
 
     if (split.isCompressed) {

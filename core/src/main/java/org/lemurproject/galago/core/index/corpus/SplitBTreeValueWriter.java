@@ -11,16 +11,16 @@ import org.lemurproject.galago.core.types.KeyValuePair;
 import org.lemurproject.galago.tupleflow.Counter;
 import org.lemurproject.galago.tupleflow.IncompatibleProcessorException;
 import org.lemurproject.galago.tupleflow.InputClass;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.Linkage;
 import org.lemurproject.galago.tupleflow.OutputClass;
 import org.lemurproject.galago.tupleflow.Processor;
 import org.lemurproject.galago.tupleflow.Step;
-import org.lemurproject.galago.tupleflow.StreamCreator;
+import org.lemurproject.galago.utility.FileUtility;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 import org.lemurproject.galago.tupleflow.execution.ErrorStore;
 import org.lemurproject.galago.tupleflow.execution.Verification;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *
@@ -65,7 +65,7 @@ public class SplitBTreeValueWriter extends BTreeWriter
     manifest = parameters.getJSON();
 
     valueOutputId = parameters.getInstanceId();
-    valueOutput = StreamCreator.realOutputStream(valueOutputPath);
+    valueOutput = FileUtility.realOutputStream(valueOutputPath);
     valueOffset = 0;
 
     if (parameters.getJSON().get("blockIndex", false)) {

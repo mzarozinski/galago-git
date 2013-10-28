@@ -4,12 +4,12 @@
   <parent>
     <groupId>org.lemurproject</groupId>
     <artifactId>galago</artifactId>
-    <version>3.5</version>
+    <version>6.0</version>
   </parent>
   <groupId>org.lemurproject.galago</groupId>
   <artifactId>core</artifactId>
   <packaging>jar</packaging>
-  <version>3.5</version>
+  <version>6.0</version>
   <name>core</name>
   <url>http://lemurproject.org/galago/php</url>
   <description>Galago is a toolkit for experimenting with search engines and text processing.</description>
@@ -168,6 +168,11 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>tupleflow</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>utility</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

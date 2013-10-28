@@ -10,7 +10,6 @@ import org.lemurproject.galago.tupleflow.Counter;
 import org.lemurproject.galago.tupleflow.InputClass;
 import org.lemurproject.galago.tupleflow.Order;
 import org.lemurproject.galago.tupleflow.OrderedCombiner;
-import org.lemurproject.galago.tupleflow.Parameters;
 import org.lemurproject.galago.tupleflow.StandardStep;
 import org.lemurproject.galago.tupleflow.TupleFlowParameters;
 import org.lemurproject.galago.tupleflow.Type;
@@ -18,6 +17,7 @@ import org.lemurproject.galago.tupleflow.TypeReader;
 import org.lemurproject.galago.tupleflow.execution.ErrorStore;
 import org.lemurproject.galago.tupleflow.execution.Verification;
 import org.lemurproject.galago.tupleflow.types.FileName;
+import org.lemurproject.galago.utility.Parameters;
 
 /**
  *

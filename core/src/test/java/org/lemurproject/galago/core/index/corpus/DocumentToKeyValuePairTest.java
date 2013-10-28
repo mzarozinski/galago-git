@@ -7,7 +7,7 @@ import java.io.ObjectInputStream;
 import junit.framework.TestCase;
 import org.lemurproject.galago.core.parse.Document;
 import org.lemurproject.galago.core.types.KeyValuePair;
-import org.lemurproject.galago.tupleflow.Utility;
+import org.lemurproject.galago.utility.Utility;
 
 /**
  *

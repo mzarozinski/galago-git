@@ -1,5 +1,5 @@
 // BSD License (http://lemurproject.org/galago-license)
-package org.lemurproject.galago.tupleflow;
+package org.lemurproject.galago.utility;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -19,7 +19,7 @@ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream
  *
  * @author trevor
  */
-public class StreamCreator {
+public class FileUtility {
 
   private static String stripPrefix(String filename) {
     String[] fields = filename.split(":");

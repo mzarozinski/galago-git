@@ -10,6 +10,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
@@ -72,5 +74,11 @@ public class FileUtility {
     } else {
       return new DataOutputStream(new FileOutputStream(filename));
     }
+  }
+  
+  
+  public static FileChannel openOutputChannel(String filename) throws IOException {
+    FileChannel chn = new FileOutputStream(filename).getChannel();
+    return chn;
   }
 }

@@ -34,14 +34,15 @@ public class CompressionTester {
 
       File outputFile = new File(inputFile.getAbsolutePath().replace("data", "compressed") + "." + compressor);
 
-      Stats c1 = testCompression(inputFile, compressor, outputFile);
-      Stats c2 = testCompression(inputFile, compressor, outputFile);
-      Stats c3 = testCompression(inputFile, compressor, outputFile);
-      Stats c = Stats.merge(new Stats[]{c1, c2, c3});
+      Stats c = testCompression(inputFile, compressor, outputFile);
+//      Stats c2 = testCompression(inputFile, compressor, outputFile);
+//      Stats c3 = testCompression(inputFile, compressor, outputFile);
+//      Stats c = Stats.merge(new Stats[]{c1, c2, c3});
 
 //      System.err.println(c.count);
+      verifyCompression(inputFile, compressor, outputFile);
 
-      Stats d1 = testDecompression(outputFile, c1.count, compressor);
+      Stats d1 = testDecompression(outputFile, c.count, compressor);
       Stats d2 = testDecompression(outputFile, c.count, compressor);
       Stats d3 = testDecompression(outputFile, c.count, compressor);
       Stats d = Stats.merge(new Stats[]{d1, d2, d3});

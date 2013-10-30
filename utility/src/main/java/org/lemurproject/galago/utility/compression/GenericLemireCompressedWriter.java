@@ -75,6 +75,11 @@ public class GenericLemireCompressedWriter implements CompressedLongWriter {
 
     blockCount += 1;
 
+    // check if we're done //
+    if(outpos.get() == 0){
+      return;
+    }
+    
     // determine the number of bytes in the final int:
     int intCount = outpos.get() - 1;
     int finalIntBytes = 4;

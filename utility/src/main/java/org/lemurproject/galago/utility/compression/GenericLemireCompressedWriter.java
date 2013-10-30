@@ -86,8 +86,6 @@ public class GenericLemireCompressedWriter implements CompressedLongWriter {
       finalIntBytes = 3;
     }
     
-    System.err.println(finalIntBytes);
-
     // two bytes for the size
     output.writeInt(4 * intCount + finalIntBytes);
     for (int i = 0; i < (outpos.get() - 1); i++) {

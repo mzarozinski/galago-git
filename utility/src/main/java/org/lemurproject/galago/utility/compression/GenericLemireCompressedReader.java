@@ -22,7 +22,6 @@ public class GenericLemireCompressedReader implements CompressedLongReader {
   DataInputStream stream;
   int buffersize;
   int[] bufferIn;
-
   int blockCount = 0;
   int blockSize;
   int blockPos;
@@ -31,17 +30,21 @@ public class GenericLemireCompressedReader implements CompressedLongReader {
   IntWrapper inpos, outpos;
 
   public GenericLemireCompressedReader(InputStream stream) throws IOException {
+    this(stream, new Composition(new BinaryPacking(), new VariableByte()));
+  }
+
+  public GenericLemireCompressedReader(InputStream stream, IntegerCODEC c) throws IOException {
     this.stream = new DataInputStream(stream);
 
     buffersize = this.stream.readInt();
 
-    codec = new Composition(new BinaryPacking(), new VariableByte());
+    codec = c;
 
     blockPos = 0;
     blockSize = 0;
 
     bufferIn = new int[4 * buffersize + 1024];
-    bufferOut = new int[buffersize];
+    bufferOut = new int[4 * buffersize + 1024];
 
     inpos = new IntWrapper(0);
     outpos = new IntWrapper(0);
@@ -50,7 +53,7 @@ public class GenericLemireCompressedReader implements CompressedLongReader {
 
   @Override
   public int readInt() throws IOException {
-    if (blockPos == outpos.get()) {
+    if (blockPos >= outpos.get()) {
       blockPos = 0;
       decompressBlock();
     }
@@ -72,18 +75,18 @@ public class GenericLemireCompressedReader implements CompressedLongReader {
   }
 
   private void decompressBlock() throws IOException {
-    
+
     blockSize = stream.readInt();
     for (int i = 0; i < blockSize; i++) {
       bufferIn[i] = stream.readInt();
     }
-    
+
     inpos.set(0);
     outpos.set(0);
-    
+
     codec.uncompress(bufferIn, inpos, blockSize, bufferOut, outpos);
-    
+
 //    System.err.println("Block-" + blockCount + "[" + blockSize + " --> " + outpos.get() + "]");
-    blockCount++;    
+    blockCount++;
   }
 }

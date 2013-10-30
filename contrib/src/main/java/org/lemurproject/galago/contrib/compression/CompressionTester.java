@@ -32,7 +32,7 @@ public class CompressionTester {
 
     for (String compressor : (List<String>) p.getAsList("compressor")) {
 
-      File outputFile = new File(inputFile.getAbsolutePath() + "." + compressor);
+      File outputFile = new File(inputFile.getAbsolutePath().replace("data", "compressed") + "." + compressor);
 
       Stats c1 = testCompression(inputFile, compressor, outputFile);
       Stats c2 = testCompression(inputFile, compressor, outputFile);
@@ -77,10 +77,11 @@ public class CompressionTester {
         compressor.writeInt(Integer.parseInt(i));
         s.count++;
       }
+      compressor.flush();
     }
+    compressor.close();
 
     long endTime = System.currentTimeMillis();
-    compressor.close();
 
     s.compressTime = endTime - startTime;
     s.space = outputFile.length();

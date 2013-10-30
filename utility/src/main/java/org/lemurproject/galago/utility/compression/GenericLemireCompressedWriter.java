@@ -26,15 +26,16 @@ public class GenericLemireCompressedWriter implements CompressedLongWriter {
   int[] bufferVerify;
   IntegerCODEC codec;
   IntWrapper inpos, outpos, verifypos;
-
   int blockCount = 0;
 
   public GenericLemireCompressedWriter(OutputStream stream) throws IOException {
+    this(stream, new Composition(new BinaryPacking(), new VariableByte()));
+  }
+
+  public GenericLemireCompressedWriter(OutputStream stream, IntegerCODEC c) throws IOException {
     output = new DataOutputStream(stream);
 
-    codec = new Composition(new BinaryPacking(), new VariableByte());
-//    codec = new Composition(new FastPFOR(), new VariableByte());
-//    codec = new VariableByte();
+    codec = c;
 
     buffersize = 512;
 

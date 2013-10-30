@@ -89,6 +89,35 @@ public class CompressionTester {
     return s;
   }
 
+  private static void verifyCompression(File inputFile, String name, File compressedFile) throws IOException {
+
+    int count = 0;
+
+    BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+    InputStream out = new BufferedInputStream(new FileInputStream(compressedFile));
+    DataInputStream dis = new DataInputStream(out);
+
+    CompressedLongReader compressor;
+    compressor = CompressedStreamFactory.compressedLongStreamReaderInstance(name, out);
+
+    String line;
+    while ((line = reader.readLine()) != null) {
+
+      String[] parts = line.split("[,:]");
+      for (String i : parts) {
+        int truth = Integer.parseInt(i);
+        int decompressed = compressor.readInt();
+
+        if (truth != decompressed) {
+          System.err.println("MAJOR ISSUE AT " + count + " -- " + decompressed + " is not " + truth + "!");
+          throw new IOException("Failed to verify compression!");
+        }
+
+        count++;
+      }
+    }
+  }
+
   private static Stats testDecompression(File compressedFile, long expectedCount, String name) throws IOException {
     Stats s = new Stats();
 
@@ -135,7 +164,6 @@ public class CompressionTester {
 
       return merged;
     }
-
     public double compressTime = 0;
     public double decompressTime = 0;
     public long count = 0;

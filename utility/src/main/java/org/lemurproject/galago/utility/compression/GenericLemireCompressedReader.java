@@ -4,14 +4,10 @@
 package org.lemurproject.galago.utility.compression;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import me.lemire.integercompression.BinaryPacking;
-import me.lemire.integercompression.Composition;
 import me.lemire.integercompression.IntWrapper;
 import me.lemire.integercompression.IntegerCODEC;
-import me.lemire.integercompression.VariableByte;
 
 /**
  *
@@ -71,7 +67,7 @@ public class GenericLemireCompressedReader implements CompressedLongReader {
   }
 
   private void decompressBlock() throws IOException {
-
+    
     byteCount = stream.readInt();
     int bufferInLength = 0;
 

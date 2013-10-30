@@ -28,10 +28,6 @@ public class GenericLemireCompressedWriter implements CompressedLongWriter {
   IntWrapper inpos, outpos, verifypos;
   int blockCount = 0;
 
-  public GenericLemireCompressedWriter(OutputStream stream) throws IOException {
-    this(stream, new Composition(new BinaryPacking(), new VariableByte()));
-  }
-
   public GenericLemireCompressedWriter(OutputStream stream, IntegerCODEC c) throws IOException {
     output = new DataOutputStream(stream);
 
@@ -77,16 +73,41 @@ public class GenericLemireCompressedWriter implements CompressedLongWriter {
 
     codec.compress(bufferIn, inpos, bufferpos, bufferOut, outpos);
 
-//    System.err.println("Block-" + blockCount + "[" + bufferpos + " --> " + outpos.get() + "]");
-
     blockCount += 1;
 
+    // determine the number of bytes in the final int:
+    int intCount = outpos.get() - 1;
+    int finalIntBytes = 4;
+    if (bufferOut[outpos.get() - 1] < (1 << 8)) {
+      finalIntBytes = 1;
+    } else if (bufferOut[outpos.get() - 1] < (1 << 16)) {
+      finalIntBytes = 2;
+    } else if (bufferOut[outpos.get() - 1] < (1 << 24)) {
+      finalIntBytes = 3;
+    }
+    
+    System.err.println(finalIntBytes);
+
     // two bytes for the size
-    output.writeInt(outpos.get());
-    for (int i = 0; i < outpos.get(); i++) {
+    output.writeInt(4 * intCount + finalIntBytes);
+    for (int i = 0; i < (outpos.get() - 1); i++) {
       output.writeInt(bufferOut[i]);
     }
+    
+    if (finalIntBytes == 1) {
+      output.writeByte(bufferOut[outpos.get() - 1]);
+    
+    } else if (finalIntBytes == 2) {
+      output.writeShort(bufferOut[outpos.get() - 1]);
 
+    } else if (finalIntBytes == 3) {
+      // writing //
+      output.writeShort(bufferOut[outpos.get() - 1]);
+      output.writeByte((bufferOut[outpos.get() - 1] >>> 16));
+     
+    } else {
+      output.writeInt(bufferOut[outpos.get() - 1]);
+    }
     // clear bufferIn //
     bufferpos = 0;
   }

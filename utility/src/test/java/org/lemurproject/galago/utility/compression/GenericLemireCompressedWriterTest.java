@@ -29,10 +29,11 @@ public class GenericLemireCompressedWriterTest extends TestCase {
       data = Utility.createTemporary();
       BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(data));
 
-      CompressedLongWriter writer = new GenericLemireCompressedWriter(out);
-      int[] log = new int[2200];
-      int[] dgaplog = new int[2200];
-      Random r = new Random(2200);
+      CompressedLongWriter writer = CompressedStreamFactory.compressedLongStreamWriterInstance("vbyte2", out);
+      int streamSize = 2221;
+      int[] log = new int[streamSize];
+      int[] dgaplog = new int[streamSize];
+      Random r = new Random(streamSize);
 
       for (int i = 0; i < log.length; i++) {
         log[i] = Math.abs(r.nextInt(1024));
@@ -42,15 +43,16 @@ public class GenericLemireCompressedWriterTest extends TestCase {
 
       int prev = 0;
       for (int i = 0; i < log.length; i++) {
-        int val = log[i] - prev;        
+        int val = log[i] - prev;
         dgaplog[i] = val;
-        writer.writeInt( val );
+        writer.writeInt(val);
         prev = log[i];
       }
       writer.close();
 
       BufferedInputStream in = new BufferedInputStream(new FileInputStream(data));
-      CompressedLongReader reader = new GenericLemireCompressedReader(in);
+      CompressedLongReader reader =
+              CompressedStreamFactory.compressedLongStreamReaderInstance("vbyte2", in);
 
       prev = 0;
       for (int i = 0; i < log.length; i++) {

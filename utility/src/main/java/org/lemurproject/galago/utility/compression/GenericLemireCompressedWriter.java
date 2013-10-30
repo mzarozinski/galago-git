@@ -75,6 +75,9 @@ public class GenericLemireCompressedWriter implements CompressedLongWriter {
 
     blockCount += 1;
 
+    // clear bufferIn //
+    bufferpos = 0;
+
     // check if we're done //
     if(outpos.get() == 0){
       return;
@@ -111,8 +114,6 @@ public class GenericLemireCompressedWriter implements CompressedLongWriter {
     } else {
       output.writeInt(bufferOut[outpos.get() - 1]);
     }
-    // clear bufferIn //
-    bufferpos = 0;
   }
 
   @Override

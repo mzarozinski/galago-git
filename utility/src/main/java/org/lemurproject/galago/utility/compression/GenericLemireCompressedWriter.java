@@ -68,6 +68,11 @@ public class GenericLemireCompressedWriter implements CompressedLongWriter {
 
   public void compressFlush() throws IOException {
 
+    if(bufferpos == 0){
+      // nothing to write //
+      return;
+    }
+    
     inpos.set(0);
     outpos.set(0);
 
@@ -77,21 +82,18 @@ public class GenericLemireCompressedWriter implements CompressedLongWriter {
 
     // clear bufferIn //
     bufferpos = 0;
-
-    // check if we're done //
-    if(outpos.get() == 0){
-      return;
-    }
     
     // determine the number of bytes in the final int:
-    int intCount = outpos.get() - 1;
-    int finalIntBytes = 4;
+    int intCount = outpos.get() - 1;    
+    int finalIntBytes = 0;
     if (bufferOut[outpos.get() - 1] < (1 << 8)) {
       finalIntBytes = 1;
     } else if (bufferOut[outpos.get() - 1] < (1 << 16)) {
       finalIntBytes = 2;
     } else if (bufferOut[outpos.get() - 1] < (1 << 24)) {
       finalIntBytes = 3;
+    } else {
+      finalIntBytes = 4;      
     }
     
     // two bytes for the size

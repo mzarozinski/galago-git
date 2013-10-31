@@ -32,14 +32,13 @@ public class CompressionTester {
 
     for (String compressor : (List<String>) p.getAsList("compressor")) {
 
-      File outputFile = new File(inputFile.getAbsolutePath().replace("data", "compressed") + "." + compressor);
+      File outputFile = new File(inputFile.getAbsolutePath().replace("/data/", "/compressed/") + "." + compressor);
 
-      Stats c = testCompression(inputFile, compressor, outputFile);
-//      Stats c2 = testCompression(inputFile, compressor, outputFile);
-//      Stats c3 = testCompression(inputFile, compressor, outputFile);
-//      Stats c = Stats.merge(new Stats[]{c1, c2, c3});
+      Stats c1 = testCompression(inputFile, compressor, outputFile);
+      Stats c2 = testCompression(inputFile, compressor, outputFile);
+      Stats c3 = testCompression(inputFile, compressor, outputFile);
+      Stats c = Stats.merge(new Stats[]{c1, c2, c3});
 
-//      System.err.println(c.count);
       verifyCompression(inputFile, compressor, outputFile);
 
       Stats d1 = testDecompression(outputFile, c.count, compressor);

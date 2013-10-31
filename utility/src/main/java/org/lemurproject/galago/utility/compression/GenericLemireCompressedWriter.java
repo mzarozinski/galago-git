@@ -65,11 +65,11 @@ public class GenericLemireCompressedWriter implements CompressedLongWriter {
 
   public void compressFlush() throws IOException {
 
-    if(bufferpos == 0){
+    if (bufferpos == 0) {
       // nothing to write //
       return;
     }
-    
+
     inpos.set(0);
     outpos.set(0);
 
@@ -79,37 +79,40 @@ public class GenericLemireCompressedWriter implements CompressedLongWriter {
 
     // clear bufferIn //
     bufferpos = 0;
-    
+
     // determine the number of bytes in the final int:
-    int intCount = outpos.get() - 1;    
+    int intCount = outpos.get() - 1;
     int finalIntBytes = 0;
-    if (bufferOut[outpos.get() - 1] < (1 << 8)) {
+
+    // check if there is any information in the top 24 bits
+    if ((bufferOut[outpos.get() - 1] & 0xFFFFFF00) == 0) {
       finalIntBytes = 1;
-    } else if (bufferOut[outpos.get() - 1] < (1 << 16)) {
+    } else if ((bufferOut[outpos.get() - 1] & 0xFFFF0000) == 0) {
       finalIntBytes = 2;
-    } else if (bufferOut[outpos.get() - 1] < (1 << 24)) {
+    } else if ((bufferOut[outpos.get() - 1] & 0xFF000000) == 0) {
       finalIntBytes = 3;
     } else {
-      finalIntBytes = 4;      
+      finalIntBytes = 4;
     }
-    
+
     // two bytes for the size
-    output.writeInt(4 * intCount + finalIntBytes);
+    assert((4 * intCount + finalIntBytes) > (1 << 16)): "FAILED TO WRITE THE BLOCK HEADER : using a short to write " + (4 * intCount + finalIntBytes);
+    
+    output.writeShort(4 * intCount + finalIntBytes);
     for (int i = 0; i < (outpos.get() - 1); i++) {
       output.writeInt(bufferOut[i]);
     }
-    
+
     if (finalIntBytes == 1) {
       output.writeByte(bufferOut[outpos.get() - 1]);
-    
+
     } else if (finalIntBytes == 2) {
       output.writeShort(bufferOut[outpos.get() - 1]);
 
     } else if (finalIntBytes == 3) {
-      // writing //
       output.writeShort(bufferOut[outpos.get() - 1]);
       output.writeByte((bufferOut[outpos.get() - 1] >>> 16));
-     
+
     } else {
       output.writeInt(bufferOut[outpos.get() - 1]);
     }

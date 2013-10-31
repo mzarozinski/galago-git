@@ -68,7 +68,7 @@ public class GenericLemireCompressedReader implements CompressedLongReader {
 
   private void decompressBlock() throws IOException {
     
-    byteCount = stream.readInt();
+    byteCount = stream.readUnsignedShort();
     int bufferInLength = 0;
 
     while (byteCount >= 4) {
@@ -76,13 +76,14 @@ public class GenericLemireCompressedReader implements CompressedLongReader {
       bufferInLength += 1;
       byteCount -= 4;
     }
+
     if (byteCount == 1) {
-      int finalInt = stream.readByte();
+      int finalInt = stream.readUnsignedByte();
       bufferIn[bufferInLength] = finalInt;
       bufferInLength += 1;
 
     } else if(byteCount == 2){
-      int finalInt = stream.readShort();
+      int finalInt = stream.readUnsignedShort();
       bufferIn[bufferInLength] = finalInt;
       bufferInLength += 1;      
       

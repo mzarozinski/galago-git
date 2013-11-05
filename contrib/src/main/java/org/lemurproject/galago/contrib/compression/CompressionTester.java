@@ -16,8 +16,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import org.lemurproject.galago.utility.Parameters;
-import org.lemurproject.galago.utility.compression.CompressedLongReader;
-import org.lemurproject.galago.utility.compression.CompressedLongWriter;
+import org.lemurproject.galago.utility.compression.integer.CompressedLongReader;
+import org.lemurproject.galago.utility.compression.integer.CompressedLongWriter;
 import org.lemurproject.galago.utility.compression.CompressedStreamFactory;
 
 /**
@@ -74,7 +74,7 @@ public class CompressionTester {
 
       String[] parts = line.split("[,:]");
       for (String i : parts) {
-        compressor.writeInt(Integer.parseInt(i));
+        compressor.writeLong(Long.parseLong(i));
         s.count++;
       }
       compressor.flush();
@@ -105,8 +105,8 @@ public class CompressionTester {
 
       String[] parts = line.split("[,:]");
       for (String i : parts) {
-        int truth = Integer.parseInt(i);
-        int decompressed = compressor.readInt();
+        long truth = Long.parseLong(i);
+        long decompressed = compressor.readLong();
 
         if (truth != decompressed) {
           System.err.println("MAJOR ISSUE AT " + count + " -- " + decompressed + " is not " + truth + "!");
@@ -130,7 +130,7 @@ public class CompressionTester {
     compressor = CompressedStreamFactory.compressedLongStreamReaderInstance(name, out);
 
     for (int i = 0; i < expectedCount; i++) {
-      int value = compressor.readInt();
+      long value = compressor.readLong();
       s.count++;
     }
 

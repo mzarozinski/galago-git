@@ -100,10 +100,12 @@ public class Utility {
   }
 
   /**
-   * <p>If the parent directories for this file don't exist, this function
-   * creates them.</p>
+   * <p>
+   * If the parent directories for this file don't exist, this function creates
+   * them.</p>
    *
-   * <p>Often we want to create a file, but we don't yet know if the parent path
+   * <p>
+   * Often we want to create a file, but we don't yet know if the parent path
    * has been created yet. Call this function immediately before opening a file
    * for writing to make sure those directories have been created.</p>
    *
@@ -210,10 +212,12 @@ public class Utility {
   }
 
   /**
-   * <p>Splits args into an array of flags and an array of parameters.</p>
+   * <p>
+   * Splits args into an array of flags and an array of parameters.</p>
    *
-   * <p>This method assumes that args is an array of strings, where some of
-   * those strings are flags (they start with '-') and the others are non-flag
+   * <p>
+   * This method assumes that args is an array of strings, where some of those
+   * strings are flags (they start with '-') and the others are non-flag
    * arguments. This splits those into two arrays so they can be processed
    * separately.</p>
    *
@@ -658,7 +662,7 @@ public class Utility {
     final int fiveMegabytes = 5 * 1024 * 1024;
 
     while (longLength > 0) {
-      int chunk = (int) Math.min(longLength, fiveMegabytes);
+      int chunk = (int) ((longLength < fiveMegabytes) ? longLength : fiveMegabytes);
       byte[] data = new byte[chunk];
       input.read(data, 0, chunk);
       stream.write(data, 0, chunk);

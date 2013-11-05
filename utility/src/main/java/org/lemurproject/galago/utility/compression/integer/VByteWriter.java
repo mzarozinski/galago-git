@@ -1,7 +1,7 @@
 /*
  *  BSD License (http://lemurproject.org/galago-license)
  */
-package org.lemurproject.galago.utility.compression;
+package org.lemurproject.galago.utility.compression.integer;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,6 +12,7 @@ import java.io.OutputStream;
  */
 public class VByteWriter implements CompressedLongWriter {
 
+  long bytesWritten = 0;
   OutputStream output;
 
   public VByteWriter(OutputStream stream) {
@@ -25,24 +26,28 @@ public class VByteWriter implements CompressedLongWriter {
 
   @Override
   public void writeLong(long value) throws IOException {
-    assert (value >= 0) : "VByteWriter can not compress negative values.";
+    // assert (value >= 0) : "VByteWriter can not compress negative values.";
 
-    if (value < 1 << 7) {
+    // if less than 7 bytes:
+    if ((value | 0x7f) == 0x7f) {
       output.write((int) (value | 0x80));
-    } else if (value < 1 << 14) {
-      output.write((int) (value >> 0) & 0x7f);
-      output.write((int) ((value >> 7) & 0x7f) | 0x80);
-    } else if (value < 1 << 21) {
-      output.write((int) (value >> 0) & 0x7f);
-      output.write((int) (value >> 7) & 0x7f);
-      output.write((int) ((value >> 14) & 0x7f) | 0x80);
+      bytesWritten += 1;
+
+    // otherwise more than 7 bytes:
     } else {
-      while (value >= 1 << 7) {
+
+      output.write((int) (value & 0x7f));
+      bytesWritten += 1;
+      value >>>= 7;
+
+      while ((value | 0x7f) != 0x7f) {
         output.write((int) (value & 0x7f));
+        bytesWritten += 1;
         value >>= 7;
       }
 
       output.write((int) (value | 0x80));
+      bytesWritten += 1;
     }
   }
 
@@ -54,11 +59,16 @@ public class VByteWriter implements CompressedLongWriter {
 
   /**
    * ONLY USE THIS FUNCTION WHEN THE UNDERLYING STREAM SHOULD BE CLOSED.
-   * 
-   * @throws IOException 
+   *
+   * @throws IOException
    */
   @Override
   public void close() throws IOException {
     this.output.close();
+  }
+
+  @Override
+  public long getUnderlyingStreamPosition() {
+    return this.bytesWritten;
   }
 }

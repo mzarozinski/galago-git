@@ -1,15 +1,17 @@
     // BSD License (http://lemurproject.org/galago-license)
-package org.lemurproject.galago.tupleflow;
+package org.lemurproject.galago.utility;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 
 /**
+ * Buffered Input Stream - uses RandomAccessFile in a synchronous manner.
  *
- * @author trevor
+ * @author sjh, trevor
  */
-public class BufferedFileDataStream implements DataStream {
+public class BufferedInputFileStream extends InputStream implements DataStream {
 
   // the fileStream object must be used in a synchronous manner
   // as this class is used heavily by the IndexReader class
@@ -21,8 +23,10 @@ public class BufferedFileDataStream implements DataStream {
   int bufferPosition;
   byte[] cacheBuffer;
 
-  /** Creates a new instance of BufferedFileDataStream */
-  public BufferedFileDataStream(RandomAccessFile input, long start, long end) {
+  /**
+   * Creates a new instance of BufferedInputFileStream
+   */
+  public BufferedInputFileStream(RandomAccessFile input, long start, long end) {
     assert start <= end;
 
     this.fileStream = input;
@@ -33,13 +37,20 @@ public class BufferedFileDataStream implements DataStream {
     this.startPosition = start;
   }
 
-  @Override
-  public BufferedFileDataStream subStream(long start, long length) {
+  public BufferedInputFileStream subStream(long start, long length) {
     assert start < length();
     assert start + length <= length();
-    return new BufferedFileDataStream(
+    return new BufferedInputFileStream(
             fileStream, bufferStart + start,
             bufferStart + start + length);
+  }
+
+  @Override
+  public int read() throws IOException {
+    cache(1);
+    byte result = cacheByte(0);
+    update(1);
+    return result;
   }
 
   @Override
@@ -63,7 +74,7 @@ public class BufferedFileDataStream implements DataStream {
 
   /**
    * Seeks forward into the fileStream to a particular byte offset (reverse
-   * seeks are not allowed).  The offset is relative to the start position of
+   * seeks are not allowed). The offset is relative to the start position of
    * this data fileStream, not the beginning of the file.
    */
   @Override
@@ -73,7 +84,7 @@ public class BufferedFileDataStream implements DataStream {
 
   /**
    * Seeks forward into the fileStream to a particular byte offset (reverse
-   * seeks are not allowed).  The offset is relative to the start of the file.
+   * seeks are not allowed). The offset is relative to the start of the file.
    */
   private void seekAbsolute(long offset) {
     assert bufferStart + bufferPosition <= offset;

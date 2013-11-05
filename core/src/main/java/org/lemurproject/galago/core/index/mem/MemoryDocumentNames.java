@@ -20,7 +20,7 @@ import org.lemurproject.galago.core.retrieval.iterator.BaseIterator;
 import org.lemurproject.galago.core.retrieval.iterator.disk.DiskDataIterator;
 import org.lemurproject.galago.core.retrieval.processing.ScoringContext;
 import org.lemurproject.galago.core.types.NumberedDocumentData;
-import org.lemurproject.galago.tupleflow.DataStream;
+import org.lemurproject.galago.utility.DataStream;
 import org.lemurproject.galago.tupleflow.FakeParameters;
 import org.lemurproject.galago.utility.Parameters;
 import org.lemurproject.galago.utility.Utility;

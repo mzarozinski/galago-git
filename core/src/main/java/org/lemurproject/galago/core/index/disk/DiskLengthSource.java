@@ -6,7 +6,7 @@ import org.lemurproject.galago.core.index.BTreeReader;
 import org.lemurproject.galago.core.index.source.BTreeValueSource;
 import org.lemurproject.galago.core.index.source.LengthSource;
 import org.lemurproject.galago.core.index.stats.FieldStatistics;
-import org.lemurproject.galago.tupleflow.DataStream;
+import org.lemurproject.galago.utility.DataStream;
 
 /**
  *

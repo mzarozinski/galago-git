@@ -3,8 +3,9 @@ package org.lemurproject.galago.core.index;
 
 import org.lemurproject.galago.core.index.disk.VocabularyReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.MappedByteBuffer;
-import org.lemurproject.galago.tupleflow.DataStream;
+import org.lemurproject.galago.utility.DataStream;
 import org.lemurproject.galago.utility.Parameters;
 import org.lemurproject.galago.utility.Utility;
 

@@ -10,7 +10,7 @@ import org.lemurproject.galago.core.index.*;
 import org.lemurproject.galago.core.retrieval.iterator.BaseIterator;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeType;
-import org.lemurproject.galago.tupleflow.DataStream;
+import org.lemurproject.galago.utility.DataStream;
 import org.lemurproject.galago.utility.Utility;
 
 /** 

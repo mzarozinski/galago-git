@@ -4,13 +4,12 @@ package org.lemurproject.galago.utility.compression;
 import java.io.DataOutput;
 import java.io.IOException;
 import org.lemurproject.galago.utility.Utility;
-import org.lemurproject.galago.utility.Utility;
 
 /**
  *
  * @author trevor
  */
-public class VByteOutput implements DataOutput {
+public class VByteOutput extends CompressedDataWriter implements DataOutput {
 
   DataOutput output;
 
@@ -88,5 +87,20 @@ public class VByteOutput implements DataOutput {
 
   public void writeFloat(float f) throws IOException {
     output.writeInt(Float.floatToRawIntBits(f));
+  }
+
+  @Override
+  public void writeByte(byte b) throws IOException {
+    write(b);
+  }
+
+  @Override
+  public void flush() throws IOException {
+    // nothing
+  }
+
+  @Override
+  public void close() throws IOException {
+    // nothing
   }
 }

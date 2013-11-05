@@ -9,8 +9,8 @@ import java.nio.channels.FileChannel;
 import org.lemurproject.galago.core.index.BTreeReader;
 import org.lemurproject.galago.core.index.disk.DiskBTreeReader;
 import org.lemurproject.galago.core.index.disk.VocabularyReader;
-import org.lemurproject.galago.tupleflow.BufferedFileDataStream;
-import org.lemurproject.galago.tupleflow.DataStream;
+import org.lemurproject.galago.utility.BufferedInputFileStream;
+import org.lemurproject.galago.utility.DataStream;
 import org.lemurproject.galago.utility.FileUtility;
 import org.lemurproject.galago.utility.Parameters;
 
@@ -127,7 +127,7 @@ public class SplitBTreeReader extends BTreeReader {
         loadValue();
       }
 
-      return new BufferedFileDataStream(dataFiles[file], getValueStart(), getValueEnd());
+      return new BufferedInputFileStream(dataFiles[file], getValueStart(), getValueEnd());
     }
 
     @Override
@@ -154,7 +154,7 @@ public class SplitBTreeReader extends BTreeReader {
 
       assert absoluteStart <= absoluteEnd;
 
-      return new BufferedFileDataStream(dataFiles[file], absoluteStart, absoluteEnd);
+      return new BufferedInputFileStream(dataFiles[file], absoluteStart, absoluteEnd);
     }
 
     /**

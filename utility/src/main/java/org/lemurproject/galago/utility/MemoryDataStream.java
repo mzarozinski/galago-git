@@ -1,9 +1,8 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * BSD License (http://lemurproject.org/galago-license)
  */
 
-package org.lemurproject.galago.tupleflow;
+package org.lemurproject.galago.utility;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;

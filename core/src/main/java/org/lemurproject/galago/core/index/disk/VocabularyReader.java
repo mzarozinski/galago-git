@@ -4,16 +4,17 @@ package org.lemurproject.galago.core.index.disk;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.lemurproject.galago.tupleflow.BufferedFileDataStream;
+import org.lemurproject.galago.utility.BufferedInputFileStream;
 import org.lemurproject.galago.utility.Utility;
 
 /**
- * 
+ *
  * @author trevor
  */
 public class VocabularyReader {
 
   public static class IndexBlockInfo {
+
     public int slotId;
     public byte[] firstKey;
     public byte[] nextSlotKey;
@@ -23,13 +24,13 @@ public class VocabularyReader {
   }
   List<IndexBlockInfo> slots;
 
-  public VocabularyReader(BufferedFileDataStream input, long valueDataEnd) throws IOException {
+  public VocabularyReader(BufferedInputFileStream input, long valueDataEnd) throws IOException {
     slots = new ArrayList<IndexBlockInfo>();
     read(input, valueDataEnd);
   }
 
   public IndexBlockInfo getSlot(int id) {
-    if(id == slots.size()){
+    if (id == slots.size()) {
       return null;
     }
     return slots.get(id);
@@ -40,7 +41,7 @@ public class VocabularyReader {
     return slots;
   }
 
-  private void read(BufferedFileDataStream input, long valueDataEnd) throws IOException {
+  private void read(BufferedInputFileStream input, long valueDataEnd) throws IOException {
     long last = 0;
 
     int finalKeyLength = input.readInt();
@@ -54,10 +55,10 @@ public class VocabularyReader {
       // read - block key
       byte[] data = new byte[length];
       input.readFully(data);
-      
+
       // read  - offset of block
       long offset = Utility.uncompressLong(input);
-      
+
       // read - length of block header 
       int headerLength = Utility.uncompressInt(input);
 
@@ -80,7 +81,7 @@ public class VocabularyReader {
     }
 
     if (slots.size() > 0) {
-      IndexBlockInfo finalSlot = slots.get(slots.size()-1);
+      IndexBlockInfo finalSlot = slots.get(slots.size() - 1);
       finalSlot.length = valueDataEnd - finalSlot.begin;
       finalSlot.nextSlotKey = finalIndexKey;
     }

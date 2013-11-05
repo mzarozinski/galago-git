@@ -8,7 +8,7 @@ import org.lemurproject.galago.core.index.source.BTreeValueSource;
 import static org.lemurproject.galago.core.index.source.BTreeValueSource.HAS_SKIPS;
 import org.lemurproject.galago.core.index.source.CountSource;
 import org.lemurproject.galago.core.index.stats.NodeStatistics;
-import org.lemurproject.galago.tupleflow.DataStream;
+import org.lemurproject.galago.utility.DataStream;
 import org.lemurproject.galago.utility.compression.VByteInput;
 
 /**
@@ -137,6 +137,7 @@ public class CountIndexCountSource extends BTreeValueSource implements CountSour
     }
     currentDocument += documents.readLong();
     currentCount = counts.readInt();
+    System.err.format("%d/%d %d %d\n", documentIndex, documentCount, currentDocument, currentCount);
   }
 
   @Override

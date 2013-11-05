@@ -1,7 +1,7 @@
 /*
  *  BSD License (http://lemurproject.org/galago-license)
  */
-package org.lemurproject.galago.utility.compression;
+package org.lemurproject.galago.utility.compression.integer;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -16,6 +16,8 @@ import me.lemire.integercompression.IntegerCODEC;
 public class GenericLemireCompressedWriter implements CompressedLongWriter {
 
   DataOutputStream output;
+  long bytesWritten = 0;
+
   int buffersize;
   int bufferpos;
   int[] bufferIn;
@@ -41,11 +43,11 @@ public class GenericLemireCompressedWriter implements CompressedLongWriter {
 
     // write the block size, (and compression mechanism ?)
     output.writeInt(buffersize);
+    bytesWritten += 4;
   }
 
   @Override
   public void writeInt(int value) throws IOException {
-    assert (value >= 0) : "GenericCompressedIntWriter can not compress negative values.";
 
     bufferIn[bufferpos] = value;
     bufferpos++;
@@ -57,13 +59,27 @@ public class GenericLemireCompressedWriter implements CompressedLongWriter {
 
   @Override
   public void writeLong(long value) throws IOException {
-    assert (value >= 0) : "GenericCompressedIntWriter can not compress negative values.";
+    int nonFinalInt = 0x80000000;
 
     // need to separate longs into two ints, and compress separately
-    // USER's problem to determine if
+    int valuePart = (int) (value & 0x7FFFFFFF);
+    value = value >>> 31;
+
+    while (value != 0) {
+      // write the last part, top bit is set to 1 -- indicates another part to reader.
+      valuePart = nonFinalInt | valuePart;
+      writeInt(valuePart);
+
+      // prepare the next part
+      valuePart = (int) (value & 0x7FFFFFFF);
+      value = value >>> 31;
+    }
+    // write the final int (top bit is set to 0).
+    writeInt(valuePart);
+
   }
 
-  public void compressFlush() throws IOException {
+  private void compressFlush() throws IOException {
 
     if (bufferpos == 0) {
       // nothing to write //
@@ -96,26 +112,37 @@ public class GenericLemireCompressedWriter implements CompressedLongWriter {
     }
 
     // two bytes for the size
-    assert((4 * intCount + finalIntBytes) > (1 << 16)): "FAILED TO WRITE THE BLOCK HEADER : using a short to write " + (4 * intCount + finalIntBytes);
-    
-    output.writeShort(4 * intCount + finalIntBytes);
+    assert ((4 * intCount + finalIntBytes) < (1 << 16)) : "FAILED TO WRITE THE BLOCK HEADER : using a short to write " + (4 * intCount + finalIntBytes);
+
+    int blockSize = 4 * intCount + finalIntBytes;
+    output.writeShort(blockSize);
+
+    bytesWritten += 2;
+
     for (int i = 0; i < (outpos.get() - 1); i++) {
       output.writeInt(bufferOut[i]);
+      bytesWritten += 4;
     }
 
     if (finalIntBytes == 1) {
       output.writeByte(bufferOut[outpos.get() - 1]);
+      bytesWritten += 1;
 
     } else if (finalIntBytes == 2) {
       output.writeShort(bufferOut[outpos.get() - 1]);
+      bytesWritten += 2;
 
     } else if (finalIntBytes == 3) {
       output.writeShort(bufferOut[outpos.get() - 1]);
       output.writeByte((bufferOut[outpos.get() - 1] >>> 16));
+      bytesWritten += 3;
 
     } else {
       output.writeInt(bufferOut[outpos.get() - 1]);
+      bytesWritten += 4;
+
     }
+    output.flush();
   }
 
   @Override
@@ -128,5 +155,11 @@ public class GenericLemireCompressedWriter implements CompressedLongWriter {
   public void close() throws IOException {
     compressFlush();
     output.close();
+  }
+
+  @Override
+  public long getUnderlyingStreamPosition() throws IOException {
+    compressFlush();
+    return this.bytesWritten;
   }
 }

@@ -1,16 +1,13 @@
 // BSD License (http://lemurproject.org/galago-license)
 package org.lemurproject.galago.core.index.disk2;
 
-import java.io.DataInput;
 import java.io.IOException;
 import java.io.InputStream;
-import org.apache.commons.io.input.CountingInputStream;
 import org.lemurproject.galago.core.index.BTreeReader;
 import org.lemurproject.galago.core.index.source.BTreeValueSource;
 import org.lemurproject.galago.core.index.source.CountSource;
 import org.lemurproject.galago.core.index.stats.NodeStatistics;
 import org.lemurproject.galago.utility.compression.CompressedStreamFactory;
-import org.lemurproject.galago.utility.compression.VByteInput;
 import org.lemurproject.galago.utility.compression.integer.CompressedLongReader;
 
 /**

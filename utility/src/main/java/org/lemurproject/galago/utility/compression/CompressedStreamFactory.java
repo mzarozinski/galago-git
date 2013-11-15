@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import me.lemire.integercompression.BinaryPacking;
 import me.lemire.integercompression.Composition;
+import me.lemire.integercompression.FastPFOR;
 import me.lemire.integercompression.IntegratedBinaryPacking;
 import me.lemire.integercompression.IntegratedComposition;
 import me.lemire.integercompression.IntegratedVariableByte;
@@ -59,7 +60,7 @@ public class CompressedStreamFactory {
       return new GenericLemireCompressedWriter(stream, new Composition(new OptPFDS9(), new VariableByte()));
 
     } else if (name.equals("fpfd-vbyte")) {
-      return new GenericLemireCompressedWriter(stream, new Composition(new NewPFD(), new VariableByte()));
+      return new GenericLemireCompressedWriter(stream, new Composition(new FastPFOR(), new VariableByte()));
 
     } else if (name.equals("s9")) {
       return new GenericLemireCompressedWriter(stream, new Simple9());
@@ -96,7 +97,7 @@ public class CompressedStreamFactory {
       return new GenericLemireCompressedReader(stream, new Composition(new OptPFDS9(), new VariableByte()));
 
     } else if (name.equals("fpfd-vbyte")) {
-      return new GenericLemireCompressedReader(stream, new Composition(new NewPFD(), new VariableByte()));
+      return new GenericLemireCompressedReader(stream, new Composition(new FastPFOR(), new VariableByte()));
 
     } else if (name.equals("s9")) {
       return new GenericLemireCompressedReader(stream, new Simple9());

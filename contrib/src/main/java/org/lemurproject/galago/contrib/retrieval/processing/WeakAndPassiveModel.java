@@ -32,12 +32,12 @@ import org.lemurproject.galago.utility.Utility;
  *
  * @author irmarc, sjh
  */
-public class NodeShareWeakAndDocumentModel extends ProcessingModel {
+public class WeakAndPassiveModel extends ProcessingModel {
 
   LocalRetrieval retrieval;
   boolean annotate;
 
-  public NodeShareWeakAndDocumentModel(LocalRetrieval lr) {
+  public WeakAndPassiveModel(LocalRetrieval lr) {
     this.retrieval = lr;
   }
 

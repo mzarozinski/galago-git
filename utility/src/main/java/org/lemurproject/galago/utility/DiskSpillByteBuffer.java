@@ -30,7 +30,6 @@ import java.io.FileOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.lemurproject.galago.utility.Utility;
 
 public class DiskSpillByteBuffer extends OutputStream {
 

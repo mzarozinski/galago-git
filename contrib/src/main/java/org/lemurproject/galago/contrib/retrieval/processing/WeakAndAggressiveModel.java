@@ -1,7 +1,7 @@
 /*
  *  BSD License (http://lemurproject.org/galago-license)
  */
-package org.lemurproject.galago.core.retrieval.processing;
+package org.lemurproject.galago.contrib.retrieval.processing;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +13,9 @@ import org.lemurproject.galago.core.retrieval.iterator.BaseIterator;
 import org.lemurproject.galago.core.retrieval.iterator.DeltaScoringIterator;
 import org.lemurproject.galago.core.retrieval.iterator.DisjunctionIterator;
 import org.lemurproject.galago.core.retrieval.iterator.ScoreIterator;
+import org.lemurproject.galago.core.retrieval.processing.ProcessingModel;
 import static org.lemurproject.galago.core.retrieval.processing.ProcessingModel.toReversedArray;
+import org.lemurproject.galago.core.retrieval.processing.ScoringContext;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeType;
 import org.lemurproject.galago.core.util.FixedSizeMinHeap;
@@ -28,12 +30,12 @@ import org.lemurproject.galago.utility.Utility;
  * 
  * @author irmarc, sjh
  */
-public class WeakAndDocumentModel extends ProcessingModel {
+public class WeakAndAggressiveModel extends ProcessingModel {
   
   LocalRetrieval retrieval;
   boolean annotate;
   
-  public WeakAndDocumentModel(LocalRetrieval lr) {
+  public WeakAndAggressiveModel(LocalRetrieval lr) {
     this.retrieval = lr;
   }
   

@@ -201,14 +201,15 @@ public class CountIndexWriter implements
       compressedDocuments.flush();
       compressedStats.flush();
 
+      
       // write the header
       ByteArrayOutputStream headerStream = new ByteArrayOutputStream();
       CompressedLongWriter compressedHeader = CompressedStreamFactory.compressedLongStreamWriterInstance(compressionType, headerStream);
       compressedHeader.writeLong(stats.length());
       compressedHeader.writeLong(documents.length());
       compressedHeader.writeLong(counts.length());
-
       compressedHeader.close();
+      
       header = headerStream.toByteArray();
 
       closed = true;

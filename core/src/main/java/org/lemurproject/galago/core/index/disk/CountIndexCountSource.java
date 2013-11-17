@@ -137,7 +137,7 @@ public class CountIndexCountSource extends BTreeValueSource implements CountSour
     }
     currentDocument += documents.readLong();
     currentCount = counts.readInt();
-    System.err.format("%d/%d %d %d\n", documentIndex, documentCount, currentDocument, currentCount);
+    // System.err.format("%d/%d %d %d\n", documentIndex, documentCount, currentDocument, currentCount);
   }
 
   @Override

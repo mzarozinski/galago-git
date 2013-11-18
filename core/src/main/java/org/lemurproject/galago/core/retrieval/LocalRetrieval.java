@@ -4,6 +4,7 @@ package org.lemurproject.galago.core.retrieval;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,7 @@ import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeType;
 import org.lemurproject.galago.core.retrieval.query.QueryType;
 import org.lemurproject.galago.core.retrieval.query.StructuredQuery;
+import org.lemurproject.galago.core.retrieval.stats.StatisticsCollector;
 import org.lemurproject.galago.core.retrieval.traversal.Traversal;
 import org.lemurproject.galago.utility.Parameters;
 import org.lemurproject.galago.utility.Utility;
@@ -95,15 +97,6 @@ public class LocalRetrieval implements Retrieval {
     index.close();
   }
 
-  /**
-   * Returns some statistics about a particular index part -- vocab size, number
-   * of entries, maximumDocCount of any indexed term, etc
-   */
-  @Override
-  public IndexPartStatistics getIndexPartStatistics(String partName) throws IOException {
-    return index.getIndexPartStatistics(partName);
-  }
-
   @Override
   public Parameters getGlobalParameters() {
     return this.globalParameters;
@@ -138,57 +131,6 @@ public class LocalRetrieval implements Retrieval {
     } else {
       throw new IllegalArgumentException("index " + index.getIndexPath() + " does not contain part " + part);
     }
-  }
-
-  @Override
-  public Document getDocument(String identifier, DocumentComponents p) throws IOException {
-    return this.index.getDocument(identifier, p);
-  }
-
-  @Override
-  public Map<String, Document> getDocuments(List<String> identifier, DocumentComponents p) throws IOException {
-    return this.index.getDocuments(identifier, p);
-  }
-
-  /**
-   * Accepts a transformed query, constructs the iterator tree from the node
-   * tree, then iterates over the iterator tree, and returns the results.
-   *
-   * TODO: export this in Retrieval, as executeQuery, as the training wheels
-   * interface
-   */
-  @Deprecated
-  public ScoredDocument[] runQuery(String query, Parameters p) throws Exception {
-    Node root = StructuredQuery.parse(query);
-    root = transformQuery(root, p);
-    return runQuery(root, p);
-  }
-
-  @Override
-  @Deprecated
-  public ScoredDocument[] runQuery(Node queryTree) throws Exception {
-    return runQuery(queryTree, new Parameters());
-  }
-
-  // Based on the root of the tree, that dictates how we execute.
-  @Override
-  @Deprecated
-  public ScoredDocument[] runQuery(Node queryTree, Parameters queryParams) throws Exception {
-    ScoredDocument[] results = null;
-    if (globalParameters.containsKey("processingModel")) {
-      queryParams.set("processingModel", globalParameters.getString("processingModel"));
-    }
-    ProcessingModel pm = ProcessingModel.instance(this, queryTree, queryParams);
-
-    // get some results
-    results = pm.execute(queryTree, queryParams);
-    if (results == null) {
-      results = new ScoredDocument[0];
-    }
-
-    // Format and get names
-    String indexId = this.globalParameters.get("indexId", "0");
-    return getArrayResults(results, indexId);
   }
 
   /*
@@ -247,7 +189,7 @@ public class LocalRetrieval implements Retrieval {
   @Override
   public Results executeQuery(Node queryTree, Parameters queryParams) throws Exception {
     ScoredDocument[] results = null;
-    if (globalParameters.containsKey("processingModel")) {
+    if (!queryParams.containsKey("processingModel") && globalParameters.containsKey("processingModel")) {
       queryParams.set("processingModel", globalParameters.getString("processingModel"));
     }
     ProcessingModel pm = ProcessingModel.instance(this, queryTree, queryParams);
@@ -326,12 +268,36 @@ public class LocalRetrieval implements Retrieval {
   }
 
   @Override
+  public AggregateStatistics getStatisics(Node root, Parameters parameters) throws Exception {
+    StatisticsCollector sc = StatisticsCollector.instance(this, parameters);
+    return sc.collect(root, parameters);
+  }
+
+  @Override
+  public Map<Node, AggregateStatistics> getStatisics(Collection<Node> nodes, Parameters parameters) throws Exception {
+    StatisticsCollector sc = StatisticsCollector.instance(this, parameters);
+    return sc.collectAll(nodes, parameters);
+  }
+
+  /**
+   * Returns some statistics about a particular index part -- vocab size, number
+   * of entries, maximumDocCount of any indexed term, etc
+   */
+  @Deprecated
+  @Override
+  public IndexPartStatistics getIndexPartStatistics(String partName) throws IOException {
+    return index.getIndexPartStatistics(partName);
+  }
+
+  @Deprecated
+  @Override
   public FieldStatistics getCollectionStatistics(String nodeString) throws Exception {
     // first parse the node
     Node root = StructuredQuery.parse(nodeString);
     return getCollectionStatistics(root);
   }
 
+  @Deprecated
   @Override
   public FieldStatistics getCollectionStatistics(Node root) throws Exception {
 
@@ -386,6 +352,7 @@ public class LocalRetrieval implements Retrieval {
     return s;
   }
 
+  @Deprecated
   @Override
   public NodeStatistics getNodeStatistics(String nodeString) throws Exception {
     // first parse the node
@@ -394,6 +361,7 @@ public class LocalRetrieval implements Retrieval {
     return ns;
   }
 
+  @Deprecated
   @Override
   public NodeStatistics getNodeStatistics(Node root) throws Exception {
 
@@ -477,6 +445,16 @@ public class LocalRetrieval implements Retrieval {
     } else {
       return QueryType.RANKED;
     }
+  }
+
+  @Override
+  public Document getDocument(String identifier, DocumentComponents p) throws IOException {
+    return this.index.getDocument(identifier, p);
+  }
+
+  @Override
+  public Map<String, Document> getDocuments(List<String> identifier, DocumentComponents p) throws IOException {
+    return this.index.getDocuments(identifier, p);
   }
 
   @Override

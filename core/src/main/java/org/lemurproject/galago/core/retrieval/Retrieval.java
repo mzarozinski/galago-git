@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import org.lemurproject.galago.core.index.stats.AggregateStatistics;
 import org.lemurproject.galago.core.index.stats.FieldStatistics;
 import org.lemurproject.galago.core.index.stats.IndexPartStatistics;
 import org.lemurproject.galago.core.index.stats.NodeStatistics;
@@ -53,25 +54,6 @@ public interface Retrieval {
   public Parameters getAvailableParts() throws IOException;
 
   /**
-   * Returns the requested Document, if found.
-   *
-   * @param identifier The external name of the document to locate.
-   * @return If found, the Document object. Null otherwise.
-   * @throws IOException
-   */
-  public Document getDocument(String identifier, DocumentComponents p) throws IOException;
-
-  /**
-   * Returns a Map of Document objects that have been found, given the list of
-   * identifiers provided.
-   *
-   * @param identifier
-   * @return
-   * @throws IOException
-   */
-  public Map<String, Document> getDocuments(List<String> identifier, DocumentComponents p) throws IOException;
-
-  /**
    * Attempts to return a NodeType object for the supplied Node.
    *
    * @param node
@@ -108,32 +90,6 @@ public interface Retrieval {
    * annotated. An example is the query produced from transformQuery.
    *
    * @param root
-   * @return array of ScoredDocuments
-   * @throws Exception
-   * @deprecated Use executeQuery
-   */
-  @Deprecated
-  public ScoredDocument[] runQuery(Node root) throws Exception;
-
-  /**
-   * Runs the query against the retrieval. Assumes the query has been properly
-   * annotated. An example is the query produced from transformQuery. Parameters
-   * object allows any global execution parameters or default values to be
-   * overridden.
-   *
-   * @param root, parameters
-   * @return array of ScoredDocuments
-   * @throws Exception
-   * @deprecated Use executeQuery
-   */
-  @Deprecated
-  public ScoredDocument[] runQuery(Node root, Parameters parameters) throws Exception;
-
-  /**
-   * Runs the query against the retrieval. Assumes the query has been properly
-   * annotated. An example is the query produced from transformQuery.
-   *
-   * @param root
    * @return Results (contains a list of scored documents)
    * @throws Exception
    */
@@ -152,76 +108,34 @@ public interface Retrieval {
   public Results executeQuery(Node root, Parameters parameters) throws Exception;
 
   /**
-   * Returns IndexPartStatistics for the named postings part.
+   * Returns some type of statistics, depending on the parameters and the node
+   * specified.
    *
-   * Data includes statistics for vocabulary size, total number of postings
-   * stored and longest posting list.
+   * Three forms are currently supported: index-part-statistics,
+   * collection-statistics, and node-statistics. See retrieval.stats for more
+   * details.
    *
-   * @param partName
-   * @return IndexPartStatistics
+   * @param root
+   * @param parameters
+   * @return stats
    * @throws IOException
    */
-  public IndexPartStatistics getIndexPartStatistics(String partName) throws IOException;
+  public AggregateStatistics getStatisics(Node root, Parameters parameters) throws Exception;
 
   /**
-   * Returns statistics for a string representation of a lengths node. See
-   * collectionStatistics(Node node).
+   * Returns a set of the same type of statistics, one for each node, depending
+   * on the parameters and the node specified.
    *
-   * Data returned includes collectionLength, document count, longest document,
-   * shortest document, average document.
+   * Three forms are currently supported: index-part-statistics,
+   * collection-statistics, and node-statistics. See retrieval.stats for more
+   * details.
    *
-   * @param nodeString
-   * @return FieldStatistics
+   * @param nodes
+   * @param parameters
+   * @return Map<Node, AggregateStatistics>
    * @throws Exception
    */
-  public FieldStatistics getCollectionStatistics(String nodeString) throws Exception;
-
-  /**
-   * Returns statistics for a lengths node. This data is commonly used in
-   * probabilistic smoothing functions.
-   *
-   * The root-node must implement LengthsIterator.
-   *
-   * Data returned includes collectionLength, document count, longest document,
-   * shortest document, average document. Where 'document' may be a 'field' or
-   * other specified region of indexed documents.
-   *
-   *
-   * @param node
-   * @return FieldStatistics
-   * @throws Exception
-   */
-  public FieldStatistics getCollectionStatistics(Node node) throws Exception;
-
-  /**
-   * Returns collection statistics for a count node. This data is commonly used
-   * as a feature in a retrieval model. See nodeStatistics(Node node).
-   *
-   * Data returned includes the frequency of the node in the collection, the
-   * number of documents that return a non-zero count for the node, and the
-   * maximum frequency of the node in any single document.
-   *
-   * @param nodeString
-   * @return NodeStatistics
-   * @throws Exception
-   */
-  public NodeStatistics getNodeStatistics(String nodeString) throws Exception;
-
-  /**
-   * Returns collection statistics for a count node. This data is commonly used
-   * as a feature in a retrieval model.
-   *
-   * The root-node must implement a 'CountIterator'.
-   *
-   * Data returned includes the frequency of the node in the collection, the
-   * number of documents that return a non-zero count for the node, and the
-   * maximum frequency of the node in any single document.
-   *
-   * @param node
-   * @return NodeStatistics
-   * @throws Exception
-   */
-  public NodeStatistics getNodeStatistics(Node node) throws Exception;
+  public Map<Node, AggregateStatistics> getStatisics(Collection<Node> nodes, Parameters parameters) throws Exception;
 
   /**
    * Returns the length of a particular document. Where docid is the internal
@@ -252,6 +166,101 @@ public interface Retrieval {
    * @throws IOException
    */
   public String getDocumentName(Integer docid) throws IOException;
+
+  /**
+   * Returns the requested Document, if found.
+   *
+   * @param identifier The external name of the document to locate.
+   * @return If found, the Document object. Null otherwise.
+   * @throws IOException
+   */
+  public Document getDocument(String identifier, DocumentComponents p) throws IOException;
+
+  /**
+   * Returns a Map of Document objects that have been found, given the list of
+   * identifiers provided.
+   *
+   * @param identifier
+   * @return
+   * @throws IOException
+   */
+  public Map<String, Document> getDocuments(List<String> identifier, DocumentComponents p) throws IOException;
+
+  /**
+   * Returns IndexPartStatistics for the named postings part.
+   *
+   * Data includes statistics for vocabulary size, total number of postings
+   * stored and longest posting list.
+   *
+   * @deprecated
+   * @param partName
+   * @return IndexPartStatistics
+   * @throws IOException
+   */
+  public IndexPartStatistics getIndexPartStatistics(String partName) throws IOException;
+
+  /**
+   * Returns statistics for a string representation of a lengths node. See
+   * collectionStatistics(Node node).
+   *
+   * Data returned includes collectionLength, document count, longest document,
+   * shortest document, average document.
+   *
+   * @deprecated
+   * @param nodeString
+   * @return FieldStatistics
+   * @throws Exception
+   */
+  public FieldStatistics getCollectionStatistics(String nodeString) throws Exception;
+
+  /**
+   * Returns statistics for a lengths node. This data is commonly used in
+   * probabilistic smoothing functions.
+   *
+   * The root-node must implement LengthsIterator.
+   *
+   * Data returned includes collectionLength, document count, longest document,
+   * shortest document, average document. Where 'document' may be a 'field' or
+   * other specified region of indexed documents.
+   *
+   * @deprecated
+   * @param node
+   * @return FieldStatistics
+   * @throws Exception
+   */
+  public FieldStatistics getCollectionStatistics(Node node) throws Exception;
+
+  /**
+   * Returns collection statistics for a count node. This data is commonly used
+   * as a feature in a retrieval model. See nodeStatistics(Node node).
+   *
+   * Data returned includes the frequency of the node in the collection, the
+   * number of documents that return a non-zero count for the node, and the
+   * maximum frequency of the node in any single document.
+   *
+   * @deprecated
+   * @param nodeString
+   * @return NodeStatistics
+   * @throws Exception
+   */
+  public NodeStatistics getNodeStatistics(String nodeString) throws Exception;
+
+  /**
+   * Returns collection statistics for a count node. This data is commonly used
+   * as a feature in a retrieval model.
+   *
+   * The root-node must implement a 'CountIterator'.
+   *
+   * Data returned includes the frequency of the node in the collection, the
+   * number of documents that return a non-zero count for the node, and the
+   * maximum frequency of the node in any single document.
+   *
+   * @deprecated
+   * @param node
+   * @return NodeStatistics
+   * @throws Exception
+   */
+  public NodeStatistics getNodeStatistics(Node node) throws Exception;
 
   /**
    * adds a node to the cache -- can improve efficiency for repeated queries --

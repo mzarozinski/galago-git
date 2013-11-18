@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import org.lemurproject.galago.core.index.stats.AggregateStatistics;
 import org.lemurproject.galago.core.index.stats.FieldStatistics;
 import org.lemurproject.galago.core.index.stats.IndexPartStatistics;
 import org.lemurproject.galago.core.index.stats.NodeStatistics;
@@ -77,16 +78,6 @@ public class GroupRetrieval implements Retrieval {
   }
 
   @Override
-  public Document getDocument(String identifier, DocumentComponents p) throws IOException {
-    return groups.get(defGroup).getDocument(identifier, p);
-  }
-
-  @Override
-  public Map<String, Document> getDocuments(List<String> identifier, DocumentComponents p) throws IOException {
-    return groups.get(defGroup).getDocuments(identifier, p);
-  }
-
-  @Override
   public NodeType getNodeType(Node node) throws Exception {
     return groups.get(defGroup).getNodeType(node);
   }
@@ -94,21 +85,6 @@ public class GroupRetrieval implements Retrieval {
   @Override
   public QueryType getQueryType(Node node) throws Exception {
     return groups.get(defGroup).getQueryType(node);
-  }
-
-  @Override
-  @Deprecated
-  public ScoredDocument[] runQuery(Node root) throws Exception {
-    return groups.get(defGroup).runQuery(root);
-  }
-
-  @Override
-  @Deprecated
-  public ScoredDocument[] runQuery(Node root, Parameters parameters) throws Exception {
-    if (parameters.isString("group")) {
-      return groups.get(parameters.getString("group")).runQuery(root, parameters);
-    }
-    return groups.get(defGroup).runQuery(root, parameters);
   }
 
   @Override
@@ -123,30 +99,25 @@ public class GroupRetrieval implements Retrieval {
     }
     return groups.get(defGroup).executeQuery(root, parameters);
   }
-  
+
   @Override
-  public IndexPartStatistics getIndexPartStatistics(String partName) throws IOException {
-    return groups.get(defGroup).getIndexPartStatistics(partName);
+  public AggregateStatistics getStatisics(Node root, Parameters parameters) throws Exception {
+    return groups.get(defGroup).getStatisics(root, parameters);
   }
 
   @Override
-  public FieldStatistics getCollectionStatistics(String nodeString) throws Exception {
-    return groups.get(defGroup).getCollectionStatistics(nodeString);
+  public Map<Node, AggregateStatistics> getStatisics(Collection<Node> root, Parameters parameters) throws Exception {
+    return groups.get(defGroup).getStatisics(root, parameters);
   }
 
   @Override
-  public FieldStatistics getCollectionStatistics(Node node) throws Exception {
-    return groups.get(defGroup).getCollectionStatistics(node);
+  public Document getDocument(String identifier, DocumentComponents p) throws IOException {
+    return groups.get(defGroup).getDocument(identifier, p);
   }
 
   @Override
-  public NodeStatistics getNodeStatistics(String nodeString) throws Exception {
-    return groups.get(defGroup).getNodeStatistics(nodeString);
-  }
-
-  @Override
-  public NodeStatistics getNodeStatistics(Node node) throws Exception {
-    return groups.get(defGroup).getNodeStatistics(node);
+  public Map<String, Document> getDocuments(List<String> identifier, DocumentComponents p) throws IOException {
+    return groups.get(defGroup).getDocuments(identifier, p);
   }
 
   @Override
@@ -174,6 +145,37 @@ public class GroupRetrieval implements Retrieval {
     groups.get(defGroup).addAllNodesToCache(node);
   }
 
+  // DEPRECATED //
+  @Deprecated
+  @Override
+  public IndexPartStatistics getIndexPartStatistics(String partName) throws IOException {
+    return groups.get(defGroup).getIndexPartStatistics(partName);
+  }
+
+  @Deprecated
+  @Override
+  public FieldStatistics getCollectionStatistics(String nodeString) throws Exception {
+    return groups.get(defGroup).getCollectionStatistics(nodeString);
+  }
+
+  @Deprecated
+  @Override
+  public FieldStatistics getCollectionStatistics(Node node) throws Exception {
+    return groups.get(defGroup).getCollectionStatistics(node);
+  }
+
+  @Deprecated
+  @Override
+  public NodeStatistics getNodeStatistics(String nodeString) throws Exception {
+    return groups.get(defGroup).getNodeStatistics(nodeString);
+  }
+
+  @Deprecated
+  @Override
+  public NodeStatistics getNodeStatistics(Node node) throws Exception {
+    return groups.get(defGroup).getNodeStatistics(node);
+  }
+
   // IDENTICAL FUNCTIONS THAT USE PARTICULAR GROUPS //
   public Parameters getGlobalParameters(String group) {
     return groups.get(group).getGlobalParameters();
@@ -181,14 +183,6 @@ public class GroupRetrieval implements Retrieval {
 
   public Parameters getAvailableParts(String group) throws IOException {
     return groups.get(group).getAvailableParts();
-  }
-
-  public Document getDocument(String identifier, DocumentComponents p, String group) throws IOException {
-    return groups.get(group).getDocument(identifier, p);
-  }
-
-  public Map<String, Document> getDocuments(List<String> identifier, DocumentComponents p, String group) throws IOException {
-    return groups.get(group).getDocuments(identifier, p);
   }
 
   public NodeType getNodeType(Node node, String group) throws Exception {
@@ -203,16 +197,6 @@ public class GroupRetrieval implements Retrieval {
     return groups.get(group).transformQuery(queryTree, qp);
   }
 
-  @Deprecated
-  public ScoredDocument[] runQuery(Node root, String group) throws Exception {
-    return groups.get(group).runQuery(root);
-  }
-
-  @Deprecated
-  public ScoredDocument[] runQuery(Node root, Parameters parameters, String group) throws Exception {
-    return groups.get(group).runQuery(root, parameters);
-  }
-  
   public Results executeQuery(Node root, String group) throws Exception {
     return groups.get(group).executeQuery(root);
   }
@@ -221,24 +205,20 @@ public class GroupRetrieval implements Retrieval {
     return groups.get(group).executeQuery(root, parameters);
   }
 
-  public IndexPartStatistics getRetrievalStatistics(String partName, String group) throws IOException {
-    return groups.get(group).getIndexPartStatistics(partName);
+  public AggregateStatistics getStatisics(Node root, Parameters parameters, String group) throws Exception {
+    return groups.get(group).getStatisics(root, parameters);
   }
 
-  public FieldStatistics getCollectionStatistics(String nodeString, String group) throws Exception {
-    return groups.get(group).getCollectionStatistics(nodeString);
+  public Map<Node, AggregateStatistics> getStatisics(Collection<Node> root, Parameters parameters, String group) throws Exception {
+    return groups.get(group).getStatisics(root, parameters);
   }
 
-  public FieldStatistics getCollectionStatistics(Node node, String group) throws Exception {
-    return groups.get(group).getCollectionStatistics(node);
+  public Document getDocument(String identifier, DocumentComponents p, String group) throws IOException {
+    return groups.get(group).getDocument(identifier, p);
   }
 
-  public NodeStatistics getNodeStatistics(String nodeString, String group) throws Exception {
-    return groups.get(group).getNodeStatistics(nodeString);
-  }
-
-  public NodeStatistics getNodeStatistics(Node node, String group) throws Exception {
-    return groups.get(group).getNodeStatistics(node);
+  public Map<String, Document> getDocuments(List<String> identifier, DocumentComponents p, String group) throws IOException {
+    return groups.get(group).getDocuments(identifier, p);
   }
 
   public Integer getDocumentLength(Integer docid, String group) throws IOException {
@@ -261,6 +241,33 @@ public class GroupRetrieval implements Retrieval {
     groups.get(group).addAllNodesToCache(node);
   }
 
+  // more deprecated functions //
+  @Deprecated
+  public IndexPartStatistics getRetrievalStatistics(String partName, String group) throws IOException {
+    return groups.get(group).getIndexPartStatistics(partName);
+  }
+
+  @Deprecated
+  public FieldStatistics getCollectionStatistics(String nodeString, String group) throws Exception {
+    return groups.get(group).getCollectionStatistics(nodeString);
+  }
+
+  @Deprecated
+  public FieldStatistics getCollectionStatistics(Node node, String group) throws Exception {
+    return groups.get(group).getCollectionStatistics(node);
+  }
+
+  @Deprecated
+  public NodeStatistics getNodeStatistics(String nodeString, String group) throws Exception {
+    return groups.get(group).getNodeStatistics(nodeString);
+  }
+
+  @Deprecated
+  public NodeStatistics getNodeStatistics(Node node, String group) throws Exception {
+    return groups.get(group).getNodeStatistics(node);
+  }
+
+  // META GroupRetrieval functions //
   public boolean containsGroup(String group) {
     return groups.containsKey(group);
   }

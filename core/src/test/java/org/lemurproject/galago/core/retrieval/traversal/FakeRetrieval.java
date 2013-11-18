@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import org.lemurproject.galago.core.index.stats.AggregateStatistics;
 import org.lemurproject.galago.core.index.stats.FieldStatistics;
 import org.lemurproject.galago.core.index.stats.IndexPartStatistics;
 import org.lemurproject.galago.core.index.stats.NodeStatistics;
@@ -67,18 +68,6 @@ public class FakeRetrieval implements Retrieval {
   }
 
   @Override
-  @Deprecated
-  public ScoredDocument[] runQuery(Node root) throws Exception {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
-  @Deprecated
-  public ScoredDocument[] runQuery(Node root, Parameters parameters) throws Exception {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
   public IndexPartStatistics getIndexPartStatistics(String partName) throws IOException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
@@ -135,6 +124,16 @@ public class FakeRetrieval implements Retrieval {
 
   @Override
   public Results executeQuery(Node root, Parameters parameters) throws Exception {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public AggregateStatistics getStatisics(Node root, Parameters parameters) throws Exception {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Map<Node, AggregateStatistics> getStatisics(Collection<Node> nodes, Parameters parameters) throws Exception {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

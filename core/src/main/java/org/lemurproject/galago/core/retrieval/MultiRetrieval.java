@@ -4,11 +4,13 @@ package org.lemurproject.galago.core.retrieval;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import org.lemurproject.galago.core.index.stats.AggregateStatistics;
 import org.lemurproject.galago.core.index.stats.FieldStatistics;
 import org.lemurproject.galago.core.index.stats.IndexPartStatistics;
 import org.lemurproject.galago.core.index.stats.NodeStatistics;
@@ -60,6 +62,7 @@ public class MultiRetrieval implements Retrieval {
     }
   }
 
+  @Deprecated
   @Override
   public IndexPartStatistics getIndexPartStatistics(String partName) throws IOException {
     IndexPartStatistics aggregate = null;
@@ -82,48 +85,6 @@ public class MultiRetrieval implements Retrieval {
   @Override
   public Parameters getGlobalParameters() {
     return this.globalParameters;
-  }
-
-  @Override
-  public Document getDocument(String identifier, DocumentComponents p) throws IOException {
-    for (Retrieval r : this.retrievals) {
-      Document d = r.getDocument(identifier, p);
-      if (d != null) {
-        return d;
-      }
-    }
-    return null;
-  }
-
-  @Override
-  public Map<String, Document> getDocuments(List<String> identifiers, DocumentComponents p) throws IOException {
-    HashMap<String, Document> results = new HashMap();
-    for (Retrieval r : this.retrievals) {
-      results.putAll(r.getDocuments(identifiers, p));
-    }
-    return results;
-  }
-
-  /**
-   *
-   * Runs a query across all retrieval objects
-   *
-   * @param root
-   * @return
-   * @throws Exception
-   */
-  @Override
-  @Deprecated
-  public ScoredDocument[] runQuery(Node root) throws Exception {
-    return runQuery(root, new Parameters());
-  }
-
-  // Based on the root of the tree, that dictates how we execute.
-  @Override
-  @Deprecated
-  public ScoredDocument[] runQuery(Node queryTree, Parameters p) throws Exception {
-    ScoredDocument[] results = runRankedQuery(queryTree, p);
-    return results;
   }
 
   /**
@@ -187,7 +148,6 @@ public class MultiRetrieval implements Retrieval {
       return new ScoredDocument[0];
     }
 
-
     // sort the results and invert (sort is inverted)
     Collections.sort(queryResultCollector, Collections.reverseOrder());
 
@@ -230,14 +190,40 @@ public class MultiRetrieval implements Retrieval {
     return queryTree;
   }
 
-  private void initRetrieval() throws IOException {
-
-    ArrayList<Parameters> parts = new ArrayList();
-    for (Retrieval r : retrievals) {
-      Parameters partSet = r.getAvailableParts();
-      parts.add(partSet);
+  @Override
+  public AggregateStatistics getStatisics(Node root, Parameters parameters) throws Exception {
+    // needs to get statistics from each sub-retrieval
+    List<AggregateStatistics> stats = new ArrayList();
+    for (int i = 0; i < this.retrievals.size(); i++) {
+      stats.add(this.retrievals.get(i).getStatisics(root, parameters));
     }
-    this.retrievalParts = mergeParts(parts);
+
+    // could replace this with a function in AggregateStats: merge(Collection<AggregateStatistics> stats) --> AggregateStatistics
+    AggregateStatistics s0 = stats.get(0);
+    for (int i = 1; i < stats.size(); i++) {
+      s0.add(stats.get(i));
+    }
+
+    return s0;
+  }
+
+  @Override
+  public Map<Node, AggregateStatistics> getStatisics(Collection<Node> nodes, Parameters parameters) throws Exception {
+    // needs to get statistics from each sub-retrieval
+    List<Map<Node, AggregateStatistics>> stats = new ArrayList();
+    for (int i = 0; i < this.retrievals.size(); i++) {
+      stats.add(this.retrievals.get(i).getStatisics(nodes, parameters));
+    }
+
+    Map<Node, AggregateStatistics> out = new HashMap();
+    for (Node n : nodes) {
+      AggregateStatistics s0 = stats.get(0).get(n);
+      for (int i = 1; i < stats.size(); i++) {
+        s0.add(stats.get(i).get(n));
+      }
+    }
+
+    return out;
   }
 
   // This takes the intersection of parts from constituent retrievals, and determines which
@@ -306,11 +292,33 @@ public class MultiRetrieval implements Retrieval {
   }
 
   @Override
+  public Document getDocument(String identifier, DocumentComponents p) throws IOException {
+    for (Retrieval r : this.retrievals) {
+      Document d = r.getDocument(identifier, p);
+      if (d != null) {
+        return d;
+      }
+    }
+    return null;
+  }
+
+  @Override
+  public Map<String, Document> getDocuments(List<String> identifiers, DocumentComponents p) throws IOException {
+    HashMap<String, Document> results = new HashMap();
+    for (Retrieval r : this.retrievals) {
+      results.putAll(r.getDocuments(identifiers, p));
+    }
+    return results;
+  }
+
+  @Deprecated
+  @Override
   public FieldStatistics getCollectionStatistics(String nodeString) throws Exception {
     Node root = StructuredQuery.parse(nodeString);
     return getCollectionStatistics(root);
   }
 
+  @Deprecated
   @Override
   public FieldStatistics getCollectionStatistics(Node node) throws Exception {
 
@@ -360,12 +368,14 @@ public class MultiRetrieval implements Retrieval {
    * mutually exclusive subcollections. If you're doing PAC-search or another
    * non-disjoint subset retrieval model, look out.
    */
+  @Deprecated
   @Override
   public NodeStatistics getNodeStatistics(String nodeString) throws Exception {
     Node root = StructuredQuery.parse(nodeString);
     return getNodeStatistics(root);
   }
 
+  @Deprecated
   @Override
   public NodeStatistics getNodeStatistics(Node node) throws Exception {
 
@@ -472,7 +482,6 @@ public class MultiRetrieval implements Retrieval {
   protected void initializeIndexOperators() throws IOException {
     Parameters parts = getAvailableParts();
 
-
     for (String part : parts.getKeys()) {
 
       knownIndexOperators.add(part);
@@ -501,7 +510,7 @@ public class MultiRetrieval implements Retrieval {
       }
     }
     if (!this.defaultIndexOperators.containsKey("extents")) {
-       if (parts.containsKey("postings.krovetz")) {
+      if (parts.containsKey("postings.krovetz")) {
         this.defaultIndexOperators.put("extents", "postings.krovetz");
       } else if (parts.containsKey("postings.porter")) {
         this.defaultIndexOperators.put("extents", "postings.porter");
@@ -564,4 +573,15 @@ public class MultiRetrieval implements Retrieval {
       r.addAllNodesToCache(node);
     }
   }
+
+  private void initRetrieval() throws IOException {
+
+    ArrayList<Parameters> parts = new ArrayList();
+    for (Retrieval r : retrievals) {
+      Parameters partSet = r.getAvailableParts();
+      parts.add(partSet);
+    }
+    this.retrievalParts = mergeParts(parts);
+  }
+
 }

@@ -36,7 +36,7 @@ public abstract class StatisticsCollector {
     return stats;
   }
 
-  public StatisticsCollector instance(LocalRetrieval r, Parameters p) throws Exception {
+  public static StatisticsCollector instance(LocalRetrieval r, Parameters p) throws Exception {
     if (p.isString("statCollector")) {
       String collector = p.getString("statCollector");
       // OPTION 1 : shorthand forms

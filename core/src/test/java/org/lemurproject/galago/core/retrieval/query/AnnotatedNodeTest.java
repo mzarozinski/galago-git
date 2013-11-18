@@ -4,6 +4,7 @@
 package org.lemurproject.galago.core.retrieval.query;
 
 import java.io.File;
+import java.util.List;
 import junit.framework.TestCase;
 import org.lemurproject.galago.core.retrieval.LocalRetrieval;
 import org.lemurproject.galago.core.retrieval.LocalRetrievalTest;
@@ -39,7 +40,7 @@ public class AnnotatedNodeTest extends TestCase {
       Parameters p = new Parameters();
       p.set("requested", 100);
       p.set("annotate", true);
-      ScoredDocument[] results = proc.execute(qnode, p);
+      List<ScoredDocument> results = proc.executeQuery(qnode, p);
       AnnotatedNode prev = null;
       for (ScoredDocument d : results) {
         assert (d.annotation != null);

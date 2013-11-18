@@ -4,6 +4,7 @@
 package org.lemurproject.galago.core.retrieval.processing;
 
 import java.io.File;
+import java.util.List;
 import static junit.framework.Assert.assertEquals;
 import junit.framework.TestCase;
 import org.lemurproject.galago.core.retrieval.LocalRetrieval;
@@ -41,15 +42,15 @@ public class DeltaScoreDocumentModelTest extends TestCase {
       query = ret.transformQuery(query, queryParams);
 
       MaxScoreDocumentModel deltaModel = new MaxScoreDocumentModel(ret);
-      ScoredDocument[] deltaResults = deltaModel.execute(query, queryParams);
+      List<ScoredDocument> deltaResults = deltaModel.executeQuery(query, queryParams);
 
       RankedDocumentModel safeModel = new RankedDocumentModel(ret);
-      ScoredDocument[] safeResults = safeModel.execute(query, queryParams);
+      List<ScoredDocument> safeResults = safeModel.executeQuery(query, queryParams);
 
-      assertEquals(safeResults.length, deltaResults.length);
-      for (int i = 0; i < safeResults.length; ++i) {
-        assertEquals(safeResults[i].document, deltaResults[i].document);
-        assertEquals(safeResults[i].score, deltaResults[i].score, 0.00001);
+      assertEquals(safeResults.size(), deltaResults.size());
+      for (int i = 0; i < safeResults.size(); ++i) {
+        assertEquals(safeResults.get(i).document, deltaResults.get(i).document);
+        assertEquals(safeResults.get(i).score, deltaResults.get(i).score, 0.00001);
       }
 
       // check that weights are correctly propagated
@@ -57,12 +58,12 @@ public class DeltaScoreDocumentModelTest extends TestCase {
       Node complexQuery = StructuredQuery.parse("#combine:0=0.9:1=0.1(#combine( test text ) #combine( 1 2 ))");
       complexQuery = ret.transformQuery(complexQuery, queryParams);
 
-      ScoredDocument[] deltaResults2 = deltaModel.execute(complexQuery, queryParams);
-      ScoredDocument[] safeResults2 = safeModel.execute(complexQuery, queryParams);
+      List<ScoredDocument> deltaResults2 = deltaModel.executeQuery(complexQuery, queryParams);
+      List<ScoredDocument> safeResults2 = safeModel.executeQuery(complexQuery, queryParams);
 
-      for (int i = 0; i < safeResults2.length; ++i) {
-        assertEquals(safeResults2[i].document, deltaResults2[i].document);
-        assertEquals(safeResults2[i].score, deltaResults2[i].score, 0.00001);
+      for (int i = 0; i < safeResults2.size(); ++i) {
+        assertEquals(safeResults2.get(i).document, deltaResults2.get(i).document);
+        assertEquals(safeResults2.get(i).score, deltaResults2.get(i).score, 0.00001);
       }
 
     } finally {
@@ -87,16 +88,30 @@ public class DeltaScoreDocumentModelTest extends TestCase {
       query = ret.transformQuery(query, queryParams);
 
       WeakAndDocumentModel deltaModel = new WeakAndDocumentModel(ret);
-      ScoredDocument[] deltaResults = deltaModel.execute(query, queryParams);
+      List<ScoredDocument> deltaResults = deltaModel.executeQuery(query, queryParams);
 
       RankedDocumentModel safeModel = new RankedDocumentModel(ret);
-      ScoredDocument[] safeResults = safeModel.execute(query, queryParams);
+      List<ScoredDocument> safeResults = safeModel.executeQuery(query, queryParams);
 
-      assertEquals(safeResults.length, deltaResults.length);
-      for (int i = 0; i < safeResults.length; ++i) {
-        assertEquals(safeResults[i].document, deltaResults[i].document);
-        assertEquals(safeResults[i].score, deltaResults[i].score, 0.00001);
+      assertEquals(safeResults.size(), deltaResults.size());
+      for (int i = 0; i < safeResults.size(); ++i) {
+        assertEquals(safeResults.get(i).document, deltaResults.get(i).document);
+        assertEquals(safeResults.get(i).score, deltaResults.get(i).score, 0.00001);
       }
+
+      // check that weights are correctly propagated
+      queryParams.set("flattenCombine", false);
+      Node complexQuery = StructuredQuery.parse("#combine:0=0.9:1=0.1(#combine( test text ) #combine( 1 2 ))");
+      complexQuery = ret.transformQuery(complexQuery, queryParams);
+
+      List<ScoredDocument> deltaResults2 = deltaModel.executeQuery(complexQuery, queryParams);
+      List<ScoredDocument> safeResults2 = safeModel.executeQuery(complexQuery, queryParams);
+
+      for (int i = 0; i < safeResults2.size(); ++i) {
+        assertEquals(safeResults2.get(i).document, deltaResults2.get(i).document);
+        assertEquals(safeResults2.get(i).score, deltaResults2.get(i).score, 0.00001);
+      }
+
     } finally {
       corpus.delete();
       Utility.deleteDirectory(index);

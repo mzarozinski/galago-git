@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -44,8 +45,6 @@ import org.lemurproject.galago.utility.Utility;
  * interface on top of the DiskIndex. Therefore, given a query or text string
  * representing a query, this object will perform the necessary transformations
  * to make it an executable object.
- *
- * 10/7/2010 - Modified for asynchronous execution
  *
  * @author trevor
  * @author irmarc
@@ -133,53 +132,6 @@ public class LocalRetrieval implements Retrieval {
     }
   }
 
-  /*
-   * getArrayResults annotates a queue of scored documents returns an array
-   *
-   */
-  protected <T extends ScoredDocument> T[] getArrayResults(T[] results, String indexId) throws IOException {
-    assert (results != null); // unfortunately, we can't make an array of type T in java
-
-    if (results.length == 0) {
-      return results;
-    }
-
-    for (int i = 0; i < results.length; i++) {
-      results[i].source = indexId;
-      results[i].rank = i + 1;
-    }
-
-    // this is to assign proper document names
-    T[] byID = Arrays.copyOf(results, results.length);
-
-    Arrays.sort(byID, new Comparator<T>() {
-
-      @Override
-      public int compare(T o1, T o2) {
-        return Utility.compare(o1.document, o2.document);
-      }
-    });
-
-    DataIterator<String> namesIterator = index.getNamesIterator();
-    ScoringContext sc = new ScoringContext();
-
-    for (T doc : byID) {
-      namesIterator.syncTo(doc.document);
-      sc.document = doc.document;
-
-      if (doc.document == namesIterator.currentCandidate()) {
-        doc.documentName = namesIterator.data(sc);
-
-      } else {
-        System.err.println("NAMES ITERATOR FAILED TO FIND DOCUMENT " + doc.document);
-        // now throw an error.
-        doc.documentName = index.getName(doc.document);
-      }
-    }
-
-    return results;
-  }
-
   @Override
   public Results executeQuery(Node queryTree) throws Exception {
     return executeQuery(queryTree, new Parameters());
@@ -188,21 +140,21 @@ public class LocalRetrieval implements Retrieval {
   // Based on the root of the tree, that dictates how we execute.
   @Override
   public Results executeQuery(Node queryTree, Parameters queryParams) throws Exception {
-    ScoredDocument[] results = null;
     if (!queryParams.containsKey("processingModel") && globalParameters.containsKey("processingModel")) {
       queryParams.set("processingModel", globalParameters.getString("processingModel"));
     }
     ProcessingModel pm = ProcessingModel.instance(this, queryTree, queryParams);
 
     // get some results
-    results = pm.execute(queryTree, queryParams);
+    List<ScoredDocument> results = pm.executeQuery(queryTree, queryParams);
+    // ensure the results are NEVER null
     if (results == null) {
-      results = new ScoredDocument[0];
+      results = Collections.EMPTY_LIST;
     }
 
-    // Format and get names
-    String indexId = this.globalParameters.get("indexId", "0");
-    List<ScoredDocument> rankedList = Arrays.asList(getArrayResults(results, indexId));
+    // Format to get document names
+    String indexId = this.globalParameters.get("indexId", "");
+    List<ScoredDocument> rankedList = formatResults(results, indexId);
 
     Results r = new Results();
     r.inputQuery = queryTree;
@@ -516,5 +468,49 @@ public class LocalRetrieval implements Retrieval {
   @Override
   public String toString() {
     return "LocalRetrieval(" + index.getIndexPath() + ")";
+  }
+
+  // Private and protected functions //  
+  protected <T extends ScoredDocument> List<T> formatResults(List<T> results, String source) throws IOException {
+    assert (results != null); // unfortunately, we can't make an array of type T in java
+
+    if (results.isEmpty()) {
+      return results;
+    }
+
+    List<T> duplicate = new ArrayList(results.size());
+
+    for (int i = 0; i < results.size(); i++) {
+      results.get(i).source = source;
+      results.get(i).rank = i + 1;
+      duplicate.add(results.get(i));
+    }
+
+    // sort the duplicate list in order of ascending document id
+    Collections.sort(duplicate, new Comparator<T>() {
+      @Override
+      public int compare(T o1, T o2) {
+        return Utility.compare(o1.document, o2.document);
+      }
+    });
+
+    DataIterator<String> namesIterator = index.getNamesIterator();
+    ScoringContext sc = new ScoringContext();
+
+    for (T doc : duplicate) {
+      namesIterator.syncTo(doc.document);
+      sc.document = doc.document;
+
+      if (doc.document == namesIterator.currentCandidate()) {
+        doc.documentName = namesIterator.data(sc);
+
+      } else {
+        System.err.println("NAMES ITERATOR FAILED TO FIND DOCUMENT " + doc.document);
+        // now throw an error.
+        doc.documentName = index.getName(doc.document);
+      }
+    }
+
+    return results;
   }
 }

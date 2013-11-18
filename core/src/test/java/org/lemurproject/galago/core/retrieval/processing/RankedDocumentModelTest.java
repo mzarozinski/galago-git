@@ -5,6 +5,7 @@ package org.lemurproject.galago.core.retrieval.processing;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 import junit.framework.TestCase;
 import org.lemurproject.galago.core.retrieval.LocalRetrieval;
 import org.lemurproject.galago.core.retrieval.ScoredDocument;
@@ -63,28 +64,28 @@ public class RankedDocumentModelTest extends TestCase {
     query = ret.transformQuery(query, queryParams);
 
     RankedDocumentModel model = new RankedDocumentModel(ret);
-    ScoredDocument[] results = model.execute(query, queryParams);
+    List<ScoredDocument> results = model.executeQuery(query, queryParams);
 
-    assertEquals(results.length, 10);
+    assertEquals(results.size(), 10);
     for (int i = 0; i < 10; i++) {
-      assertEquals(results[i].document, i);
-      assertEquals(results[i].rank, i + 1);
+      assertEquals(results.get(i).document, i);
+      assertEquals(results.get(i).rank, i + 1);
       if (i > 0) {
-        assert (Utility.compare(results[i].score, results[i - 1].score) <= 0);
+        assert (Utility.compare(results.get(i).score, results.get(i - 1).score) <= 0);
       }
     }
 
     query = StructuredQuery.parse("#combine( test text 99 )");
     query = ret.transformQuery(query, queryParams);
 
-    results = model.execute(query, queryParams);
+    results = model.executeQuery(query, queryParams);
 
-    assertEquals(results.length, 10);
+    assertEquals(results.size(), 10);
     for (int i = 0; i < 10; i++) {
-      assertEquals(results[i].document, i + 90);
-      assertEquals(results[i].rank, i + 1);
+      assertEquals(results.get(i).document, i + 90);
+      assertEquals(results.get(i).rank, i + 1);
       if (i > 0) {
-        assert (Utility.compare(results[i].score, results[i - 1].score) <= 0);
+        assert (Utility.compare(results.get(i).score, results.get(i - 1).score) <= 0);
       }
     }
   }
@@ -100,39 +101,38 @@ public class RankedDocumentModelTest extends TestCase {
     query = ret.transformQuery(query, queryParams);
 
     WorkingSetDocumentModel model = new WorkingSetDocumentModel(ret);
-    queryParams.set("working", 
+    queryParams.set("working",
             Arrays.asList(new Long[]{0l, 1l, 2l, 3l, 4l, 5l, 6l, 7l, 8l, 11l, 12l, 13l, 14l}));
-    ScoredDocument[] results = model.execute(query, queryParams);
+    List<ScoredDocument> results = model.executeQuery(query, queryParams);
 
-    assertEquals(results.length, 10);
+    assertEquals(results.size(), 10);
     for (int i = 0; i < 9; i++) {
-      assertEquals(results[i].document, i);
-      assertEquals(results[i].rank, i + 1);
+      assertEquals(results.get(i).document, i);
+      assertEquals(results.get(i).rank, i + 1);
       if (i > 0) {
-        assert (Utility.compare(results[i].score, results[i - 1].score) <= 0);
+        assert (Utility.compare(results.get(i).score, results.get(i - 1).score) <= 0);
       }
     }
+
     // document 10 is not in the white list:      
-    assertEquals(results[9].document, 11);
-    assertEquals(results[9].rank, 10);
-    assert (Utility.compare(results[9].score, results[8].score) <= 0);
-
-
+    assertEquals(results.get(9).document, 11);
+    assertEquals(results.get(9).rank, 10);
+    assert (Utility.compare(results.get(9).score, results.get(8).score) <= 0);
 
     query = StructuredQuery.parse("#combine( test text 90 )");
     query = ret.transformQuery(query, queryParams);
 
-    queryParams.set("working", 
+    queryParams.set("working",
             Arrays.asList(new Long[]{0l, 1l, 2l, 3l, 4l, 5l, 90l, 91l, 92l, 93l, 94l, 95l, 96l, 97l, 98l, 99l}));
 
-    results = model.execute(query, queryParams);
+    results = model.executeQuery(query, queryParams);
 
-    assertEquals(results.length, 10);
+    assertEquals(results.size(), 10);
     for (int i = 0; i < 10; i++) {
-      assertEquals(results[i].document, i + 90);
-      assertEquals(results[i].rank, i + 1);
+      assertEquals(results.get(i).document, i + 90);
+      assertEquals(results.get(i).rank, i + 1);
       if (i > 0) {
-        assert (Utility.compare(results[i].score, results[i - 1].score) <= 0);
+        assert (Utility.compare(results.get(i).score, results.get(i - 1).score) <= 0);
       }
     }
   }

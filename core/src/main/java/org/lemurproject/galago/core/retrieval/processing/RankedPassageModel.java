@@ -1,6 +1,7 @@
 // BSD License (http://lemurproject.org/galago-license)
 package org.lemurproject.galago.core.retrieval.processing;
 
+import java.util.List;
 import org.lemurproject.galago.core.index.Index;
 import org.lemurproject.galago.core.retrieval.LocalRetrieval;
 import org.lemurproject.galago.core.retrieval.ScoredDocument;
@@ -29,7 +30,7 @@ public class RankedPassageModel extends ProcessingModel {
   }
 
   @Override
-  public ScoredDocument[] execute(Node queryTree, Parameters queryParams) throws Exception {
+  public List<ScoredPassage> executeQuery(Node queryTree, Parameters queryParams) throws Exception {
     PassageScoringContext context = new PassageScoringContext();
     context.cachable = false;
 
@@ -42,9 +43,7 @@ public class RankedPassageModel extends ProcessingModel {
       throw new IllegalArgumentException("passageSize/passageShift must be specified as positive integers.");
     }
 
-    ScoreIterator iterator =
-            (ScoreIterator) retrieval.createIterator(queryParams,
-            queryTree);
+    ScoreIterator iterator = (ScoreIterator) retrieval.createIterator(queryParams, queryTree);
     LengthsIterator documentLengths = retrieval.getDocumentLengthsIterator();
 
     FixedSizeMinHeap<ScoredPassage> queue = new FixedSizeMinHeap(ScoredPassage.class, requested, new ScoredPassage.ScoredPassageComparator());
@@ -90,6 +89,7 @@ public class RankedPassageModel extends ProcessingModel {
       }
       iterator.movePast(document);
     }
-    return toReversedArray(queue);
+
+    return toReversedList(queue);
   }
 }

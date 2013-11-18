@@ -16,7 +16,7 @@ import org.lemurproject.galago.utility.Parameters;
  * Performs straightforward document-at-a-time (daat) processing of a fully
  * annotated query, processing scores over documents.
  *
- * @author irmarc
+ * @author irmarc, sjh
  */
 public class WorkingSetDocumentModel extends ProcessingModel {
 
@@ -30,7 +30,7 @@ public class WorkingSetDocumentModel extends ProcessingModel {
   }
 
   @Override
-  public ScoredDocument[] execute(Node queryTree, Parameters queryParams) throws Exception {
+  public List<ScoredDocument> executeQuery(Node queryTree, Parameters queryParams) throws Exception {
     // This model uses the simplest ScoringContext
     ScoringContext context = new ScoringContext();
 
@@ -46,26 +46,26 @@ public class WorkingSetDocumentModel extends ProcessingModel {
       whitelist = (List<Long>) l;
     } else if (String.class.isAssignableFrom(containedType)) {
       whitelist = retrieval.getDocumentIds((List<String>) l);
-          
+
       // check and print missing documents
-      if(queryParams.get("warnMissingDocuments", true)) {
-        for(long docId : whitelist){
-          if(docId < 0){
-            logger.warning("Document: " + docId + " does not exist in index: " + index.getIndexPath() +" IGNORING.");
+      if (queryParams.get("warnMissingDocuments", true)) {
+        for (long docId : whitelist) {
+          if (docId < 0) {
+            logger.warning("Document: " + docId + " does not exist in index: " + index.getIndexPath() + " IGNORING.");
           }
         }
       }
-      
+
     } else {
       throw new IllegalArgumentException(
               String.format("Parameter 'working' must be a list of longs or a list of strings. Found type %s\n.",
-              containedType.toString()));
+                      containedType.toString()));
     }
     Collections.sort(whitelist);
 
     // construct the query iterators
-    ScoreIterator iterator =
-            (ScoreIterator) retrieval.createIterator(queryParams, queryTree);
+    ScoreIterator iterator
+            = (ScoreIterator) retrieval.createIterator(queryParams, queryTree);
     int requested = (int) queryParams.get("requested", 1000);
     boolean annotate = queryParams.get("annotate", false);
 
@@ -74,7 +74,7 @@ public class WorkingSetDocumentModel extends ProcessingModel {
 
     for (int i = 0; i < whitelist.size(); i++) {
       long document = whitelist.get(i);
-      if(document < 0){
+      if (document < 0) {
         continue;
       }
       iterator.syncTo(document);
@@ -90,6 +90,6 @@ public class WorkingSetDocumentModel extends ProcessingModel {
         queue.offer(scoredDocument);
       }
     }
-    return toReversedArray(queue);
+    return toReversedList(queue);
   }
 }

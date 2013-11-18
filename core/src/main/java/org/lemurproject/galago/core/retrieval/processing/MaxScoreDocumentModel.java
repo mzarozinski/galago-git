@@ -32,7 +32,7 @@ public class MaxScoreDocumentModel extends ProcessingModel {
   }
 
   @Override
-  public ScoredDocument[] execute(Node queryTree, Parameters queryParams) throws Exception {
+  public List<ScoredDocument> executeQuery(Node queryTree, Parameters queryParams) throws Exception {
     ScoringContext context = new ScoringContext();
     int requested = (int) queryParams.get("requested", 1000);
 
@@ -151,7 +151,7 @@ public class MaxScoreDocumentModel extends ProcessingModel {
       }
     }
 
-    return toReversedArray(queue);
+    return toReversedList(queue);
   }
 
   private boolean findDeltaNodes(Node n, List<Node> scorers, LocalRetrieval ret) throws Exception {

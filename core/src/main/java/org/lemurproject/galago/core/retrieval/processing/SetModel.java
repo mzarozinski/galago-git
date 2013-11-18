@@ -5,6 +5,7 @@
 package org.lemurproject.galago.core.retrieval.processing;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.lemurproject.galago.core.index.Index;
 import org.lemurproject.galago.core.retrieval.LocalRetrieval;
 import org.lemurproject.galago.core.retrieval.ScoredDocument;
@@ -30,26 +31,27 @@ public class SetModel extends ProcessingModel {
   }
 
   @Override
-  public ScoredDocument[] execute(Node queryTree, Parameters queryParams) throws Exception {
+  public List<ScoredDocument> executeQuery(Node queryTree, Parameters queryParams) throws Exception {
     ScoringContext context = new ScoringContext();
 
     // construct the query iterators
-    IndicatorIterator iterator =
-            (IndicatorIterator) retrieval.createIterator(queryParams,
-            queryTree);
+    IndicatorIterator iterator
+            = (IndicatorIterator) retrieval.createIterator(queryParams,
+                    queryTree);
     ArrayList<ScoredDocument> list = new ArrayList<ScoredDocument>();
     while (!iterator.isDone()) {
 
       // ensure we are at the document we wish to score
       // -- this function will move ALL iterators, 
       //     not just the ones that do not have all candidates
-      iterator.syncTo(iterator.currentCandidate());
+      context.document = iterator.currentCandidate();
+      iterator.syncTo(context.document);
 
-      if (iterator.hasMatch(iterator.currentCandidate())) {
-        list.add(new ScoredDocument(iterator.currentCandidate(), 1.0));
+      if (iterator.hasMatch(context.document) && iterator.indicator(context)) {
+        list.add(new ScoredDocument(context.document, 1.0));
       }
-      iterator.movePast(iterator.currentCandidate());
+      iterator.movePast(context.document);
     }
-    return list.toArray(new ScoredDocument[0]);
+    return list;
   }
 }

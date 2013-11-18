@@ -19,7 +19,7 @@ import org.lemurproject.galago.utility.Parameters;
  * generated the same as Indri: if we hit the end of the document prematurely,
  * we generate a shortened last passage (i.e. window slides are constant).
  *
- * @author irmarc
+ * @author irmarc, sjh
  */
 public class WorkingSetPassageModel extends ProcessingModel {
 
@@ -33,7 +33,7 @@ public class WorkingSetPassageModel extends ProcessingModel {
   }
 
   @Override
-  public ScoredDocument[] execute(Node queryTree, Parameters queryParams) throws Exception {
+  public List<ScoredPassage> executeQuery(Node queryTree, Parameters queryParams) throws Exception {
     PassageScoringContext context = new PassageScoringContext();
     context.cachable = false;
 
@@ -50,15 +50,15 @@ public class WorkingSetPassageModel extends ProcessingModel {
     } else if (String.class.isAssignableFrom(containedType)) {
       whitelist = retrieval.getDocumentIds((List<String>) l);
       // check and print missing documents
-      for(int i =0; i<l.size(); i++){
-        if(whitelist.get(i) < 0){
-          logger.warning("Document: " + l.get(i) + " does not exist in index: " + index.getIndexPath() +" IGNORING.");
+      for (int i = 0; i < l.size(); i++) {
+        if (whitelist.get(i) < 0) {
+          logger.warning("Document: " + l.get(i) + " does not exist in index: " + index.getIndexPath() + " IGNORING.");
         }
       }
     } else {
       throw new IllegalArgumentException(
               String.format("Parameter 'working' must be a list of longs or a list of strings. Found type %s\n.",
-              containedType.toString()));
+                      containedType.toString()));
     }
     Collections.sort(whitelist);
 
@@ -72,9 +72,9 @@ public class WorkingSetPassageModel extends ProcessingModel {
       throw new IllegalArgumentException("passageSize/passageShift must be specified as positive integers.");
     }
 
-    ScoreIterator iterator =
-            (ScoreIterator) retrieval.createIterator(queryParams,
-            queryTree);
+    ScoreIterator iterator
+            = (ScoreIterator) retrieval.createIterator(queryParams,
+                    queryTree);
     LengthsIterator documentLengths = retrieval.getDocumentLengthsIterator();
 
     FixedSizeMinHeap<ScoredPassage> queue = new FixedSizeMinHeap(ScoredPassage.class, requested, new ScoredPassage.ScoredPassageComparator());
@@ -82,7 +82,7 @@ public class WorkingSetPassageModel extends ProcessingModel {
     // now there should be an iterator at the root of this tree
     for (int i = 0; i < whitelist.size(); i++) {
       long document = whitelist.get(i);
-      if(document < 0){
+      if (document < 0) {
         continue;
       }
       iterator.syncTo(document);
@@ -125,6 +125,6 @@ public class WorkingSetPassageModel extends ProcessingModel {
       }
       iterator.movePast(document);
     }
-    return toReversedArray(queue);
+    return toReversedList(queue);
   }
 }

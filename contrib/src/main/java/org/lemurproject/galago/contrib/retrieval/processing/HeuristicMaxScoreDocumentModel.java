@@ -33,9 +33,9 @@ import org.lemurproject.galago.utility.Parameters;
  * Three reasons: ((+/-) time diff to MaxScore using SDM, and 250 Robust desc.)
  * 1. it uses a FixedSizeSortedArray (not a minheap) (+6s) 2. it computes the
  * document segments for each query (+10s) 3. the improved speed from higher
- * thresholds is only a couple of seconds (-4s)
+ * thresholds is only a relatively small (-4s)
  *
- * It may be more useful for non-Dirichlet scoring models.
+ * It may be more useful for non-Dirichlet scoring models, or other models...
  *
  * @author sjh
  */
@@ -50,7 +50,7 @@ public class HeuristicMaxScoreDocumentModel extends ProcessingModel {
   }
 
   @Override
-  public ScoredDocument[] execute(Node queryTree, Parameters queryParams) throws Exception {
+  public List<ScoredDocument> executeQuery(Node queryTree, Parameters queryParams) throws Exception {
     ScoringContext context = new ScoringContext();
     int requested = (int) queryParams.get("requested", 1000);
 
@@ -70,7 +70,6 @@ public class HeuristicMaxScoreDocumentModel extends ProcessingModel {
     // step three: determine the collection segments
     long[] collectionSegments = determineCollectionSegments(queryParams.getDouble("mxerror"), requested, colStats.lastDocId);
     int currentSegment = 0;
-
 
     double maximumPossibleScore = 0.0;
     for (DeltaScoringIterator scorer : scoringIterators) {
@@ -185,16 +184,15 @@ public class HeuristicMaxScoreDocumentModel extends ProcessingModel {
     }
 
     //System.err.println(queryParams.getString("number") + " fullyScored " + fullyScored);
-
-    return toReversedArray2(queue);
+    return toRankedList(queue);
   }
 
-  public static <T extends ScoredDocument> T[] toReversedArray2(FixedSizeSortedArray<T> queue) {
+  public static <T extends ScoredDocument> List<T> toRankedList(FixedSizeSortedArray<T> queue) {
     if (queue.size() == 0) {
       return null;
     }
 
-    T[] items = queue.getSortedArray();
+    List<T> items = queue.getSortedList();
     int r = 1;
     for (T i : items) {
       i.rank = r;
@@ -208,8 +206,6 @@ public class HeuristicMaxScoreDocumentModel extends ProcessingModel {
     // throw exception if we can't determine the class of each node.
     NodeType nt = ret.getNodeType(n);
     Class<? extends BaseIterator> iteratorClass = nt.getIteratorClass();
-
-
 
     if (DeltaScoringIterator.class
             .isAssignableFrom(iteratorClass)) {

@@ -2,7 +2,6 @@
 package org.lemurproject.galago.contrib.retrieval.processing;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,9 +11,7 @@ import org.lemurproject.galago.core.retrieval.iterator.BaseIterator;
 import org.lemurproject.galago.core.retrieval.iterator.DeltaScoringIterator;
 import org.lemurproject.galago.core.retrieval.iterator.DisjunctionIterator;
 import org.lemurproject.galago.core.retrieval.iterator.ScoreIterator;
-import org.lemurproject.galago.core.retrieval.processing.DeltaScoringIteratorMaxDiffComparator;
 import org.lemurproject.galago.core.retrieval.processing.ProcessingModel;
-import static org.lemurproject.galago.core.retrieval.processing.ProcessingModel.toReversedArray;
 import org.lemurproject.galago.core.retrieval.processing.ScoringContext;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeType;
@@ -36,7 +33,7 @@ public class NaiveAggressiveModel extends ProcessingModel {
   }
 
   @Override
-  public ScoredDocument[] execute(Node queryTree, Parameters queryParams) throws Exception {
+  public List<ScoredDocument> executeQuery(Node queryTree, Parameters queryParams) throws Exception {
     ScoringContext context = new ScoringContext();
     int requested = (int) queryParams.get("requested", 1000);
 
@@ -98,7 +95,7 @@ public class NaiveAggressiveModel extends ProcessingModel {
       }
     }
 
-    return toReversedArray(queue);
+    return toReversedList(queue);
   }
 
   private boolean findDeltaNodes(Node n, List<Node> scorers, LocalRetrieval ret) throws Exception {

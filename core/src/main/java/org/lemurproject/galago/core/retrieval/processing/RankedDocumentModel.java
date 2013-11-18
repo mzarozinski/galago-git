@@ -28,7 +28,7 @@ public class RankedDocumentModel extends ProcessingModel {
   }
 
   @Override
-  public ScoredDocument[] execute(Node queryTree, Parameters queryParams) throws Exception {
+  public List<ScoredDocument> executeQuery(Node queryTree, Parameters queryParams) throws Exception {
     // This model uses the simplest ScoringContext
     ScoringContext context = new ScoringContext();
 
@@ -62,6 +62,6 @@ public class RankedDocumentModel extends ProcessingModel {
       }
       iterator.movePast(document);
     }
-    return toReversedArray(queue);
+    return toReversedList(queue);
   }
 }

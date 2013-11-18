@@ -6,6 +6,8 @@ package org.lemurproject.galago.core.util;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+import org.lemurproject.galago.core.retrieval.ScoredDocument;
 
 /**
  * Fixed size sorted array for document retrieval
@@ -13,26 +15,26 @@ import java.util.Comparator;
  * @author sjh
  */
 public class FixedSizeSortedArray<T> {
-
+  
   private Comparator<T> _cmp;
   private T[] _arr;
   private int _position;
-
+  
   public FixedSizeSortedArray(Class<T> c, int requested, Comparator<T> cmp) {
     assert (requested > 0);
     this._arr = (T[]) Array.newInstance(c, requested);
     this._position = 0;
     this._cmp = cmp;
   }
-
+  
   public int size() {
     return _position;
   }
-
+  
   public T get(int pos) {
     return _arr[pos];
   }
-
+  
   public T getFinal() {
     if (_position > 0) {
       return _arr[_position - 1];
@@ -52,20 +54,25 @@ public class FixedSizeSortedArray<T> {
       _position++;
       bubbleUp(_position - 1);
 
-
       // or if smallest item is worse than this document
     } else if (_cmp.compare(d, _arr[_position - 1]) > 0) {
       _arr[_position - 1] = d;
       bubbleUp(_position - 1);
     }
   }
-
+  
   public T[] getSortedArray() {
     T[] data = (T[]) Arrays.copyOf(_arr, _position);
     // Arrays.sort(data, _cmp);
     return data;
   }
-
+  
+  public <T extends ScoredDocument> List<T> getSortedList() {
+    T[] data = (T[]) Arrays.copyOf(_arr, _position);
+    // Arrays.sort(data, _cmp);
+    return Arrays.asList(data);
+  }
+  
   private void bubbleUp(int pos) {
     int prev = pos - 1;
     while ((prev >= 0) && (_cmp.compare(_arr[pos], _arr[prev]) > 0)) {

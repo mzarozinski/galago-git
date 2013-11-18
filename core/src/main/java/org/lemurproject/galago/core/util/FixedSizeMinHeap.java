@@ -7,6 +7,7 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import org.lemurproject.galago.core.retrieval.ScoredDocument;
 
 /**
@@ -35,7 +36,8 @@ public class FixedSizeMinHeap<T> {
   }
 
   /**
-   * Adds an item to the heap IFF the heaps is small OR the min-item is worse than this item
+   * Adds an item to the heap IFF the heaps is small OR the min-item is worse
+   * than this item
    */
   public void offer(T d) {
     // if we're small
@@ -43,7 +45,6 @@ public class FixedSizeMinHeap<T> {
       _heap[_position] = d;
       _position++;
       bubbleUp(_position - 1);
-
 
       // or if smallest item is worse than this document
     } else if (_cmp.compare(d, _heap[0]) > 0) {
@@ -56,6 +57,12 @@ public class FixedSizeMinHeap<T> {
     T[] data = (T[]) Arrays.copyOf(_heap, _position);
     Arrays.sort(data, Collections.reverseOrder(_cmp));
     return data;
+  }
+
+  public List<T> getSortedList() {
+    T[] data = (T[]) Arrays.copyOf(_heap, _position);
+    Arrays.sort(data, Collections.reverseOrder(_cmp));
+    return Arrays.asList(data);
   }
 
   private void bubbleUp(int pos) {

@@ -40,7 +40,7 @@ public class WorkingSetExtentModel extends ProcessingModel {
   }
 
   @Override
-  public ScoredDocument[] execute(Node queryTree, Parameters queryParams) throws Exception {
+  public List<ScoredPassage> executeQuery(Node queryTree, Parameters queryParams) throws Exception {
 
     PassageScoringContext context = new PassageScoringContext();
     context.cachable = false;
@@ -58,15 +58,15 @@ public class WorkingSetExtentModel extends ProcessingModel {
     } else if (String.class.isAssignableFrom(containedType)) {
       whitelist = retrieval.getDocumentIds((List<String>) l);
       // check and print missing documents
-      for(int i =0; i<l.size(); i++){
-        if(whitelist.get(i) < 0){
-          logger.warning("Document: " + l.get(i) + " does not exist in index: " + index.getIndexPath() +" IGNORING.");
+      for (int i = 0; i < l.size(); i++) {
+        if (whitelist.get(i) < 0) {
+          logger.warning("Document: " + l.get(i) + " does not exist in index: " + index.getIndexPath() + " IGNORING.");
         }
       }
     } else {
       throw new IllegalArgumentException(
               String.format("Parameter 'working' must be a list of longs or a list of strings. Found type %s\n.",
-              containedType.toString()));
+                      containedType.toString()));
     }
     Collections.sort(whitelist);
 
@@ -81,15 +81,15 @@ public class WorkingSetExtentModel extends ProcessingModel {
     }
 
     // scoring iterator
-    ScoreIterator iterator =
-            (ScoreIterator) retrieval.createIterator(queryParams,
-            queryTree);
+    ScoreIterator iterator
+            = (ScoreIterator) retrieval.createIterator(queryParams,
+                    queryTree);
 
     // get the extent iterator
     String extent = queryParams.getString("extent");
-    ExtentIterator extentIterator =
-            (ExtentIterator) retrieval.createIterator(new Parameters(),
-            StructuredQuery.parse("#extents:" + extent + ":part=extents()"));
+    ExtentIterator extentIterator
+            = (ExtentIterator) retrieval.createIterator(new Parameters(),
+                    StructuredQuery.parse("#extents:" + extent + ":part=extents()"));
 
     if (extentIterator.isDone()) {
       System.err.println("Failed to find iterator for extent " + extent);
@@ -102,7 +102,7 @@ public class WorkingSetExtentModel extends ProcessingModel {
     for (int i = 0; i < whitelist.size(); i++) {
 
       long document = whitelist.get(i);
-      if(document < 0){
+      if (document < 0) {
         continue;
       }
       context.document = document;
@@ -119,7 +119,6 @@ public class WorkingSetExtentModel extends ProcessingModel {
       iterator.syncTo(document);
 
       // passageSize, passageShift defaults to 1: all extents are scored individually.
-
       for (int e = 0; e < extents.size(); e += extentShift) {
         context.begin = extents.begin(e);
 
@@ -145,6 +144,6 @@ public class WorkingSetExtentModel extends ProcessingModel {
         }
       }
     }
-    return toReversedArray(queue);
+    return toReversedList(queue);
   }
 }

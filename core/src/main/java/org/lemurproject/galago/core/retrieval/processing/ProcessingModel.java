@@ -5,6 +5,8 @@ import org.lemurproject.galago.core.retrieval.ScoredDocument;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
+import java.util.Collections;
+import java.util.List;
 import java.util.PriorityQueue;
 import org.lemurproject.galago.core.retrieval.LocalRetrieval;
 import org.lemurproject.galago.core.util.FixedSizeMinHeap;
@@ -20,14 +22,37 @@ import org.lemurproject.galago.utility.Parameters;
  */
 public abstract class ProcessingModel {
 
-  public abstract ScoredDocument[] execute(Node queryTree, Parameters queryParams) throws Exception;
+  public abstract <T extends ScoredDocument> List<T> executeQuery(Node queryTree, Parameters queryParams) throws Exception;
 
-  public static <T extends ScoredDocument> T[] toReversedArray(PriorityQueue<T> queue) {
+  public static <T extends ScoredDocument> List<T> toReversedList(FixedSizeMinHeap<T> queue) {
     if (queue.size() == 0) {
-      return null;
+      return Collections.EMPTY_LIST;
     }
 
+    List<T> items = queue.getSortedList();
+    int r = 1;
+    for (T i : items) {
+      i.rank = r;
+      r++;
+    }
+
+    return items;
+  }
+
+  @Deprecated
+  public ScoredDocument[] execute(Node queryTree, Parameters queryParams) throws Exception {
+    List<? extends ScoredDocument> res = executeQuery(queryTree, queryParams);
+    return res.toArray(new ScoredDocument[res.size()]);
+  }
+
+  @Deprecated
+  public static <T extends ScoredDocument> T[] toReversedArray(PriorityQueue<T> queue) {
     T[] items = (T[]) Array.newInstance(queue.peek().getClass(), queue.size());
+
+    if (queue.size() == 0) {
+      return items;
+    }
+
     for (int i = queue.size() - 1; queue.isEmpty() == false; i--) {
       items[i] = queue.poll();
 
@@ -37,6 +62,7 @@ public abstract class ProcessingModel {
     return items;
   }
 
+  @Deprecated
   public static <T extends ScoredDocument> T[] toReversedArray(FixedSizeMinHeap<T> queue) {
     if (queue.size() == 0) {
       return null;
@@ -61,16 +87,15 @@ public abstract class ProcessingModel {
       // these are short hand methods of getting some desired proc models:
       if (modelName.equals("rankeddocument")) {
         return new RankedDocumentModel(r);
-      
+
       } else if (modelName.equals("rankedpassage")) {
         return new RankedPassageModel(r);
-      
+
       } else if (modelName.equals("maxscore")) {
         return new MaxScoreDocumentModel(r);
 
-        // CURRENTLY BROKEN DO NOT USE
-//      } else if (modelName.equals("wand")) {
-//        return new WANDScoreDocumentModel(r);
+      } else if (modelName.equals("wand")) {
+        return new WeakAndDocumentModel(r);
 
       } else {
         // generally it's better to use the full class

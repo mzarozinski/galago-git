@@ -17,7 +17,6 @@ import org.lemurproject.galago.core.retrieval.iterator.DisjunctionIterator;
 import org.lemurproject.galago.core.retrieval.iterator.ScoreIterator;
 import org.lemurproject.galago.core.retrieval.processing.ProcessingModel;
 import org.lemurproject.galago.core.retrieval.processing.ScoringContext;
-import static org.lemurproject.galago.core.retrieval.processing.ProcessingModel.toReversedArray;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeType;
 import org.lemurproject.galago.core.util.FixedSizeMinHeap;
@@ -41,8 +40,15 @@ public class WeakAndPassiveModel extends ProcessingModel {
     this.retrieval = lr;
   }
 
+  @Deprecated
   @Override
   public ScoredDocument[] execute(Node queryTree, Parameters queryParams) throws Exception {
+    List<ScoredDocument> res = executeQuery(queryTree, queryParams);
+    return res.toArray(new ScoredDocument[res.size()]);
+  }
+
+  @Override
+  public List<ScoredDocument> executeQuery(Node queryTree, Parameters queryParams) throws Exception {
     ScoringContext context = new ScoringContext();
     int requested = (int) queryParams.get("requested", 1000);
     annotate = queryParams.get("annotate", false);
@@ -96,7 +102,6 @@ public class WeakAndPassiveModel extends ProcessingModel {
         advancePosition = pickAdvancingSentinel(sortedIterators, context.document);
         sortedIterators[advancePosition].next(context.document + 1);
 
-
       } else {
         if (sortedIterators[0].currentCandidate == pivot && hasMatch(sortedIterators, pivot)) {
           //if (sortedIterators[0].currentCandidate == pivot) {
@@ -125,7 +130,7 @@ public class WeakAndPassiveModel extends ProcessingModel {
       }
     }
 
-    return toReversedArray(queue);
+    return toReversedList(queue);
   }
 
   private boolean hasMatch(DeltaScoringIteratorWrapper[] s, long doc) {
@@ -147,12 +152,13 @@ public class WeakAndPassiveModel extends ProcessingModel {
   private void fullSort(DeltaScoringIteratorWrapper[] s) {
     for (int i = 0; i < s.length; i++) {
       s[i].updateCC();
-    }    
-    // too SLOW
+    }
+    
+    // seems a bit SLOW ?
     // Arrays.sort(s);
 
     boolean sorted = false;
-    while(! sorted){
+    while (!sorted) {
       sorted = true;
       for (int i = 0; i < s.length - 1; i++) {
         int result = s[i].compareTo(s[i + 1]);
@@ -160,13 +166,13 @@ public class WeakAndPassiveModel extends ProcessingModel {
           DeltaScoringIteratorWrapper tmp = s[i];
           s[i] = s[i + 1];
           s[i + 1] = tmp;
-          sorted= false;
+          sorted = false;
         }
       }
     }
-    
+
   }
-  
+
 //  // Premise here is that the 'start' iterator is the one that moved forward, but it was already behind
 //  // any other iterator at position n where 0 <= n < start. So we don't even look at those. Makes the sort
 //  // linear at worst.
@@ -182,7 +188,6 @@ public class WeakAndPassiveModel extends ProcessingModel {
 //      }
 //    }
 //  }
-
   private double score(DeltaScoringIteratorWrapper[] sortedIterators, ScoringContext context, double maximumPossibleScore) throws IOException {
 
     // Setup to score
@@ -207,7 +212,6 @@ public class WeakAndPassiveModel extends ProcessingModel {
 //    if (annotate) {
 //      System.err.println("Final Score " + runningScore);
 //    }
-
     return runningScore;
   }
 

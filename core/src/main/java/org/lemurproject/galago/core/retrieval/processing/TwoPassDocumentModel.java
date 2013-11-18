@@ -33,9 +33,10 @@ public class TwoPassDocumentModel extends ProcessingModel {
   }
 
   @Override
-  public ScoredDocument[] execute(Node queryTree, Parameters queryParams) throws Exception {
+  public List<ScoredDocument> executeQuery(Node queryTree, Parameters queryParams) throws Exception {
     Parameters firstPassParams = queryParams.clone();
     firstPassParams.set("requested", Math.max(topK, queryParams.get("requested", 1000)));
+
     // ensure the firstpass query is not mistaken for a delta ready query
     if (firstPassParams.containsKey("deltaReady")) {
       firstPassParams.remove("deltaReady");
@@ -47,24 +48,24 @@ public class TwoPassDocumentModel extends ProcessingModel {
     Node firstPassQuery = StructuredQuery.parse(queryParams.getString("firstPassQuery"));
     firstPassQuery = retrieval.transformQuery(firstPassQuery, firstPassParams);
 
-    ScoredDocument[] results;
+    List<ScoredDocument> results;
     if (firstPassParams.get("deltaReady", false)) {
-      results = firstPassMaxScore.execute(firstPassQuery, firstPassParams);
+      results = firstPassMaxScore.executeQuery(firstPassQuery, firstPassParams);
     } else {
-      results = firstPassDefault.execute(firstPassQuery, firstPassParams);
+      results = firstPassDefault.executeQuery(firstPassQuery, firstPassParams);
     }
 
     List<Long> workingSet = resultsToWorkingSet(results);
     queryParams.set("working", workingSet);
-    results = secondPassDefault.execute(queryTree, queryParams);
+    results = secondPassDefault.executeQuery(queryTree, queryParams);
 
     return results;
   }
 
-  private List<Long> resultsToWorkingSet(ScoredDocument[] results) {
-    ArrayList<Long> ws = new ArrayList();
-    for (int i = 0; i < results.length; i++) {
-      ws.add((long) results[i].document);
+  private List<Long> resultsToWorkingSet(List<ScoredDocument> results) {
+    List<Long> ws = new ArrayList();
+    for (ScoredDocument d : results) {
+      ws.add(d.document);
     }
     Collections.sort(ws);
     return ws;

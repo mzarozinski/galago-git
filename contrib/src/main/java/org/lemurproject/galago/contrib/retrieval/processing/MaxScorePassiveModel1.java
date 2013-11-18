@@ -36,7 +36,7 @@ public class MaxScorePassiveModel1 extends ProcessingModel {
   }
 
   @Override
-  public ScoredDocument[] execute(Node queryTree, Parameters queryParams) throws Exception {
+  public List<ScoredDocument> executeQuery(Node queryTree, Parameters queryParams) throws Exception {
     ScoringContext context = new ScoringContext();
     int requested = (int) queryParams.get("requested", 1000);
 
@@ -65,13 +65,13 @@ public class MaxScorePassiveModel1 extends ProcessingModel {
 
     // Main loop : 
     context.document = -1;
-    
+
     while (true) {
       long candidate = Long.MAX_VALUE;
       for (int i = 0; i < scoringIterators.size(); i++) {
         // move past previously scored document //
         scoringIterators.get(i).movePast(context.document);
-        if (!scoringIterators.get(i).isDone()) {          
+        if (!scoringIterators.get(i).isDone()) {
           long c = scoringIterators.get(i).currentCandidate();
           candidate = (candidate < c) ? candidate : c;
         }
@@ -120,7 +120,7 @@ public class MaxScorePassiveModel1 extends ProcessingModel {
       }
     }
 
-    return toReversedArray(queue);
+    return toReversedList(queue);
   }
 
   private boolean findDeltaNodes(Node n, List<Node> scorers, LocalRetrieval ret) throws Exception {

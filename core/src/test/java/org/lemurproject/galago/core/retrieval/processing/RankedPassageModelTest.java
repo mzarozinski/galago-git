@@ -5,8 +5,10 @@ package org.lemurproject.galago.core.retrieval.processing;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 import junit.framework.TestCase;
 import org.lemurproject.galago.core.retrieval.LocalRetrieval;
+import org.lemurproject.galago.core.retrieval.ScoredDocument;
 import org.lemurproject.galago.core.retrieval.ScoredPassage;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.StructuredQuery;
@@ -69,47 +71,46 @@ public class RankedPassageModelTest extends TestCase {
 
     RankedPassageModel model = new RankedPassageModel(ret);
 
-    ScoredPassage[] results = (ScoredPassage[]) model.execute(query, queryParams);
+    List<ScoredPassage> results = model.executeQuery(query, queryParams);
 
     // --- all documents contain these terms in the first ten words --
     // -> this query should only ever return the first passage (0-10)
     // -> and the top 100 scores should be equal
-    assertEquals(results.length, req);
+    assertEquals(results.size(), req);
     for (int i = 0; i < req; i++) {
-      assertEquals(results[i].document, i);
-      assertEquals(results[i].begin, 0);
-      assertEquals(results[i].end, 10);
-      assertEquals(results[i].rank, i + 1);
+      assertEquals(results.get(i).document, i);
+      assertEquals(results.get(i).begin, 0);
+      assertEquals(results.get(i).end, 10);
+      assertEquals(results.get(i).rank, i + 1);
       if (i > 0) {
-        assert (Utility.compare(results[i].score, results[i - 1].score) == 0);
+        assert (Utility.compare(results.get(i).score, results.get(i - 1).score) == 0);
       }
     }
 
     query = StructuredQuery.parse("#combine( test text 99 )");
     query = ret.transformQuery(query, queryParams);
 
-    results = (ScoredPassage[]) model.execute(query, queryParams);
+    results = model.executeQuery(query, queryParams);
 
     // note that dirichlet favours smaller documents over longer documents 
+    assertEquals(results.size(), req);
+    assertEquals(results.get(0).document, 94);
+    assertEquals(results.get(0).begin, 100);
+    assertEquals(results.get(0).end, 106);
+    assertEquals(results.get(0).rank, 1);
+    assertEquals(results.get(0).score, -4.776027, 0.000001);
 
-    assertEquals(results.length, req);
-    assertEquals(results[0].document, 94);
-    assertEquals(results[0].begin, 100);
-    assertEquals(results[0].end, 106);
-    assertEquals(results[0].rank, 1);
-    assertEquals(results[0].score, -4.776027, 0.000001);
+    assertEquals(results.get(1).document, 90);
+    assertEquals(results.get(1).begin, 95);
+    assertEquals(results.get(1).end, 102);
+    assertEquals(results.get(1).rank, 2);
+    assertEquals(results.get(1).score, -4.776691, 0.000001);
 
-    assertEquals(results[1].document, 90);
-    assertEquals(results[1].begin, 95);
-    assertEquals(results[1].end, 102);
-    assertEquals(results[1].rank, 2);
-    assertEquals(results[1].score, -4.776691, 0.000001);
-
-    assertEquals(results[2].document, 95);
-    assertEquals(results[2].begin, 100);
-    assertEquals(results[2].end, 107);
-    assertEquals(results[2].rank, 3);
-    assertEquals(results[2].score, -4.776691, 0.000001);
+    assertEquals(results.get(2).document, 95);
+    assertEquals(results.get(2).begin, 100);
+    assertEquals(results.get(2).end, 107);
+    assertEquals(results.get(2).rank, 3);
+    assertEquals(results.get(2).score, -4.776691, 0.000001);
 
   }
 
@@ -131,18 +132,18 @@ public class RankedPassageModelTest extends TestCase {
     queryParams.set("working",
             Arrays.asList(new Long[]{2l, 3l, 4l, 5l, 6l, 7l, 8l, 9l, 10l, 11l}));
 
-    ScoredPassage[] results = (ScoredPassage[]) model.execute(query, queryParams);
+    List<ScoredPassage> results = model.executeQuery(query, queryParams);
 
     // --- all documents contain these terms in the first ten words --
     // -> this query should only ever return the first passage (0-10)
     // -> and all scores should be equal
-     assertEquals(31, results.length);
+    assertEquals(31, results.size());
     for (int i = 0; i < 10; i++) {
-      assertEquals(results[i].document, i + 2);
-      assertEquals(results[i].begin, 0);
-      assertEquals(results[i].end, 10);
-      assertEquals(results[i].rank, i + 1);
-      assertEquals(results[i].score, -4.085500, 0.000001);
+      assertEquals(results.get(i).document, i + 2);
+      assertEquals(results.get(i).begin, 0);
+      assertEquals(results.get(i).end, 10);
+      assertEquals(results.get(i).rank, i + 1);
+      assertEquals(results.get(i).score, -4.085500, 0.000001);
     }
 
     query = StructuredQuery.parse("#combine( test text 80 )");
@@ -150,38 +151,35 @@ public class RankedPassageModelTest extends TestCase {
 
     queryParams.set("working",
             Arrays.asList(new Long[]{0l, 1l, 2l, 3l, 4l, 89l, 90l, 91l, 92l, 93l}));
-    results = (ScoredPassage[]) model.execute(query, queryParams);
+    results = model.executeQuery(query, queryParams);
 
-    assertEquals(results.length, 100);
-    
+    assertEquals(results.size(), 100);
+
     // higher documents, with the term '89', 
     // are ranked highest because 'test' and 'text' exist in every document (~= stopwords)
+    assertEquals(results.get(0).document, 89);
+    assertEquals(results.get(0).begin, 75);
+    assertEquals(results.get(0).end, 85);
+    assertEquals(results.get(0).rank, 1);
+    assertEquals(results.get(0).score, -4.49422735, 0.000001);
 
-    assertEquals(results[0].document, 89);
-    assertEquals(results[0].begin, 75);
-    assertEquals(results[0].end, 85);
-    assertEquals(results[0].rank, 1);
-    assertEquals(results[0].score, -4.49422735, 0.000001);
+    assertEquals(results.get(1).document, 89);
+    assertEquals(results.get(1).begin, 80);
+    assertEquals(results.get(1).end, 90);
+    assertEquals(results.get(1).rank, 2);
+    assertEquals(results.get(1).score, -4.49422735, 0.000001);
 
-    assertEquals(results[1].document, 89);
-    assertEquals(results[1].begin, 80);
-    assertEquals(results[1].end, 90);
-    assertEquals(results[1].rank, 2);
-    assertEquals(results[1].score, -4.49422735, 0.000001);
+    assertEquals(results.get(10).document, 0);
+    assertEquals(results.get(10).begin, 0);
+    assertEquals(results.get(10).end, 10);
+    assertEquals(results.get(10).rank, 11);
+    assertEquals(results.get(10).score, -4.51151864, 0.000001);
 
-    assertEquals(results[10].document, 0);
-    assertEquals(results[10].begin, 0);
-    assertEquals(results[10].end, 10);
-    assertEquals(results[10].rank, 11);
-    assertEquals(results[10].score, -4.51151864, 0.000001);
-
-    assertEquals(results[15].document, 89);
-    assertEquals(results[15].begin, 0);
-    assertEquals(results[15].end, 10);
-    assertEquals(results[15].rank, 16);
-    assertEquals(results[15].score, -4.51151864, 0.000001);
-    
-    // 
+    assertEquals(results.get(15).document, 89);
+    assertEquals(results.get(15).begin, 0);
+    assertEquals(results.get(15).end, 10);
+    assertEquals(results.get(15).rank, 16);
+    assertEquals(results.get(15).score, -4.51151864, 0.000001);
 
   }
 

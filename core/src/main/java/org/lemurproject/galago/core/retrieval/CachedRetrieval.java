@@ -6,7 +6,7 @@ package org.lemurproject.galago.core.retrieval;
 import java.io.IOException;
 import java.util.HashMap;
 import org.lemurproject.galago.core.index.mem.*;
-import org.lemurproject.galago.core.index.stats.AggregateStatistic;
+import org.lemurproject.galago.core.index.stats.AggregateStatistics;
 import org.lemurproject.galago.core.retrieval.iterator.*;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.utility.Parameters;
@@ -28,7 +28,7 @@ public class CachedRetrieval {
   protected boolean cacheStats;
   protected HashMap<String, MemoryIndexPart> cacheParts;
   protected HashMap<String, String> cachedNodes;
-  protected HashMap<String, AggregateStatistic> cachedStats;
+  protected HashMap<String, AggregateStatistics> cachedStats;
 
   /**
    * One retrieval interacts with one index. Parameters dictate the behavior
@@ -156,7 +156,7 @@ public class CachedRetrieval {
    *  lengthNode -> CollectionStatistics
    *  countNode -> NodeStatistics
    */
-  public void addToCache(String key, AggregateStatistic stat) {
+  public void addToCache(String key, AggregateStatistics stat) {
     if (!cachedNodes.containsKey(key)) {
       cachedStats.put(key, stat);
     } else {
@@ -164,7 +164,7 @@ public class CachedRetrieval {
     }
   }
 
-  public AggregateStatistic getCachedStatistic(String key) throws Exception {
+  public AggregateStatistics getCachedStatistic(String key) throws Exception {
     // check the node cache first - this will avoid zeros.
     if (cachedStats.containsKey(key)) {
       //logger.info("Getting stats from cache for node : " + nodeString);

@@ -9,7 +9,7 @@ import org.lemurproject.galago.utility.Parameters;
  *
  * @author sjh
  */
-public class NodeStatistics implements AggregateStatistic {
+public class NodeStatistics extends AggregateStatistics {
 
   private static final long serialVersionUID = 7553653651892088433L;
   public String node = null;
@@ -44,5 +44,10 @@ public class NodeStatistics implements AggregateStatistic {
     ns.nodeDocumentCount = this.nodeDocumentCount;
     ns.maximumCount = this.maximumCount;
     return ns;
+  }
+
+  @Override
+  public void add(AggregateStatistics s) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

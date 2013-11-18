@@ -88,11 +88,11 @@ public class NaiveAggressiveModel extends ProcessingModel {
       while (i < scoringIterators.size()) {
         DeltaScoringIterator dsi = scoringIterators.get(i);
         dsi.syncTo(candidate);
-        runningScore += dsi.score(context);
+        runningScore += dsi.score(context) * dsi.getWeight();
         ++i;
       }
 
-      if (runningScore > queue.peek().score || queue.size() < requested) {
+      if (queue.size() < requested || runningScore > queue.peek().score) {
         ScoredDocument scoredDocument = new ScoredDocument(candidate, runningScore);
         queue.offer(scoredDocument);
       }

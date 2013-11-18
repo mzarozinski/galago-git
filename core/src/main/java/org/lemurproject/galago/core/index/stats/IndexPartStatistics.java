@@ -9,7 +9,7 @@ import org.lemurproject.galago.utility.Parameters;
  *
  * @author sjh
  */
-public class IndexPartStatistics implements AggregateStatistic {
+public class IndexPartStatistics extends AggregateStatistics {
 
   private static final long serialVersionUID = 5553653651892088433L;
   public String partName = null;
@@ -58,5 +58,10 @@ public class IndexPartStatistics implements AggregateStatistic {
     ps.highestDocumentCount = this.highestDocumentCount;
     ps.highestFrequency = this.highestFrequency;
     return ps;
+  }
+
+  @Override
+  public void add(AggregateStatistics s) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

@@ -92,7 +92,7 @@ public class NaivePassiveModel extends ProcessingModel {
         while (i < scoringIterators.size()) {
           DeltaScoringIterator dsi = scoringIterators.get(i);
           dsi.syncTo(candidate);
-          runningScore += dsi.score(context);
+          runningScore += dsi.score(context) * dsi.getWeight();
           ++i;
         }
 

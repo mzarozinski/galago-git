@@ -4,7 +4,8 @@
 package org.lemurproject.galago.core.index.stats;
 
 /**
- *
+ * Interface to allow some IndexPartReader classes to provide some aggregate statistics.
+ *  
  * @author sjh
  */
 public interface AggregateIndexPart {

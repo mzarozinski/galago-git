@@ -10,8 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import org.lemurproject.galago.core.index.Index;
+import org.lemurproject.galago.core.index.IndexPartReader;
 import org.lemurproject.galago.core.index.disk.DiskIndex;
-import org.lemurproject.galago.core.index.stats.AggregateStatistic;
+import org.lemurproject.galago.core.index.stats.AggregateStatistics;
 import org.lemurproject.galago.core.index.stats.CollectionAggregateIterator;
 import org.lemurproject.galago.core.index.stats.FieldStatistics;
 import org.lemurproject.galago.core.index.stats.IndexPartStatistics;
@@ -131,6 +132,14 @@ public class LocalRetrieval implements Retrieval {
     return index;
   }
 
+  public IndexPartReader getIndexPart(String part) throws IOException {
+    if (index.containsPart(part)) {
+      return index.getIndexPart(part);
+    } else {
+      throw new IllegalArgumentException("index " + index.getIndexPath() + " does not contain part " + part);
+    }
+  }
+
   @Override
   public Document getDocument(String identifier, DocumentComponents p) throws IOException {
     return this.index.getDocument(identifier, p);
@@ -144,8 +153,9 @@ public class LocalRetrieval implements Retrieval {
   /**
    * Accepts a transformed query, constructs the iterator tree from the node
    * tree, then iterates over the iterator tree, and returns the results.
-   * 
-   * TODO: export this in Retrieval, as executeQuery, as the training wheels interface
+   *
+   * TODO: export this in Retrieval, as executeQuery, as the training wheels
+   * interface
    */
   @Deprecated
   public ScoredDocument[] runQuery(String query, Parameters p) throws Exception {
@@ -186,7 +196,7 @@ public class LocalRetrieval implements Retrieval {
    *
    */
   protected <T extends ScoredDocument> T[] getArrayResults(T[] results, String indexId) throws IOException {
-    assert(results != null); // unfortunately, we can't make an array of type T in java
+    assert (results != null); // unfortunately, we can't make an array of type T in java
 
     if (results.length == 0) {
       return results;
@@ -327,7 +337,7 @@ public class LocalRetrieval implements Retrieval {
 
     String rootString = root.toString();
     if (cache != null && cache.cacheStats) {
-      AggregateStatistic stat = cache.getCachedStatistic(rootString);
+      AggregateStatistics stat = cache.getCachedStatistic(rootString);
       if (stat != null && stat instanceof FieldStatistics) {
         return (FieldStatistics) stat;
       }
@@ -389,12 +399,11 @@ public class LocalRetrieval implements Retrieval {
 
     String rootString = root.toString();
     if (cache != null && cache.cacheStats) {
-      AggregateStatistic stat = cache.getCachedStatistic(rootString);
+      AggregateStatistics stat = cache.getCachedStatistic(rootString);
       if (stat != null && stat instanceof NodeStatistics) {
         return (NodeStatistics) stat;
       }
     }
-
 
     NodeStatistics s;
     // if you want passage statistics, you'll need a manual solution for now.
@@ -528,6 +537,6 @@ public class LocalRetrieval implements Retrieval {
 
   @Override
   public String toString() {
-    return "LocalRetrieval("+index.getIndexPath()+")";
+    return "LocalRetrieval(" + index.getIndexPath() + ")";
   }
 }

@@ -56,13 +56,13 @@ public class AnnotateCollectionStatistics extends Traversal {
 
   @Override
   public Node afterNode(Node node, Parameters qp) throws Exception {
-    
+
     // need to get list of required statistics
     NodeType nt = retrieval.getNodeType(node);
     if(nt == null){
       throw new IllegalArgumentException("NodeType of " + node.toString() + " is unknown.");
     }
-    
+
     Class<? extends BaseIterator> c = nt.getIteratorClass();
     RequiredStatistics required = c.getAnnotation(RequiredStatistics.class);
 

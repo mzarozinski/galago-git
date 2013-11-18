@@ -2,6 +2,7 @@
 package org.lemurproject.galago.core.retrieval;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.lemurproject.galago.core.index.stats.FieldStatistics;
@@ -15,7 +16,8 @@ import org.lemurproject.galago.core.retrieval.query.QueryType;
 import org.lemurproject.galago.utility.Parameters;
 
 /**
- * <p>This is a base interface for all kinds of retrieval classes. Historically
+ * <p>
+ * This is a base interface for all kinds of retrieval classes. Historically
  * this was used to support binned indexes in addition to structured
  * indexes.</p>
  *
@@ -80,7 +82,8 @@ public interface Retrieval {
 
   /**
    * Attempts to return a QueryType object for the supplied Node. This is
-   * typically called on root nodes of query trees.
+   * typically called on root nodes of query trees. It allows a semi-automatic
+   * selection of processing model.
    *
    * @param node
    * @return
@@ -114,9 +117,9 @@ public interface Retrieval {
 
   /**
    * Runs the query against the retrieval. Assumes the query has been properly
-   * annotated. An example is the query produced from transformQuery.
-   * Parameters object allows any global execution parameters or default values
-   * to be overridden.
+   * annotated. An example is the query produced from transformQuery. Parameters
+   * object allows any global execution parameters or default values to be
+   * overridden.
    *
    * @param root, parameters
    * @return array of ScoredDocuments
@@ -138,9 +141,9 @@ public interface Retrieval {
 
   /**
    * Runs the query against the retrieval. Assumes the query has been properly
-   * annotated. An example is the query produced from transformQuery.
-   * Parameters object allows any global execution parameters or default values
-   * to be overridden.
+   * annotated. An example is the query produced from transformQuery. Parameters
+   * object allows any global execution parameters or default values to be
+   * overridden.
    *
    * @param root, parameters
    * @return Results (contains a list of scored documents)
@@ -148,13 +151,12 @@ public interface Retrieval {
    */
   public Results executeQuery(Node root, Parameters parameters) throws Exception;
 
-  
   /**
    * Returns IndexPartStatistics for the named postings part.
-   * 
-   * Data includes statistics for vocabulary size, 
-   * total number of postings stored and longest posting list.
-   * 
+   *
+   * Data includes statistics for vocabulary size, total number of postings
+   * stored and longest posting list.
+   *
    * @param partName
    * @return IndexPartStatistics
    * @throws IOException
@@ -162,11 +164,11 @@ public interface Retrieval {
   public IndexPartStatistics getIndexPartStatistics(String partName) throws IOException;
 
   /**
-   * Returns statistics for a string representation of a lengths node.
-   * See collectionStatistics(Node node).
-   * 
+   * Returns statistics for a string representation of a lengths node. See
+   * collectionStatistics(Node node).
+   *
    * Data returned includes collectionLength, document count, longest document,
-   * shortest document, average document. 
+   * shortest document, average document.
    *
    * @param nodeString
    * @return FieldStatistics
@@ -175,15 +177,15 @@ public interface Retrieval {
   public FieldStatistics getCollectionStatistics(String nodeString) throws Exception;
 
   /**
-   * Returns statistics for a lengths node. This data is commonly used
-   * in probabilistic smoothing functions. 
-   * 
+   * Returns statistics for a lengths node. This data is commonly used in
+   * probabilistic smoothing functions.
+   *
    * The root-node must implement LengthsIterator.
-   * 
+   *
    * Data returned includes collectionLength, document count, longest document,
-   * shortest document, average document. Where 'document' may be a 'field' or other
-   * specified region of indexed documents.
-   * 
+   * shortest document, average document. Where 'document' may be a 'field' or
+   * other specified region of indexed documents.
+   *
    *
    * @param node
    * @return FieldStatistics
@@ -193,13 +195,12 @@ public interface Retrieval {
 
   /**
    * Returns collection statistics for a count node. This data is commonly used
-   * as a feature in a retrieval model. 
-   * See nodeStatistics(Node node).
-   * 
-   * Data returned includes the frequency of the node in the collection, 
-   * the number of documents that return a non-zero count for the node, and
-   * the maximum frequency of the node in any single document.
-   * 
+   * as a feature in a retrieval model. See nodeStatistics(Node node).
+   *
+   * Data returned includes the frequency of the node in the collection, the
+   * number of documents that return a non-zero count for the node, and the
+   * maximum frequency of the node in any single document.
+   *
    * @param nodeString
    * @return NodeStatistics
    * @throws Exception
@@ -208,14 +209,14 @@ public interface Retrieval {
 
   /**
    * Returns collection statistics for a count node. This data is commonly used
-   * as a feature in a retrieval model. 
-   * 
+   * as a feature in a retrieval model.
+   *
    * The root-node must implement a 'CountIterator'.
-   * 
-   * Data returned includes the frequency of the node in the collection, 
-   * the number of documents that return a non-zero count for the node, and
-   * the maximum frequency of the node in any single document.
-   * 
+   *
+   * Data returned includes the frequency of the node in the collection, the
+   * number of documents that return a non-zero count for the node, and the
+   * maximum frequency of the node in any single document.
+   *
    * @param node
    * @return NodeStatistics
    * @throws Exception
@@ -223,8 +224,8 @@ public interface Retrieval {
   public NodeStatistics getNodeStatistics(Node node) throws Exception;
 
   /**
-   * Returns the length of a particular document. Where docid
-   * is the internal identifier of the document.
+   * Returns the length of a particular document. Where docid is the internal
+   * identifier of the document.
    *
    * @param docid
    * @return document length
@@ -233,8 +234,8 @@ public interface Retrieval {
   public Integer getDocumentLength(Integer docid) throws IOException;
 
   /**
-   * Returns the length of a particular document. Where docname
-   * is the internally stored name of the document.
+   * Returns the length of a particular document. Where docname is the
+   * internally stored name of the document.
    *
    * @param docname
    * @return document length
@@ -243,9 +244,9 @@ public interface Retrieval {
   public Integer getDocumentLength(String docname) throws IOException;
 
   /**
-   * Returns the internally stored name of a particular document. 
-   * Where docid is the internal identifier of the document.
-   * 
+   * Returns the internally stored name of a particular document. Where docid is
+   * the internal identifier of the document.
+   *
    * @param docid
    * @return document length
    * @throws IOException
@@ -253,17 +254,15 @@ public interface Retrieval {
   public String getDocumentName(Integer docid) throws IOException;
 
   /**
-   * adds a node to the cache
-   *  -- can improve efficiency for repeated queries
-   *  -- if no cache is present, function does nothing
+   * adds a node to the cache -- can improve efficiency for repeated queries --
+   * if no cache is present, function does nothing
    */
   public void addNodeToCache(Node node) throws Exception;
 
   /**
-   * recursively adds nodes to the cache
-   *  -- all children nodes in the tree are added to the cache
-   *  -- can improve efficiency for repeated queries
-   *  -- if no cache is present, function does nothing
+   * recursively adds nodes to the cache -- all children nodes in the tree are
+   * added to the cache -- can improve efficiency for repeated queries -- if no
+   * cache is present, function does nothing
    */
   public void addAllNodesToCache(Node node) throws Exception;
 }

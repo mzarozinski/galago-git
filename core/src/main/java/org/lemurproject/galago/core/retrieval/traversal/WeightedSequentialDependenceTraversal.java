@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import org.lemurproject.galago.core.index.stats.AggregateStatistic;
+import org.lemurproject.galago.core.index.stats.AggregateStatistics;
 import org.lemurproject.galago.core.index.stats.NodeStatistics;
 import org.lemurproject.galago.core.retrieval.GroupRetrieval;
 import org.lemurproject.galago.core.retrieval.query.Node;
@@ -180,7 +180,7 @@ public class WeightedSequentialDependenceTraversal extends Traversal {
     Map<WSDMFeature, Double> featureValues = new HashMap();
 
     // tf/df comes from the same object - can be used  twice
-    Map<String, AggregateStatistic> localCache = new HashMap();
+    Map<String, AggregateStatistics> localCache = new HashMap();
 
     // NOW : collect some feature values
     Node node;
@@ -291,7 +291,7 @@ public class WeightedSequentialDependenceTraversal extends Traversal {
     Map<WSDMFeature, Double> featureValues = new HashMap();
 
     // tf/df comes from the same object - can be used  twice
-    Map<String, AggregateStatistic> localCache = new HashMap();
+    Map<String, AggregateStatistics> localCache = new HashMap();
 
     // NOW : collect some feature values
     Node node;
@@ -440,7 +440,7 @@ public class WeightedSequentialDependenceTraversal extends Traversal {
     Map<WSDMFeature, Double> featureValues = new HashMap();
 
     // tf/df comes from the same object - can be used twice
-    Map<String, AggregateStatistic> localCache = new HashMap();
+    Map<String, AggregateStatistics> localCache = new HashMap();
 
     // NOW : collect some feature values
     Node node;

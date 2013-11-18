@@ -9,7 +9,7 @@ import org.lemurproject.galago.utility.Parameters;
  *
  * @author sjh
  */
-public class FieldStatistics implements AggregateStatistic {
+public class FieldStatistics extends AggregateStatistics {
 
   private static final long serialVersionUID = 6553653651892088433L;
   // 'document', 'field', or passage label
@@ -26,9 +26,11 @@ public class FieldStatistics implements AggregateStatistic {
   public long minLength = 0;
   // average length of 'field' 
   public double avgLength = 0;
+  // extra stat
   public long nonZeroLenDocCount = 0;
-  
+  // first
   public long firstDocId;
+  // last
   public long lastDocId;
 
   public FieldStatistics() {
@@ -57,6 +59,11 @@ public class FieldStatistics implements AggregateStatistic {
     p.set("lastDocId", this.lastDocId);
     p.set("avgLength", this.avgLength);
     return p;
+  }
+
+  @Override
+  public void add(AggregateStatistics s) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override

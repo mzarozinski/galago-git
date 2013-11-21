@@ -7,10 +7,10 @@ import org.lemurproject.galago.core.index.stats.AggregateStatistics;
 import org.lemurproject.galago.core.index.stats.CollectionAggregateIterator;
 import org.lemurproject.galago.core.index.stats.FieldStatistics;
 import org.lemurproject.galago.core.retrieval.LocalRetrieval;
+import org.lemurproject.galago.core.retrieval.iterator.BaseIterator;
 import org.lemurproject.galago.core.retrieval.iterator.LengthsIterator;
 import org.lemurproject.galago.core.retrieval.processing.ScoringContext;
 import org.lemurproject.galago.core.retrieval.query.Node;
-import org.lemurproject.galago.core.retrieval.query.NodeType;
 import org.lemurproject.galago.utility.Parameters;
 
 /**
@@ -29,27 +29,27 @@ public class CollectionStatsCollector extends StatisticsCollector {
   public AggregateStatistics collect(Node node, Parameters p) throws Exception {
 
     // node must correspond to a lengths iterator //
-    NodeType nt = lr.getNodeType(node);
+    BaseIterator i = lr.createIterator(p, node);
 
-    if (nt != null && CollectionAggregateIterator.class.isAssignableFrom(nt.getIteratorClass())) {
+    if (CollectionAggregateIterator.class.isAssignableFrom(i.getClass())) {
       // we have direct access to stats for this node
-      CollectionAggregateIterator i = (CollectionAggregateIterator) lr.createIterator(p, node);
-      return i.getStatistics();
+      return ((CollectionAggregateIterator) i).getStatistics();
 
-    } else if (nt != null && LengthsIterator.class.isAssignableFrom(nt.getIteratorClass())) {
+    } else if (LengthsIterator.class.isAssignableFrom(i.getClass())) {
+
+      LengthsIterator li = (LengthsIterator) i;
       // we have to compute stats for this node
       FieldStatistics fs = new FieldStatistics();
       fs.fieldName = node.toString();
-      LengthsIterator i = (LengthsIterator) lr.createIterator(p, node);
       ScoringContext sc = new ScoringContext();
 
-      fs.firstDocId = i.currentCandidate();
+      fs.firstDocId = li.currentCandidate();
       fs.maxLength = 0;
       fs.minLength = Integer.MAX_VALUE;
-      while (!i.isDone()) {
-        sc.document = i.currentCandidate();
-        if (i.hasMatch(sc.document)) {
-          int l = i.length(sc);
+      while (!li.isDone()) {
+        sc.document = li.currentCandidate();
+        if (li.hasMatch(sc.document)) {
+          int l = li.length(sc);
           fs.collectionLength += l;
           fs.documentCount += 1;
           fs.maxLength = (fs.maxLength >= l) ? fs.maxLength : l;
@@ -58,7 +58,7 @@ public class CollectionStatsCollector extends StatisticsCollector {
             fs.nonZeroLenDocCount += 1;
           }
         }
-        i.movePast(sc.document);
+        li.movePast(sc.document);
       }
       fs.lastDocId = sc.document;
       fs.avgLength = (double) fs.collectionLength / (double) fs.documentCount;

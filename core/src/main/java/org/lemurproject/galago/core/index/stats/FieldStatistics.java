@@ -36,15 +36,20 @@ public class FieldStatistics extends AggregateStatistics {
   public FieldStatistics() {
   }
 
-  public void add(FieldStatistics other) {
-    this.collectionLength += other.collectionLength;
-    this.documentCount += other.documentCount;
-    this.nonZeroLenDocCount += other.nonZeroLenDocCount;
-    this.maxLength = Math.max(this.maxLength, other.maxLength);
-    this.minLength = Math.min(this.minLength, other.minLength);
-    this.avgLength = (this.documentCount > 0) ? this.collectionLength / this.documentCount : -1;
-    this.firstDocId = Math.min(this.firstDocId, other.firstDocId);
-    this.lastDocId = Math.max(this.lastDocId, other.lastDocId);
+  public void add(AggregateStatistics o) {
+    if (o instanceof FieldStatistics) {
+      FieldStatistics other = (FieldStatistics) o;
+      this.collectionLength += other.collectionLength;
+      this.documentCount += other.documentCount;
+      this.nonZeroLenDocCount += other.nonZeroLenDocCount;
+      this.maxLength = Math.max(this.maxLength, other.maxLength);
+      this.minLength = Math.min(this.minLength, other.minLength);
+      this.avgLength = (this.documentCount > 0) ? this.collectionLength / this.documentCount : -1;
+      this.firstDocId = Math.min(this.firstDocId, other.firstDocId);
+      this.lastDocId = Math.max(this.lastDocId, other.lastDocId);
+    } else {
+      throw new RuntimeException(o.getClass().getSimpleName() + " can not be added to FieldStatistics.");
+    }
   }
 
   public Parameters toParameters() {
@@ -59,11 +64,6 @@ public class FieldStatistics extends AggregateStatistics {
     p.set("lastDocId", this.lastDocId);
     p.set("avgLength", this.avgLength);
     return p;
-  }
-
-  @Override
-  public void add(AggregateStatistics s) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override

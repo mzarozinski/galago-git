@@ -29,11 +29,16 @@ public class IndexPartStatistics extends AggregateStatistics {
     this.highestFrequency = parameters.get("statistics/highestFrequency", 0L);
   }
 
-  public void add(IndexPartStatistics other) {
-    this.collectionLength += other.collectionLength;
-    this.vocabCount = Math.max(this.vocabCount, other.vocabCount);
-    this.highestDocumentCount = Math.max(this.highestDocumentCount, other.highestDocumentCount);
-    this.highestFrequency = Math.max(this.highestFrequency, other.highestFrequency);
+  public void add(AggregateStatistics o) {
+    if (o instanceof IndexPartStatistics) {
+      IndexPartStatistics other = (IndexPartStatistics) o;
+      this.collectionLength += other.collectionLength;
+      this.vocabCount = Math.max(this.vocabCount, other.vocabCount);
+      this.highestDocumentCount = Math.max(this.highestDocumentCount, other.highestDocumentCount);
+      this.highestFrequency = Math.max(this.highestFrequency, other.highestFrequency);
+    } else {
+      throw new RuntimeException(o.getClass().getSimpleName() + " can not be added to IndexPartStatistics.");
+    }
   }
 
   public Parameters toParameters() {
@@ -58,10 +63,5 @@ public class IndexPartStatistics extends AggregateStatistics {
     ps.highestDocumentCount = this.highestDocumentCount;
     ps.highestFrequency = this.highestFrequency;
     return ps;
-  }
-
-  @Override
-  public void add(AggregateStatistics s) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

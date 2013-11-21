@@ -13,6 +13,8 @@ import org.lemurproject.galago.core.index.stats.FieldStatistics;
 import org.lemurproject.galago.core.index.stats.IndexPartStatistics;
 import org.lemurproject.galago.core.retrieval.Retrieval;
 import org.lemurproject.galago.core.retrieval.RetrievalFactory;
+import org.lemurproject.galago.core.retrieval.query.Node;
+import org.lemurproject.galago.core.retrieval.query.StructuredQuery;
 import org.lemurproject.galago.core.tools.apps.BuildIndex;
 import org.lemurproject.galago.utility.Parameters;
 import org.lemurproject.galago.utility.Utility;
@@ -121,16 +123,23 @@ public class UniversalParserTest extends TestCase {
 
       Retrieval ret = RetrievalFactory.instance(index.getAbsolutePath(), new Parameters());
 
-      FieldStatistics cs = ret.getCollectionStatistics("#lengths:part=lengths()");
+      FieldStatistics cs = (FieldStatistics) ret.getStatisics(
+              StructuredQuery.parse("#lengths:document:part=lengths()"),
+              Parameters.singleKeyValue("statCollector", "collStats"));
+
       assertEquals(cs.collectionLength, 553);
       assertEquals(cs.documentCount, 32);
       assertEquals(cs.maxLength, 22);
       assertEquals(cs.minLength, 11);
 
-      IndexPartStatistics is1 = ret.getIndexPartStatistics("postings");
+      IndexPartStatistics is1 = (IndexPartStatistics) ret.getStatisics(
+              new Node("text", "postings"),
+              Parameters.singleKeyValue("statCollector", "partStats"));
       assertEquals(is1.collectionLength, 553);
 
-      IndexPartStatistics is2 = ret.getIndexPartStatistics("postings.krovetz");
+      IndexPartStatistics is2 = (IndexPartStatistics) ret.getStatisics(
+              new Node("text", "postings.krovetz"),
+              Parameters.singleKeyValue("statCollector", "partStats"));
       assertEquals(is2.collectionLength, 553);
 
       // should have about the same vocabs
@@ -164,16 +173,22 @@ public class UniversalParserTest extends TestCase {
 
       Retrieval ret = RetrievalFactory.instance(index.getAbsolutePath(), new Parameters());
 
-      FieldStatistics cs = ret.getCollectionStatistics("#lengths:part=lengths()");
+      FieldStatistics cs = (FieldStatistics) ret.getStatisics(
+              StructuredQuery.parse("#lengths:part=lengths()"),
+              Parameters.singleKeyValue("statCollector", "collStats"));
       assertEquals(cs.collectionLength, 129);
       assertEquals(cs.documentCount, 6);
       assertEquals(cs.maxLength, 22);
       assertEquals(cs.minLength, 21);
 
-      IndexPartStatistics is1 = ret.getIndexPartStatistics("postings");
+      IndexPartStatistics is1 = (IndexPartStatistics) ret.getStatisics(
+              new Node("text", "postings"),
+              Parameters.singleKeyValue("statCollector", "partStats"));
       assertEquals(is1.collectionLength, 129);
 
-      IndexPartStatistics is2 = ret.getIndexPartStatistics("postings.krovetz");
+      IndexPartStatistics is2 = (IndexPartStatistics) ret.getStatisics(
+              new Node("text", "postings.krovetz"),
+              Parameters.singleKeyValue("statCollector", "partStats"));
       assertEquals(is2.collectionLength, 129);
 
       // should have about the same vocabs
@@ -210,16 +225,22 @@ public class UniversalParserTest extends TestCase {
 
       Retrieval ret = RetrievalFactory.instance(index.getAbsolutePath(), new Parameters());
 
-      FieldStatistics cs = ret.getCollectionStatistics("#lengths:part=lengths()");
+      FieldStatistics cs = (FieldStatistics) ret.getStatisics(
+              StructuredQuery.parse("#lengths:part=lengths()"),
+              Parameters.singleKeyValue("statCollector", "collStats"));
       assertEquals(cs.collectionLength, 822);
-      assertEquals(cs.documentCount, 41); 
+      assertEquals(cs.documentCount, 41);
       assertEquals(cs.maxLength, 22);
       assertEquals(cs.minLength, 20);
 
-      IndexPartStatistics is1 = ret.getIndexPartStatistics("postings");
+      IndexPartStatistics is1 = (IndexPartStatistics) ret.getStatisics(
+              new Node("text", "postings"),
+              Parameters.singleKeyValue("statCollector", "partStats"));
       assertEquals(is1.collectionLength, 822);
 
-      IndexPartStatistics is2 = ret.getIndexPartStatistics("postings.krovetz");
+      IndexPartStatistics is2 = (IndexPartStatistics) ret.getStatisics(
+              new Node("text", "postings.krovetz"),
+              Parameters.singleKeyValue("statCollector", "partStats"));
       assertEquals(is2.collectionLength, 822);
 
       // should have about the same vocabs

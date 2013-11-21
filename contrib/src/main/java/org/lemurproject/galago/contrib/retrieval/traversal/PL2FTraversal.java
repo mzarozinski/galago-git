@@ -12,6 +12,7 @@ import org.lemurproject.galago.core.index.stats.NodeStatistics;
 import org.lemurproject.galago.core.retrieval.Retrieval;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeParameters;
+import org.lemurproject.galago.core.retrieval.query.StructuredQuery;
 import org.lemurproject.galago.core.retrieval.traversal.Traversal;
 import org.lemurproject.galago.core.util.TextPartAssigner;
 import org.lemurproject.galago.utility.Parameters;
@@ -26,20 +27,13 @@ import org.lemurproject.galago.utility.Parameters;
  *
  * Given f1 and f2, Expanded form should be something like:
  *
- * #combine:norm=false(
- *  #feature:dfr:qfmax=1:qf=1(
- *    # combine:norm=false(
- *      #feature:pl2f:lengths=f1( #counts:term1:part=field.f1() )
- *      #feature:pl2f:lengths=f2( #counts:term1:part=field.f2() )
- *    )
- *  )
- *  #feature:dfr:qfmax=1:qf=1(
- *    #combine:norm=false(
- *      #feature:pl2f:lengths=f1( #counts:term1:part=field.f1() )
- *      #feature:pl2f:lengths=f2( #counts:term1:part=field.f2() )
- *    )
- *  )
- * )
+ * #combine:norm=false( #feature:dfr:qfmax=1:qf=1( # combine:norm=false(
+ * #feature:pl2f:lengths=f1( #counts:term1:part=field.f1() )
+ * #feature:pl2f:lengths=f2( #counts:term1:part=field.f2() ) ) )
+ * #feature:dfr:qfmax=1:qf=1( #combine:norm=false( #feature:pl2f:lengths=f1(
+ * #counts:term1:part=field.f1() ) #feature:pl2f:lengths=f2(
+ * #counts:term1:part=field.f2() ) ) ) )
+ *
  * @author irmarc
  */
 public class PL2FTraversal extends Traversal {
@@ -128,7 +122,6 @@ public class PL2FTraversal extends Traversal {
 
       // Each field node is a count node wrapped in a feature:pl2f node.
       // Weights are added to a combine that sums the field values up.
-
       Node countNode = new Node("counts", term);
       countNode.getNodeParameters().set("part", partName);
       Node fieldNode = new Node("feature", "pl2f");
@@ -163,11 +156,16 @@ public class PL2FTraversal extends Traversal {
             retrieval.getAvailableParts());
 
     // get the frequency of the term in the collection:
-    NodeStatistics ns = retrieval.getNodeStatistics(parted);
+    NodeStatistics ns = (NodeStatistics) retrieval.getStatisics(
+            parted,
+            Parameters.singleKeyValue("statsCollector", "nodeStats"));
     dfr.getNodeParameters().set("nodeFrequency", ns.nodeFrequency);
 
     // get global document count:
-    FieldStatistics cs = retrieval.getCollectionStatistics("#lengths:part=lengths()");
+    FieldStatistics cs = (FieldStatistics) retrieval.getStatisics(
+            StructuredQuery.parse("#lengths:document:part=lengths()"),
+            Parameters.singleKeyValue("statsCollector", "collStats"));
+    
     dfr.getNodeParameters().set("documentCount", cs.documentCount);
 
     // Now echo these values down to the leaves

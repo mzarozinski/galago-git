@@ -69,14 +69,20 @@ public class CachedRetrievalTest extends TestCase {
         cachedScoreIterator.movePast(sc.document);
       }
 
-
       // COUNT node
       Node count = StructuredQuery.parse("#counts:is:part=postings()");
       cacheRet.addNodeToCache(count);
 
-      NodeStatistics diskNS = nonCacheRet.getNodeStatistics(count); // from disk
-      NodeStatistics cachedNS = cacheRet.getNodeStatistics(count);  // from memory-cached-node
-      NodeStatistics cachedNS2 = cacheRet.getNodeStatistics(count); // stored in statistic cache
+      NodeStatistics diskNS = (NodeStatistics) nonCacheRet.getStatisics(count,
+              Parameters.singleKeyValue("statCollector", "nodeStats"));
+      NodeStatistics cachedNS = (NodeStatistics) cacheRet.getStatisics(count,
+              Parameters.singleKeyValue("statCollector", "nodeStats"));
+      NodeStatistics cachedNS2 = (NodeStatistics) cacheRet.getStatisics(count,
+              Parameters.singleKeyValue("statCollector", "nodeStats"));
+
+//      NodeStatistics diskNS = nonCacheRet.getNodeStatistics(count); // from disk
+//      NodeStatistics cachedNS = cacheRet.getNodeStatistics(count);  // from memory-cached-node
+//      NodeStatistics cachedNS2 = cacheRet.getNodeStatistics(count); // stored in statistic cache
 
       assertEquals(diskNS.nodeDocumentCount, cachedNS.nodeDocumentCount);
       assertEquals(diskNS.nodeFrequency, cachedNS.nodeFrequency);
@@ -99,8 +105,10 @@ public class CachedRetrievalTest extends TestCase {
       Node extent = StructuredQuery.parse("#extents:sample:part=postings()");
       cacheRet.addNodeToCache(extent);
 
-      diskNS = nonCacheRet.getNodeStatistics(extent);
-      cachedNS = cacheRet.getNodeStatistics(extent);
+      diskNS = (NodeStatistics) nonCacheRet.getStatisics(extent,
+              Parameters.singleKeyValue("statCollector", "nodeStats"));
+      cachedNS = (NodeStatistics) cacheRet.getStatisics(extent,
+              Parameters.singleKeyValue("statCollector", "nodeStats"));
 
       assertEquals(diskNS.nodeDocumentCount, cachedNS.nodeDocumentCount);
       assertEquals(diskNS.nodeFrequency, cachedNS.nodeFrequency);

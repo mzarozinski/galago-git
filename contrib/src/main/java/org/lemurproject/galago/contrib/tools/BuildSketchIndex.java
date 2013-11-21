@@ -15,6 +15,7 @@ import org.lemurproject.galago.core.index.stats.FieldStatistics;
 import org.lemurproject.galago.core.parse.DocumentSource;
 import org.lemurproject.galago.core.parse.stem.KrovetzStemmer;
 import org.lemurproject.galago.core.retrieval.LocalRetrieval;
+import org.lemurproject.galago.core.retrieval.query.StructuredQuery;
 import org.lemurproject.galago.core.tools.AppFunction;
 import org.lemurproject.galago.core.tools.apps.BuildStageTemplates;
 import org.lemurproject.galago.core.types.DocumentSplit;
@@ -79,7 +80,7 @@ public class BuildSketchIndex extends AppFunction {
     buildParameters.set("indexPath", indexPath);
 
     List<String> inputPaths = buildParameters.getAsList("inputPath");
-    Parameters splitParameters = (buildParameters.isMap("parser"))?buildParameters.getMap("parser"): new Parameters();
+    Parameters splitParameters = (buildParameters.isMap("parser")) ? buildParameters.getMap("parser") : new Parameters();
     splitParameters.set("corpusPieces", buildParameters.get("distrib", 10));
     if (buildParameters.isMap("parser")) {
       splitParameters.set("parser", buildParameters.getMap("parser"));
@@ -98,7 +99,10 @@ public class BuildSketchIndex extends AppFunction {
 
     // determine the sketch index parameters here, and create HashFunctions
     LocalRetrieval r = new LocalRetrieval(indexPath, new Parameters());
-    FieldStatistics collectionStatistics = r.getCollectionStatistics("#lengths:document:part=lengths()");
+    FieldStatistics collectionStatistics = (FieldStatistics) r.getStatisics(
+            StructuredQuery.parse("#lengths:document:part=lengths()"),
+            Parameters.singleKeyValue("statCollector", "collStats"));
+
     long collectionLength = collectionStatistics.collectionLength;
     long universe = 256; // each array unit is a byte //    
 

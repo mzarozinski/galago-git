@@ -17,10 +17,15 @@ public class NodeStatistics extends AggregateStatistics {
   public long nodeDocumentCount = 0;
   public long maximumCount = 0;
 
-  public void add(NodeStatistics other) {
-    nodeFrequency += other.nodeFrequency;
-    nodeDocumentCount += other.nodeDocumentCount;
-    maximumCount = (maximumCount < other.maximumCount) ? other.maximumCount : maximumCount;
+  public void add(AggregateStatistics o) {
+    if (o instanceof NodeStatistics) {
+      NodeStatistics other = (NodeStatistics) o;
+      nodeFrequency += other.nodeFrequency;
+      nodeDocumentCount += other.nodeDocumentCount;
+      maximumCount = (maximumCount < other.maximumCount) ? other.maximumCount : maximumCount;
+    } else {
+      throw new RuntimeException(o.getClass().getSimpleName() + " can not be added to NodeStatistics.");
+    }
   }
 
   public Parameters toParameters() {
@@ -44,10 +49,5 @@ public class NodeStatistics extends AggregateStatistics {
     ns.nodeDocumentCount = this.nodeDocumentCount;
     ns.maximumCount = this.maximumCount;
     return ns;
-  }
-
-  @Override
-  public void add(AggregateStatistics s) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

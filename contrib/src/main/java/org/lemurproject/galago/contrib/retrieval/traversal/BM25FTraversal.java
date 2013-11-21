@@ -8,6 +8,7 @@ import org.lemurproject.galago.core.index.stats.NodeStatistics;
 import org.lemurproject.galago.core.retrieval.Retrieval;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeParameters;
+import org.lemurproject.galago.core.retrieval.query.StructuredQuery;
 import org.lemurproject.galago.core.retrieval.traversal.Traversal;
 import org.lemurproject.galago.utility.Parameters;
 
@@ -56,10 +57,12 @@ public class BM25FTraversal extends Traversal {
     }
   }
 
+  @Override
   public void beforeNode(Node original, Parameters queryParams) throws Exception {
     levels++;
   }
 
+  @Override
   public Node afterNode(Node original, Parameters queryParams) throws Exception {
     levels--;
     if (levels == 0 && original.getOperator().equals("bm25f")) {
@@ -90,13 +93,18 @@ public class BM25FTraversal extends Traversal {
 
   private double getIDF(Node termNode) throws Exception {
     // get the global document count:
-    FieldStatistics cs = retrieval.getCollectionStatistics("#lengths:part=lengths()");
+    FieldStatistics cs = (FieldStatistics) retrieval.getStatisics(
+            StructuredQuery.parse("#lengths:document:part=lengths()"),
+            Parameters.singleKeyValue("statsCollector", "collStats"));
     double documentCount = cs.documentCount;
 
     // get the number of documents this term occurs in:
     termNode.getNodeParameters().set("queryType", "count");
     termNode = retrieval.transformQuery(termNode, new Parameters());
-    NodeStatistics ns = retrieval.getNodeStatistics(termNode.toString());
+
+    NodeStatistics ns = (NodeStatistics) retrieval.getStatisics(
+            termNode,
+            Parameters.singleKeyValue("statsCollector", "nodeStats"));
     long df = ns.nodeDocumentCount;
 
     // compute idf and return

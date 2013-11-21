@@ -51,6 +51,7 @@ public class Parameters implements Serializable {
   private Parameters _backoff;
 
   public enum Type {
+
     BOOLEAN, LONG, DOUBLE, STRING, MAP, LIST
   };
 
@@ -62,30 +63,12 @@ public class Parameters implements Serializable {
     _bools = null;
     _doubles = null;
     _objects = null;
-
     _backoff = null;
   }
 
-  @Deprecated
-  public Parameters(Map<String, String> map) {
-    _objects = new HashMap();
-    _keys = new HashMap<String, Type>();
-    _backoff = null;
-    this.copyFrom(Parameters.parseMap(map));
-  }
-
-  // in this case, we assume everything is a key-value pair of strings
-  // TODO : Make this and the above constructor care about types.
-  @Deprecated
-  public Parameters(String[] args) throws IOException {
-    _keys = new HashMap<String, Type>();
-    _backoff = null;
-    this.copyFrom(Parameters.parseArgs(args));
-  }
-  
-  public static Parameters parseMap(Map<String,String> map) {
+  public static Parameters parseMap(Map<String, String> map) {
     Parameters self = new Parameters();
-    
+
     for (String key : map.keySet()) {
       String value = map.get(key);
       Type t = determineType(value);
@@ -103,13 +86,13 @@ public class Parameters implements Serializable {
           self.set(key, value);
       }
     }
-    
+
     return self;
   }
-  
+
   public static Parameters parseArgs(String[] args) throws IOException {
     Parameters self = new Parameters();
-    
+
     for (String arg : args) {
       if (arg.startsWith("--")) {
         String pattern = arg.substring(2);
@@ -120,55 +103,71 @@ public class Parameters implements Serializable {
         self.copyFrom(other);
       }
     }
-    
+
     return self;
   }
 
-  @Deprecated
-  public static Parameters parse(String data) throws IOException {
-    return parseString(data);
+  public static Parameters singleKeyValue(String key, String value) {
+    Parameters self = new Parameters();
+    self.set(key, value);
+    return self;
   }
 
-  @Deprecated
-  public static Parameters parse(InputStream iStream) throws IOException {
-    return parseStream(iStream);
+  public static Parameters singleKeyValue(String key, long value) {
+    Parameters self = new Parameters();
+    self.set(key, value);
+    return self;
   }
 
-  @Deprecated
-  public static Parameters parse(byte[] data) throws IOException {
-    return parseBytes(data);
+  public static Parameters singleKeyValue(String key, double value) {
+    Parameters self = new Parameters();
+    self.set(key, value);
+    return self;
   }
 
-  @Deprecated
-  public static Parameters parse(File f) throws IOException {
-    return parseFile(f);
+  public static Parameters singleKeyValue(String key, boolean value) {
+    Parameters self = new Parameters();
+    self.set(key, value);
+    return self;
   }
-  
+
+  public static Parameters singleKeyValue(String key, List value) {
+    Parameters self = new Parameters();
+    self.set(key, value);
+    return self;
+  }
+
+  public static Parameters singleKeyValue(String key, Parameters value) {
+    Parameters self = new Parameters();
+    self.set(key, value);
+    return self;
+  }
+
   public static Parameters parseFile(File f) throws IOException {
     JSONParser jp = new JSONParser(new FileReader(f), f.getPath());
     return jp.parse();
   }
-  
+
   public static Parameters parseFile(String path) throws IOException {
     return parseFile(new File(path));
   }
-  
+
   public static Parameters parseString(String data) throws IOException {
     JSONParser jp = new JSONParser(new StringReader(data), "<from string>");
     return jp.parse();
   }
-  
+
   public static Parameters parseReader(Reader reader) throws IOException {
     JSONParser jp = new JSONParser(reader, "<from reader>");
     return jp.parse();
   }
-  
+
   public static Parameters parseStream(InputStream iStream) throws IOException {
     JSONParser jp = new JSONParser(new InputStreamReader(iStream), "<from stream>");
     Parameters p = jp.parse();
     return p;
   }
-  
+
   public static Parameters parseBytes(byte[] data) throws IOException {
     return parseStream(new ByteArrayInputStream(data));
   }
@@ -350,23 +349,25 @@ public class Parameters implements Serializable {
       throw new IllegalArgumentException("Key " + key + " does not exist in parameters object.");
     }
   }
-  
+
   /**
-   * If the value is primitive, this reaches into the Parameters object and returns "key" as a string.
+   * If the value is primitive, this reaches into the Parameters object and
+   * returns "key" as a string.
+   *
    * @param key The key to look for.
    * @return the value of key as a string.
    */
   public String getAsString(String key) {
-    if(isString(key)) {
+    if (isString(key)) {
       return getString(key);
-    } else if(isLong(key)) {
+    } else if (isLong(key)) {
       return Long.toString(getLong(key));
-    } else if(isBoolean(key)) {
+    } else if (isBoolean(key)) {
       return Boolean.toString(getBoolean(key));
-    } else if(isDouble(key)) {
+    } else if (isDouble(key)) {
       return Double.toString(getDouble(key));
     }
-    throw new IllegalArgumentException("Key "+ key +" does not exist as a primitive in parameters object.");
+    throw new IllegalArgumentException("Key " + key + " does not exist as a primitive in parameters object.");
   }
 
   public String getString(String key) {
@@ -607,7 +608,7 @@ public class Parameters implements Serializable {
    * @param backoff
    */
   public void setBackoff(Parameters backoff) {
-    assert(backoff != this);
+    assert (backoff != this);
     this._backoff = backoff;
   }
 

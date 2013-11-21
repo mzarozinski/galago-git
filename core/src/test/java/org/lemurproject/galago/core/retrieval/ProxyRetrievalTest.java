@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -85,7 +86,6 @@ public class ProxyRetrievalTest extends TestCase {
         i += 1;
       }
 
-
       if (!success) {
         // try to kill the thread...
         remoteRetThread.interrupt();
@@ -99,8 +99,6 @@ public class ProxyRetrievalTest extends TestCase {
 
       try {
         instance.getAvailableParts();
-        instance.getCollectionStatistics(StructuredQuery.parse("#lengths:document:part=lengths()"));
-        instance.getCollectionStatistics("#lengths:document:part=lengths()");
 
         Document d = instance.getDocument("doc-" + 2, new DocumentComponents(true, false, false));
         assert (d.text != null);
@@ -116,22 +114,29 @@ public class ProxyRetrievalTest extends TestCase {
         names.add("doc-" + 2);
 //        instance.getDocuments(names, new Parameters());
         instance.getGlobalParameters();
-        instance.getIndexPartStatistics("postings");
-        instance.getNodeStatistics(StructuredQuery.parse("#counts:@/1/:part=postings()"));
-        instance.getNodeStatistics("#counts:@/1/:part=postings()");
+
+        instance.getStatisics(new Node("text", "postings"),
+                Parameters.singleKeyValue("statCollector", "partStats"));
+        instance.getStatisics(StructuredQuery.parse("#lengths:document:part=lengths()"),
+                Parameters.singleKeyValue("statCollector", "collStats"));
+        instance.getStatisics(StructuredQuery.parse("#counts:@/1/:part=postings()"),
+                Parameters.singleKeyValue("statCollector", "nodeStats"));
+
+//        List<Node> nodes = new ArrayList();
+//        nodes.add(StructuredQuery.parse("#counts:@/1/:part=postings()"));
+//        nodes.add(StructuredQuery.parse("#counts:@/2/:part=postings()"));
+//        instance.getStatisics((Collection<Node>) nodes, retParams);
+
         instance.getNodeType(StructuredQuery.parse("#counts:@/1/:part=postings()"));
         instance.getQueryType(StructuredQuery.parse("#counts:@/1/:part=postings()"));
         Node trans = instance.transformQuery(StructuredQuery.parse("#combine(1 2 3)"), new Parameters());
         instance.executeQuery(trans);
         instance.executeQuery(trans, new Parameters());
 
-
-
         instance.close();
       } catch (Exception e) {
         exceptions.add(e);
       }
-
 
       // try to kill the thread...
       remoteRetThread.interrupt();

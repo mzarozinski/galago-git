@@ -116,7 +116,6 @@ public class WeightedSequentialDependenceTraversal extends Traversal {
       // i don't want normalization -- even though michael used some.
       newWeights.set("norm", defCombNorm);
 
-
       for (Node child : children) {
         String term = child.getDefaultParameter();
 
@@ -213,10 +212,12 @@ public class WeightedSequentialDependenceTraversal extends Traversal {
           if (localCache.containsKey(cacheString)) {
             featureStats = (NodeStatistics) localCache.get(cacheString);
           } else if (gRetrieval != null && !f.group.isEmpty()) {
-            featureStats = gRetrieval.getNodeStatistics(node, f.group);
+            featureStats = (NodeStatistics) gRetrieval.getStatisics(node, 
+                    Parameters.singleKeyValue("statCollector", "nodeStats"), f.group);
             localCache.put(cacheString, featureStats);
           } else {
-            featureStats = this.retrieval.getNodeStatistics(node);
+            featureStats = (NodeStatistics) retrieval.getStatisics(node, 
+                    Parameters.singleKeyValue("statCollector", "nodeStats"));
             localCache.put(cacheString, featureStats);
           }
 
@@ -244,10 +245,10 @@ public class WeightedSequentialDependenceTraversal extends Traversal {
           if (localCache.containsKey(cacheString)) {
             featureStats = (NodeStatistics) localCache.get(cacheString);
           } else if (gRetrieval != null && !f.group.isEmpty()) {
-            featureStats = gRetrieval.getNodeStatistics(node, f.group);
+            featureStats = (NodeStatistics) gRetrieval.getStatisics(node, Parameters.singleKeyValue("statCollector", "nodeStats"), f.group);
             localCache.put(cacheString, featureStats);
           } else {
-            featureStats = this.retrieval.getNodeStatistics(node);
+            featureStats = (NodeStatistics) retrieval.getStatisics(node, Parameters.singleKeyValue("statCollector", "nodeStats"));
             localCache.put(cacheString, featureStats);
           }
 
@@ -325,10 +326,10 @@ public class WeightedSequentialDependenceTraversal extends Traversal {
           if (localCache.containsKey(cacheString)) {
             featureStats = (NodeStatistics) localCache.get(cacheString);
           } else if (gRetrieval != null && !f.group.isEmpty()) {
-            featureStats = gRetrieval.getNodeStatistics(node, f.group);
+            featureStats = (NodeStatistics) gRetrieval.getStatisics(node, Parameters.singleKeyValue("statCollector", "nodeStats"), f.group);
             localCache.put(cacheString, featureStats);
           } else {
-            featureStats = this.retrieval.getNodeStatistics(node);
+            featureStats = (NodeStatistics) retrieval.getStatisics(node, Parameters.singleKeyValue("statCollector", "nodeStats"));
             localCache.put(cacheString, featureStats);
           }
 
@@ -357,10 +358,10 @@ public class WeightedSequentialDependenceTraversal extends Traversal {
           if (localCache.containsKey(cacheString)) {
             featureStats = (NodeStatistics) localCache.get(cacheString);
           } else if (gRetrieval != null && !f.group.isEmpty()) {
-            featureStats = gRetrieval.getNodeStatistics(node, f.group);
+            featureStats = (NodeStatistics) gRetrieval.getStatisics(node, Parameters.singleKeyValue("statCollector", "nodeStats"), f.group);
             localCache.put(cacheString, featureStats);
           } else {
-            featureStats = this.retrieval.getNodeStatistics(node);
+            featureStats = (NodeStatistics) retrieval.getStatisics(node, Parameters.singleKeyValue("statCollector", "nodeStats"));
             localCache.put(cacheString, featureStats);
           }
 
@@ -389,10 +390,10 @@ public class WeightedSequentialDependenceTraversal extends Traversal {
           if (localCache.containsKey(cacheString)) {
             featureStats = (NodeStatistics) localCache.get(cacheString);
           } else if (gRetrieval != null && !f.group.isEmpty()) {
-            featureStats = gRetrieval.getNodeStatistics(node, f.group);
+            featureStats = (NodeStatistics) gRetrieval.getStatisics(node, Parameters.singleKeyValue("statCollector", "nodeStats"), f.group);
             localCache.put(cacheString, featureStats);
           } else {
-            featureStats = this.retrieval.getNodeStatistics(node);
+            featureStats = (NodeStatistics) retrieval.getStatisics(node, Parameters.singleKeyValue("statCollector", "nodeStats"));
             localCache.put(cacheString, featureStats);
           }
 
@@ -475,10 +476,10 @@ public class WeightedSequentialDependenceTraversal extends Traversal {
           if (localCache.containsKey(cacheString)) {
             featureStats = (NodeStatistics) localCache.get(cacheString);
           } else if (gRetrieval != null && !f.group.isEmpty()) {
-            featureStats = gRetrieval.getNodeStatistics(node, f.group);
+            featureStats = (NodeStatistics) gRetrieval.getStatisics(node, Parameters.singleKeyValue("statCollector", "nodeStats"), f.group);
             localCache.put(cacheString, featureStats);
           } else {
-            featureStats = this.retrieval.getNodeStatistics(node);
+            featureStats = (NodeStatistics) retrieval.getStatisics(node, Parameters.singleKeyValue("statCollector", "nodeStats"));
             localCache.put(cacheString, featureStats);
           }
 
@@ -508,10 +509,10 @@ public class WeightedSequentialDependenceTraversal extends Traversal {
           if (localCache.containsKey(cacheString)) {
             featureStats = (NodeStatistics) localCache.get(cacheString);
           } else if (gRetrieval != null && !f.group.isEmpty()) {
-            featureStats = gRetrieval.getNodeStatistics(node, f.group);
+            featureStats = (NodeStatistics) gRetrieval.getStatisics(node, Parameters.singleKeyValue("statCollector", "nodeStats"), f.group);
             localCache.put(cacheString, featureStats);
           } else {
-            featureStats = this.retrieval.getNodeStatistics(node);
+            featureStats = (NodeStatistics) retrieval.getStatisics(node, Parameters.singleKeyValue("statCollector", "nodeStats"));
             localCache.put(cacheString, featureStats);
           }
 
@@ -540,10 +541,10 @@ public class WeightedSequentialDependenceTraversal extends Traversal {
           if (localCache.containsKey(cacheString)) {
             featureStats = (NodeStatistics) localCache.get(cacheString);
           } else if (gRetrieval != null && !f.group.isEmpty()) {
-            featureStats = gRetrieval.getNodeStatistics(node, f.group);
+            featureStats = (NodeStatistics) gRetrieval.getStatisics(node, Parameters.singleKeyValue("statCollector", "nodeStats"), f.group);
             localCache.put(cacheString, featureStats);
           } else {
-            featureStats = this.retrieval.getNodeStatistics(node);
+            featureStats = (NodeStatistics) retrieval.getStatisics(node, Parameters.singleKeyValue("statCollector", "nodeStats"));
             localCache.put(cacheString, featureStats);
           }
 

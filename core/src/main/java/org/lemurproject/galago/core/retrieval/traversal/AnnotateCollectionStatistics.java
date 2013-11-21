@@ -13,15 +13,16 @@ import org.lemurproject.galago.core.retrieval.Retrieval;
 import org.lemurproject.galago.core.retrieval.iterator.BaseIterator;
 import org.lemurproject.galago.core.retrieval.query.NodeParameters;
 import org.lemurproject.galago.core.retrieval.RequiredStatistics;
+import org.lemurproject.galago.core.retrieval.query.StructuredQuery;
 import org.lemurproject.galago.utility.Parameters;
 
 /**
- * Class collects collections statistics:
- *  - collectionLength : number of terms in index part / collection
- *  - documentCount : number of documents in index part / collection
- *  - vocabCount : number of unique terms in index part
- *  - nodeFrequency : number of matching instances of node in index part / collection
- *  - nodeDocumentCount : number of matching documents for node in index part / collection
+ * Class collects collections statistics: - collectionLength : number of terms
+ * in index part / collection - documentCount : number of documents in index
+ * part / collection - vocabCount : number of unique terms in index part -
+ * nodeFrequency : number of matching instances of node in index part /
+ * collection - nodeDocumentCount : number of matching documents for node in
+ * index part / collection
  *
  * @author sjh
  */
@@ -59,7 +60,7 @@ public class AnnotateCollectionStatistics extends Traversal {
 
     // need to get list of required statistics
     NodeType nt = retrieval.getNodeType(node);
-    if(nt == null){
+    if (nt == null) {
       throw new IllegalArgumentException("NodeType of " + node.toString() + " is unknown.");
     }
 
@@ -148,10 +149,15 @@ public class AnnotateCollectionStatistics extends Traversal {
       group = qp.get("backgroundIndex", globalParameters.get("backgroundIndex", group));
 
       if (!group.isEmpty()) {
-        return ((GroupRetrieval) retrieval).getCollectionStatistics("#lengths:" + field + ":part=lengths()", group);
+        return (FieldStatistics) ((GroupRetrieval) retrieval).getStatisics(
+                StructuredQuery.parse("#lengths:" + field + ":part=lengths()"),
+                Parameters.singleKeyValue("statCollector", "collStats"), group);
       }
     }
-    return retrieval.getCollectionStatistics("#lengths:" + field + ":part=lengths()");
+
+    return (FieldStatistics) retrieval.getStatisics(
+            StructuredQuery.parse("#lengths:" + field + ":part=lengths()"),
+            Parameters.singleKeyValue("statCollector", "collStats"));
   }
 
   private NodeStatistics getNodeStatistics(Node node, Parameters qp) throws Exception {
@@ -177,10 +183,11 @@ public class AnnotateCollectionStatistics extends Traversal {
       group = qp.get("backgroundIndex", globalParameters.get("backgroundIndex", group));
 
       if (!group.isEmpty()) {
-        return ((GroupRetrieval) retrieval).getNodeStatistics(n, group);
+        return (NodeStatistics) ((GroupRetrieval) retrieval).getStatisics(n, Parameters.singleKeyValue("statCollector", "nodeStats"), group);
       }
     }
-    return retrieval.getNodeStatistics(n);
+
+    return (NodeStatistics) retrieval.getStatisics(n, Parameters.singleKeyValue("statCollector", "nodeStats"));
   }
 
   private boolean isCountNode(Node node) throws Exception {

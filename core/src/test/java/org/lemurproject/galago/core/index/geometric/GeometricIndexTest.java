@@ -62,20 +62,29 @@ public class GeometricIndexTest extends TestCase {
 
       assertEquals(index.globalDocumentCount, 255);
 
-      FieldStatistics cs = ret.getCollectionStatistics("#lengths:part=lengths()");
+//      FieldStatistics cs = ret.getCollectionStatistics("#lengths:part=lengths()");
+      FieldStatistics cs = (FieldStatistics) ret.getStatisics(
+              StructuredQuery.parse("#lengths:part=lengths()"),
+              Parameters.singleKeyValue("statCollector", "collStats"));
       assertEquals(cs.collectionLength, 1275);
       assertEquals(cs.documentCount, 255);
       assertEquals(cs.maxLength, 5);
       assertEquals(cs.minLength, 5);
 
-      IndexPartStatistics stats = ret.getIndexPartStatistics("postings");
+//      IndexPartStatistics stats = ret.getIndexPartStatistics("postings");
+      IndexPartStatistics stats = (IndexPartStatistics) ret.getStatisics(
+              new Node("text", "postings"),
+              Parameters.singleKeyValue("statCollector", "partStats"));
       assertEquals(stats.collectionLength, 1275);
       // these three are estimated as the max the set of shards
       assertEquals(stats.vocabCount, 154);
       assertEquals(stats.highestFrequency, 150);
       assertEquals(stats.highestDocumentCount, 150);
 
-      stats = ret.getIndexPartStatistics("postings.krovetz");
+//      stats = ret.getIndexPartStatistics("postings.krovetz");
+      stats = (IndexPartStatistics) ret.getStatisics(
+              new Node("text", "postings.krovetz"),
+              Parameters.singleKeyValue("statCollector", "partStats"));
       assertEquals(stats.collectionLength, 1275);
       // these three are estimated as the max of the set of shards
       assertEquals(stats.vocabCount, 154);
@@ -168,7 +177,7 @@ public class GeometricIndexTest extends TestCase {
 
           List<ScoredDocument> results = ret.executeQuery(query, p).scoredDocuments;
           assert (results.get(0).documentName.contains(Integer.toString(j)));
-          }
+        }
       }
     } finally {
       Utility.deleteDirectory(shards);

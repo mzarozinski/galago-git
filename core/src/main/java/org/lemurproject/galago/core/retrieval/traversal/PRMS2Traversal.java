@@ -25,11 +25,10 @@ import org.lemurproject.galago.utility.Parameters.Type;
  * something like:
  *
  * #combine( #wsum:0=0.407:1=0.382:2=0.187 ( #dirichlet(meg.cast)
- * #dirichlet(meg.team) #dirichlet( meg.title) )
- * #wsum:0=0.601:1=0.381:2=0.017 ( #dirichlet(ryan.cast)
- * #dirichlet(ryan.team) #dirichlet(ryan.title) )
- * #wsum:0=0.927:1=0.070:2=0.002 ( #dirichlet(war.cast)
- * #dirichlet(war.team) #dirichlet(war.title) ) )
+ * #dirichlet(meg.team) #dirichlet( meg.title) ) #wsum:0=0.601:1=0.381:2=0.017 (
+ * #dirichlet(ryan.cast) #dirichlet(ryan.team) #dirichlet(ryan.title) )
+ * #wsum:0=0.927:1=0.070:2=0.002 ( #dirichlet(war.cast) #dirichlet(war.team)
+ * #dirichlet(war.title) ) )
  *
  * @author jykim, irmarc, sjh
  */
@@ -68,7 +67,7 @@ public class PRMS2Traversal extends Traversal {
     if (original.getOperator().equals("prms2") || original.getOperator().equals("prms")) {
 
       String scorerType = queryParameters.get("scorer", globals.get("scorer", "dirichlet"));
-      
+
       List<String> fields = queryParameters.isList("fields", Type.STRING) ? queryParameters.getList("fields") : defaultFields;
       Parameters weights = queryParameters.isMap("weights") ? queryParameters.getMap("weights") : defaultWeights;
 
@@ -80,7 +79,9 @@ public class PRMS2Traversal extends Traversal {
 
       for (String field : fields) {
         Node fieldLen = StructuredQuery.parse("#lengths:" + field + ":part=lengths()");
-        FieldStatistics fieldStat = retrieval.getCollectionStatistics(fieldLen);
+        FieldStatistics fieldStat
+                = (FieldStatistics) retrieval.getStatisics(fieldLen,
+                        Parameters.singleKeyValue("statCollector", "collStats"));
         fieldStats.put(field, fieldStat);
         fieldLenNodes.put(field, fieldLen);
       }
@@ -130,7 +131,10 @@ public class PRMS2Traversal extends Traversal {
             // otherwise there are no weights
             //  - weight fields according to the probability of this term coming from this field
 
-            NodeStatistics ns = retrieval.getNodeStatistics(termFieldCounts);
+            NodeStatistics ns = (NodeStatistics) retrieval.getStatisics(
+                    termFieldCounts,
+                    Parameters.singleKeyValue("statCollector", "nodeStats"));
+
             double fieldprob = (double) ns.nodeFrequency / (double) fieldStats.get(field).collectionLength; // P(t|F_j)
             nodeweights.set(Integer.toString(i), fieldprob);
 

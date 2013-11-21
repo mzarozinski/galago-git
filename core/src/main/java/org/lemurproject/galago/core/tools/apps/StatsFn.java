@@ -6,6 +6,7 @@ package org.lemurproject.galago.core.tools.apps;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Set;
+import org.lemurproject.galago.core.index.stats.AggregateStatistics;
 import org.lemurproject.galago.core.retrieval.Retrieval;
 import org.lemurproject.galago.core.retrieval.RetrievalFactory;
 import org.lemurproject.galago.core.retrieval.query.Node;
@@ -53,7 +54,7 @@ public class StatsFn extends AppFunction {
         p.set("part", "postings.krovetz");
       } else if (available.contains("postings.porter")) {
         p.set("part", "postings.porter");
-      } else  if (available.contains("postings")) {
+      } else if (available.contains("postings")) {
         p.set("part", "postings");
       } else {
         output.print(getHelpString());
@@ -62,64 +63,56 @@ public class StatsFn extends AppFunction {
       }
     }
 
-    int statItemCount = 0;
+    Parameters o = new Parameters();
 
-    output.println("{");
+    Parameters p1 = Parameters.singleKeyValue("statCollector", "partStats");
+    Parameters p2 = Parameters.singleKeyValue("statCollector", "collStats");
+    Parameters p3 = Parameters.singleKeyValue("statCollector", "nodeStats");
+
     for (String part : (List<String>) p.getAsList("part")) {
-      if (statItemCount > 0) {
-        output.println("  ,");
-      }
-      statItemCount += 1;
 
-      output.println("  \"" + part + "\" : ");
-      
+      Node partNode = new Node("text", part);
+
       try {
-        output.println(r.getIndexPartStatistics(part).toParameters().toPrettyString("    "));
+        AggregateStatistics s = r.getStatisics(partNode, p1);
+        o.set(part, s.toParameters());
+
       } catch (IllegalArgumentException e) {
         System.err.println(e.toString());
       }
     }
     for (String field : (List<String>) p.getAsList("field")) {
-      if (statItemCount > 0) {
-        output.println("  ,");
-      }
-      statItemCount += 1;
 
-      output.println("  \"" + field + "\" : ");
-
-      Node n = StructuredQuery.parse(field);
-      // It would be nice to make the traversals deal with this corrently.
-      //n = r.transformQuery(n, new Parameters());
-
-      // however, currently - I'm only willing to fix one type of lengths node:
-      if(n.getOperator().equals("text")){
-        n.setOperator("lengths");
-        n.getNodeParameters().set("part", "lengths");
+      Node fieldNode = StructuredQuery.parse(field);
+      // Currently - I'm only willing to fix one type of lengths node:
+      if (fieldNode.getOperator().equals("text")) {
+        fieldNode.setOperator("lengths");
+        fieldNode.getNodeParameters().set("part", "lengths");
       }
 
       try {
-        output.println(r.getCollectionStatistics(n).toParameters().toPrettyString("    "));
+        AggregateStatistics s = r.getStatisics(fieldNode, p2);
+        o.set(field, s.toParameters());
+
       } catch (IllegalArgumentException e) {
         System.err.println(e.toString());
       }
     }
     for (String node : (List<String>) p.getAsList("node")) {
-      if (statItemCount > 0) {
-        output.println("  ,");
-      }
-      statItemCount += 1;
 
-      Node n = StructuredQuery.parse(node);
-      n.getNodeParameters().set("queryType", "count");
-      n = r.transformQuery(n, new Parameters());
+      Node countNode = StructuredQuery.parse(node);
+      // ensure the traversals don't wrap this count node //
+      countNode.getNodeParameters().set("queryType", "count");
+      countNode = r.transformQuery(countNode, new Parameters());
 
-      output.println("  \"" + node + "\" : ");
       try {
-        output.println(r.getNodeStatistics(n).toParameters().toPrettyString("    "));
+        AggregateStatistics s = r.getStatisics(countNode, p3);
+        o.set(node, s.toParameters());
       } catch (IllegalArgumentException e) {
         System.err.println(e.toString());
       }
     }
-    output.println("}");
+
+    output.println(o.toPrettyString());
   }
 }

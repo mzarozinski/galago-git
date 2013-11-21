@@ -7,6 +7,7 @@ import org.lemurproject.galago.core.index.stats.AggregateStatistics;
 import org.lemurproject.galago.core.index.stats.NodeAggregateIterator;
 import org.lemurproject.galago.core.index.stats.NodeStatistics;
 import org.lemurproject.galago.core.retrieval.LocalRetrieval;
+import org.lemurproject.galago.core.retrieval.iterator.BaseIterator;
 import org.lemurproject.galago.core.retrieval.iterator.CountIterator;
 import org.lemurproject.galago.core.retrieval.iterator.LengthsIterator;
 import org.lemurproject.galago.core.retrieval.processing.ScoringContext;
@@ -28,39 +29,36 @@ public class NodeStatsCollector extends StatisticsCollector {
 
   @Override
   public AggregateStatistics collect(Node node, Parameters p) throws Exception {
-
     // node must correspond to a lengths iterator //
-    NodeType nt = lr.getNodeType(node);
+    BaseIterator i = lr.createIterator(p, node);
 
-    if (nt != null && NodeAggregateIterator.class.isAssignableFrom(nt.getIteratorClass())) {
+    if (NodeAggregateIterator.class.isAssignableFrom(i.getClass())) {
       // we have direct access to stats for this node
-      NodeAggregateIterator i = (NodeAggregateIterator) lr.createIterator(p, node);
-      return i.getStatistics();
+      return ((NodeAggregateIterator) i).getStatistics();
 
-    } else if (nt != null && CountIterator.class.isAssignableFrom(nt.getIteratorClass())) {
+    } else if (CountIterator.class.isAssignableFrom(i.getClass())) {
       // we have to compute stats for this node
       NodeStatistics ns = new NodeStatistics();
       ns.node = node.toString();
 
-      CountIterator i = (CountIterator) lr.createIterator(p, node);
+      CountIterator ci = (CountIterator) i;
       ScoringContext sc = new ScoringContext();
 
       ns.maximumCount = 0;
-      while (!i.isDone()) {
-        sc.document = i.currentCandidate();
-        if (i.hasMatch(sc.document)) {
-          int c = i.count(sc);
+      while (!ci.isDone()) {
+        sc.document = ci.currentCandidate();
+        if (ci.hasMatch(sc.document)) {
+          int c = ci.count(sc);
           if (c > 0) {
             ns.nodeFrequency += c;
             ns.nodeDocumentCount += 1;
             ns.maximumCount = (ns.maximumCount >= c) ? ns.maximumCount : c;
           }
         }
-        i.movePast(sc.document);
+        ci.movePast(sc.document);
       }
 
       return ns;
-
     } else {
 
       throw new IllegalArgumentException("Node must evaluate to a counts iterator.");

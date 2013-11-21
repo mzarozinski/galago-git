@@ -20,6 +20,7 @@ import org.lemurproject.galago.core.retrieval.processing.ProcessingModel;
 import org.lemurproject.galago.core.retrieval.processing.ScoringContext;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeType;
+import org.lemurproject.galago.core.retrieval.query.StructuredQuery;
 import org.lemurproject.galago.core.util.FixedSizeSortedArray;
 import org.lemurproject.galago.utility.Parameters;
 
@@ -46,7 +47,8 @@ public class HeuristicMaxScoreDocumentModel extends ProcessingModel {
 
   public HeuristicMaxScoreDocumentModel(LocalRetrieval lr) throws Exception {
     this.retrieval = lr;
-    this.colStats = lr.getCollectionStatistics("#lengths:document:part=lengths()");
+    this.colStats = (FieldStatistics) lr.getStatisics(StructuredQuery.parse("#lengths:document:part=lengths()"), 
+            Parameters.singleKeyValue("statCollector", "collStats"));
   }
 
   @Override

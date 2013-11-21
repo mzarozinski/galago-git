@@ -120,7 +120,7 @@ public interface Retrieval {
    * @return stats
    * @throws IOException
    */
-  public AggregateStatistics getStatisics(Node root, Parameters parameters) throws Exception;
+  public AggregateStatistics getStatisics(Node root, Parameters p) throws Exception;
 
   /**
    * Returns a set of the same type of statistics, one for each node, depending
@@ -135,7 +135,7 @@ public interface Retrieval {
    * @return Map<Node, AggregateStatistics>
    * @throws Exception
    */
-  public Map<Node, AggregateStatistics> getStatisics(Collection<Node> nodes, Parameters parameters) throws Exception;
+  public Map<Node, AggregateStatistics> getStatisics(Collection<Node> nodes, Parameters p) throws Exception;
 
   /**
    * Returns the length of a particular document. Where docid is the internal

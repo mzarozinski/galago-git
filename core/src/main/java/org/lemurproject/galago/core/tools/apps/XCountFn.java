@@ -5,6 +5,7 @@ package org.lemurproject.galago.core.tools.apps;
 
 import java.io.PrintStream;
 import java.util.List;
+import org.lemurproject.galago.core.index.stats.NodeStatistics;
 import org.lemurproject.galago.core.retrieval.Retrieval;
 import org.lemurproject.galago.core.retrieval.RetrievalFactory;
 import org.lemurproject.galago.core.retrieval.query.Node;
@@ -52,7 +53,8 @@ public class XCountFn extends AppFunction {
         System.err.println(transformed);
       }
 
-      count = r.getNodeStatistics(transformed).nodeFrequency;
+      count = ((NodeStatistics) r.getStatisics(transformed,
+              Parameters.singleKeyValue("statCollector", "nodeStats"))).nodeFrequency;
       output.println(count + "\t" + query);
     }
     r.close();

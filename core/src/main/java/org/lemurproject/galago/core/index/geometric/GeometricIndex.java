@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -113,12 +114,11 @@ public class GeometricIndex implements DynamicIndex, Index {
     updateIndex();
   }
 
-  
   @Override
-  public String getIndexPath(){
+  public String getIndexPath() {
     return shardDirectory;
-  }  
-  
+  }
+
   @Override
   public void process(Document doc) throws IOException {
     currentMemoryIndex.process(doc);
@@ -143,11 +143,9 @@ public class GeometricIndex implements DynamicIndex, Index {
     //Bin finalMergeBin = geometricParts.getAllShards();
     //doMerge(finalMergeBin, getNextIndexShardFolder(finalMergeBin.size + 1));
     // check point is updated by the merge op.
-
     //  } catch (IOException ex) {
     //  Logger.getLogger(GeometricRetrieval.class.getName()).log(Level.SEVERE, null, ex);
     //}
-
   }
 
   // tries to flush memory index
@@ -188,7 +186,16 @@ public class GeometricIndex implements DynamicIndex, Index {
 
   @Override
   public NodeType getNodeType(Node node) throws Exception {
-    return this.currentMemoryIndex.getNodeType(node);
+    if (node.getOperator().equals("counts")) {
+      return new NodeType(DisjointCountsIterator.class);
+    } else if (node.getOperator().equals("extents")) {
+      return new NodeType(DisjointExtentsIterator.class);
+    } else if (node.getOperator().equals("lengths")) {
+      return new NodeType(DisjointLengthsIterator.class);
+    } else if (node.getOperator().equals("names")) {
+      return new NodeType(DisjointNamesIterator.class);
+    }
+    return null;
   }
 
   @Override
@@ -198,7 +205,13 @@ public class GeometricIndex implements DynamicIndex, Index {
 
   @Override
   public Map<String, NodeType> getPartNodeTypes(String partName) throws IOException {
-    return this.currentMemoryIndex.getPartNodeTypes(partName);
+    // This is wrong -- but it's never used...
+    Map<String, NodeType> mapping = new HashMap();
+    mapping.put("counts", new NodeType(DisjointCountsIterator.class));
+    mapping.put("extents", new NodeType(DisjointExtentsIterator.class));
+    mapping.put("lengths", new NodeType(DisjointLengthsIterator.class));
+    mapping.put("names", new NodeType(DisjointNamesIterator.class));
+    return mapping;
   }
 
   @Override
@@ -397,7 +410,6 @@ public class GeometricIndex implements DynamicIndex, Index {
         File indexShard = getNextIndexShardFolder(mergeBin.size + 1);
         // otherwise there's something to merge
         logger.info("Performing merge!");
-
 
         // merge the shards
         Parameters p = this.globalParameters.clone();

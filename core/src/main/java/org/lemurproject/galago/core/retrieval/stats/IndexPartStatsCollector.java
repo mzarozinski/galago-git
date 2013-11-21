@@ -36,10 +36,7 @@ public class IndexPartStatsCollector extends StatisticsCollector {
   }
 
   private IndexPartStatistics getPartStats(String part) throws IOException {
-    IndexPartReader p = lr.getIndexPart(part);
-    if (AggregateIndexPart.class.isAssignableFrom(p.getClass())) {
-      return ((AggregateIndexPart) p).getStatistics();
-    }
-    throw new IllegalArgumentException("Index part " + part + " does not extend AggregateIndexPart.");
+    // Easy one -- this function should throw errors if it's not allowed.
+    return lr.getIndex().getIndexPartStatistics(part);
   }
 }

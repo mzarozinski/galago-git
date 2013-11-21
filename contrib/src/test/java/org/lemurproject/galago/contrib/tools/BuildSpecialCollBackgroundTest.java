@@ -8,8 +8,10 @@ import java.util.Random;
 import junit.framework.TestCase;
 import org.lemurproject.galago.contrib.index.disk.BackgroundStatsReader;
 import org.lemurproject.galago.core.index.disk.DiskIndex;
+import org.lemurproject.galago.core.index.stats.NodeStatistics;
 import org.lemurproject.galago.core.retrieval.Retrieval;
 import org.lemurproject.galago.core.retrieval.RetrievalFactory;
+import org.lemurproject.galago.core.retrieval.query.StructuredQuery;
 import org.lemurproject.galago.core.tools.App;
 import org.lemurproject.galago.utility.Parameters;
 import org.lemurproject.galago.utility.Utility;
@@ -51,14 +53,15 @@ public class BuildSpecialCollBackgroundTest extends TestCase {
       p2.set("partName", "back");
       App.run("build-special-coll-background", p2, System.out);
 
-
-      BackgroundStatsReader backPart = (BackgroundStatsReader) DiskIndex.openIndexComponent(new File(index,"back").getAbsolutePath());
+      BackgroundStatsReader backPart = (BackgroundStatsReader) DiskIndex.openIndexComponent(new File(index, "back").getAbsolutePath());
       assertEquals(backPart.getManifest().getLong("statistics/highestCollectionFrequency"), 8);
 
       Retrieval r = RetrievalFactory.instance(index.getAbsolutePath(), new Parameters());
-      assertEquals(r.getNodeStatistics("#counts:@/0/:part=back()").nodeFrequency, 0);
-      assertEquals(r.getNodeStatistics("#counts:@/4/:part=back()").nodeFrequency, 8);
-      
+      assertEquals(((NodeStatistics) r.getStatisics(StructuredQuery.parse("#counts:@/0/:part=back()"),
+              Parameters.singleKeyValue("statCollector", "nodeStats"))).nodeFrequency, 0);
+      assertEquals(((NodeStatistics) r.getStatisics(StructuredQuery.parse("#counts:@/4/:part=back()"),
+              Parameters.singleKeyValue("statCollector", "nodeStats"))).nodeFrequency, 8);
+
     } finally {
       docs.delete();
       back.delete();

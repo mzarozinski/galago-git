@@ -16,6 +16,7 @@ import org.lemurproject.galago.core.retrieval.Retrieval;
 import org.lemurproject.galago.core.retrieval.ScoredDocument;
 import org.lemurproject.galago.core.retrieval.query.Node;
 import org.lemurproject.galago.core.retrieval.query.NodeParameters;
+import org.lemurproject.galago.core.retrieval.query.StructuredQuery;
 import org.lemurproject.galago.core.retrieval.traversal.Traversal;
 import org.lemurproject.galago.utility.Parameters;
 import org.lemurproject.galago.utility.Utility;
@@ -31,7 +32,7 @@ public class FieldRelevanceModelTraversal extends Traversal {
   List<String> fields;
   String scorerType;
   Retrieval retrieval;
-  
+
   public FieldRelevanceModelTraversal(Retrieval retrieval) {
     this.retrieval = retrieval;
     Parameters globals = retrieval.getGlobalParameters();
@@ -157,14 +158,20 @@ public class FieldRelevanceModelTraversal extends Traversal {
 
       // First get all the term/field unnormalized statistics (creating a normalizer as we go)
       for (String field : fields) {
-        FieldStatistics field_cs = retrieval.getCollectionStatistics("#lengths:"+field+":part=lengths()");
-        
+        FieldStatistics field_cs = (FieldStatistics) retrieval.getStatisics(
+                StructuredQuery.parse("#lengths:" + field + ":part=lengths()"),
+                Parameters.singleKeyValue("statsCollector", "collStats"));
+
         String partName = "field." + field;
         NodeParameters par1 = new NodeParameters();
         par1.set("default", term);
         par1.set("part", partName);
         Node termCount = new Node("counts", par1, new ArrayList(), 0);
-        NodeStatistics ns = retrieval.getNodeStatistics(termCount);
+
+        NodeStatistics ns = (NodeStatistics) retrieval.getStatisics(
+                termCount,
+                Parameters.singleKeyValue("statsCollector", "nodeStats"));
+
         double fieldprob = (ns.nodeFrequency + 0.0) / field_cs.collectionLength; // P(t|F_j)
         inner.put(field, fieldprob);
         normalizer += fieldprob;
@@ -191,7 +198,9 @@ public class FieldRelevanceModelTraversal extends Traversal {
 
       // First get all the term/field unnormalized statistics (creating a normalizer as we go)
       for (String field : fields) {
-        FieldStatistics field_cs = retrieval.getCollectionStatistics("#lengths:"+field+":part=lengths()");
+        FieldStatistics field_cs = (FieldStatistics) retrieval.getStatisics(
+                StructuredQuery.parse("#lengths:" + field + ":part=lengths()"),
+                Parameters.singleKeyValue("statsCollector", "collStats"));
 
         String partName = "field." + field;
 
@@ -210,7 +219,9 @@ public class FieldRelevanceModelTraversal extends Traversal {
         odCount.addChild(term1Count);
         odCount.addChild(term2Count);
 
-        NodeStatistics ns = retrieval.getNodeStatistics(odCount);
+        NodeStatistics ns = (NodeStatistics) retrieval.getStatisics(
+                odCount,
+                Parameters.singleKeyValue("statsCollector", "nodeStats"));
         double fieldprob = (ns.nodeFrequency + 0.0) / field_cs.collectionLength; // P(t|F_j)
         inner.put(field, fieldprob);
         normalizer += fieldprob;
@@ -287,7 +298,7 @@ public class FieldRelevanceModelTraversal extends Traversal {
     // transform and run
     Node transformedCombineNode = retrieval.transformQuery(combineNode, localParameters);
     List<ScoredDocument> initialResults = retrieval.executeQuery(transformedCombineNode, localParameters).scoredDocuments;
-    
+
     // Gather content
     ArrayList<String> names = new ArrayList<String>();
     for (ScoredDocument sd : initialResults) {

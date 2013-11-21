@@ -20,7 +20,7 @@ import org.lemurproject.galago.utility.Parameters;
 
 /**
  *
- * @author trevor
+ * @author trevor, sjh
  */
 public class Search {
 
@@ -38,7 +38,7 @@ public class Search {
     return retrieval;
   }
 
-  public IndexPartStatistics getIndexPartStatistics(String part) throws IOException {
+  public IndexPartStatistics getIndexPartStatistics(String part) throws IOException {    
     return retrieval.getIndexPartStatistics(part);
   }
 
@@ -100,7 +100,8 @@ public class Search {
   public Document getDocument(String identifier, DocumentComponents p) throws IOException {
     return retrieval.getDocument(identifier, p);
   }
-  public Map<String,Document> getDocuments(List<String> identifier, DocumentComponents p) throws IOException {
+
+  public Map<String, Document> getDocuments(List<String> identifier, DocumentComponents p) throws IOException {
     return retrieval.getDocuments(identifier, p);
   }
 
@@ -126,20 +127,20 @@ public class Search {
     int count = (int) p.getLong("resultCount");
 
     List<ScoredDocument> results = retrieval.executeQuery(root, p).scoredDocuments;
-    
+
     SearchResult result = new SearchResult();
     Set<String> queryTerms = StructuredQuery.findQueryTerms(root);
     generator.setStemming(root.toString().contains("part=stemmedPostings"));
 
     result.transformedQuery = root;
-    
+
     DocumentComponents p1 = new DocumentComponents();
 
     for (int i = startAt; i < Math.min(startAt + count, results.size()); i++) {
       String identifier = results.get(i).documentName;
       Document document = null;
       if (summarize) {
-    	  document = getDocument(identifier, p1);
+        document = getDocument(identifier, p1);
       }
       SearchResultItem item = new SearchResultItem();
 
@@ -147,7 +148,7 @@ public class Search {
       item.identifier = identifier;
       item.displayTitle = identifier;
       item.document = document;
-      
+
       if (document != null && document.metadata.containsKey("title")) {
         item.displayTitle = document.metadata.get("title");
       }
@@ -165,7 +166,7 @@ public class Search {
       }
 
       if (document != null) {
-    	  item.metadata = document.metadata;
+        item.metadata = document.metadata;
       }
       item.score = results.get(i).score;
       result.items.add(item);

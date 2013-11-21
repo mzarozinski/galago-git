@@ -111,25 +111,33 @@ public class MemoryIndexTest extends TestCase {
       (new FlushToDisk()).flushMemoryIndex(index, output.getAbsolutePath(), false);
 
       Retrieval r = RetrievalFactory.instance(output.getAbsolutePath(), new Parameters());
-      FieldStatistics collStats = r.getCollectionStatistics("#lengths:part=lengths()");
+//      FieldStatistics collStats = r.getCollectionStatistics("#lengths:part=lengths()");
+      FieldStatistics collStats = (FieldStatistics) r.getStatisics(
+              StructuredQuery.parse("#lengths:part=lengths()"),
+              Parameters.singleKeyValue("statCollector", "collStats"));
       assertEquals(collStats.collectionLength, 1000);
       assertEquals(collStats.documentCount, 200);
       assertEquals(collStats.fieldName, "document");
       assertEquals(collStats.maxLength, 5);
       assertEquals(collStats.minLength, 5);
 
-      IndexPartStatistics postingsStats = r.getIndexPartStatistics("postings");
+//      IndexPartStatistics postingsStats = r.getIndexPartStatistics("postings");
+      IndexPartStatistics postingsStats = (IndexPartStatistics) r.getStatisics(
+              new Node("text", "postings"),
+              Parameters.singleKeyValue("statCollector", "partStats"));
       assertEquals(postingsStats.collectionLength, 1000);
       assertEquals(postingsStats.vocabCount, 204);
       assertEquals(postingsStats.highestDocumentCount, 200);
       assertEquals(postingsStats.highestFrequency, 200);
 
-      IndexPartStatistics stemmedPostingsStats = r.getIndexPartStatistics("postings.krovetz");
+//      IndexPartStatistics stemmedPostingsStats = r.getIndexPartStatistics("postings.krovetz");
+      IndexPartStatistics stemmedPostingsStats = (IndexPartStatistics) r.getStatisics(
+              new Node("text", "postings.krovetz"),
+              Parameters.singleKeyValue("statCollector", "partStats"));
       assertEquals(stemmedPostingsStats.collectionLength, 1000);
       assertEquals(stemmedPostingsStats.vocabCount, 204);
       assertEquals(stemmedPostingsStats.highestDocumentCount, 200);
       assertEquals(stemmedPostingsStats.highestFrequency, 200);
-
 
     } finally {
       if (output != null) {

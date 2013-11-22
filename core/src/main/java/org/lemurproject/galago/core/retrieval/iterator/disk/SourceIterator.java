@@ -12,9 +12,9 @@ import org.lemurproject.galago.core.retrieval.query.AnnotatedNode;
 import org.lemurproject.galago.utility.Utility;
 
 /**
- * This is the base abstract implementation of an Iterator that
- *  wraps a DiskSource.
- * 
+ * This is the base abstract implementation of an Iterator that wraps a
+ * DiskSource.
+ *
  * @author jfoley, sjh
  */
 public abstract class SourceIterator extends DiskIterator {
@@ -52,6 +52,12 @@ public abstract class SourceIterator extends DiskIterator {
 
   @Override
   public void movePast(long identifier) throws IOException {
+    source.movePast(identifier);
+
+  }
+
+  @Override
+  public void findCandidatePast(long identifier) throws IOException {
     source.movePast(identifier);
   }
 

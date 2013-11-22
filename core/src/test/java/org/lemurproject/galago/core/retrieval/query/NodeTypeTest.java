@@ -56,9 +56,9 @@ public class NodeTypeTest extends TestCase {
   public void testGetConstructor() throws Exception {
     NodeType n = new NodeType(FakeIterator.class);
     Constructor c = n.getConstructor();
-    Constructor actual =
-            FakeIterator.class.getConstructor(NodeParameters.class, ExtentIterator.class,
-            new ScoreIterator[0].getClass());
+    Constructor actual
+            = FakeIterator.class.getConstructor(NodeParameters.class, ExtentIterator.class,
+                    new ScoreIterator[0].getClass());
     assertEquals(actual, c);
   }
 
@@ -84,6 +84,11 @@ public class NodeTypeTest extends TestCase {
     @Override
     public void movePast(long identifier) throws IOException {
       throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void findCandidatePast(long identifier) throws IOException {
+      movePast(identifier);
     }
 
     @Override

@@ -62,8 +62,8 @@ public class FieldIndexReader extends KeyListReader {
   }
 
   public ListIterator getField(String fieldname) throws IOException {
-    BTreeReader.BTreeIterator iterator =
-            reader.getIterator(Utility.fromString(fieldname));
+    BTreeReader.BTreeIterator iterator
+            = reader.getIterator(Utility.fromString(fieldname));
     ListIterator it = new ListIterator(iterator, formatMap);
     return it;
   }
@@ -85,7 +85,7 @@ public class FieldIndexReader extends KeyListReader {
   public static class KeyIterator extends KeyListReader.KeyValueIterator {
 
     public Parameters formatMap;
-    
+
     public KeyIterator(BTreeReader reader, Parameters formatMap) throws IOException {
       super(reader);
       this.formatMap = formatMap;
@@ -233,6 +233,11 @@ public class FieldIndexReader extends KeyListReader {
       }
     }
 
+    @Override
+    public void findCandidatePast(long identifier) throws IOException {
+      movePast(identifier);
+    }
+    
     private void loadValue() throws IOException {
       currentDocument += Utility.uncompressLong(dataStream);
 

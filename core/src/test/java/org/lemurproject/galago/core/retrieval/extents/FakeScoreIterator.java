@@ -67,6 +67,11 @@ public class FakeScoreIterator implements ScoreIterator {
   }
 
   @Override
+  public void findCandidatePast(long identifier) throws IOException {
+    movePast(identifier);
+  }
+
+  @Override
   public double score(ScoringContext c) {
     if (!isDone() && docs[index] == c.document) {
       return scores[index];

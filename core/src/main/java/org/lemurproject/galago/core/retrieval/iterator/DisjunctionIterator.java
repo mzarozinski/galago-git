@@ -69,6 +69,13 @@ public abstract class DisjunctionIterator implements BaseIterator {
   }
 
   @Override
+  public void findCandidatePast(long candidate) throws IOException {
+    for (BaseIterator iterator : this.drivingIterators) {
+      iterator.findCandidatePast(candidate);
+    }
+  }
+
+  @Override
   public long currentCandidate() {
     // the current candidate is the smallest of the set
     long candidate = Long.MAX_VALUE;

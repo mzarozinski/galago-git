@@ -70,14 +70,41 @@ public abstract class ConjunctionIterator implements BaseIterator {
   }
 
   @Override
+  public void findCandidatePast(long candidate) throws IOException {
+//    movePast(candidate);
+    long prevCandidate = candidate + 1;
+    boolean done = false;
+    while (!done) {
+      done = true;
+      for (BaseIterator iterator : this.drivingIterators) {
+
+        iterator.findCandidatePast(prevCandidate - 1);
+
+        if (iterator.isDone()) {
+          // if one iterator is done -- we're done.
+          return;
+        }
+
+        long nextCandidate = iterator.currentCandidate();
+        if (nextCandidate > prevCandidate || !iterator.hasMatch(nextCandidate)) {
+          // if this iterator doesn't have a match, increase the value of prevCandidate
+          done = false;
+          prevCandidate = iterator.currentCandidate();
+          break;
+        }
+      }
+    }
+  }
+
+  @Override
   public long currentCandidate() {
     long candidateMin = Long.MAX_VALUE; // impossibly large candidate //
     long candidateMax = -1; // impossibly small candidate //
-    for(int i=0; i<drivingIterators.length;i++){
+    for (int i = 0; i < drivingIterators.length; i++) {
       if (!drivingIterators[i].isDone()) {
         long otherCandidate = drivingIterators[i].currentCandidate();
-        candidateMin = (candidateMin <= otherCandidate)? candidateMin : otherCandidate;
-        candidateMax = (candidateMax >= otherCandidate)? candidateMax : otherCandidate;
+        candidateMin = (candidateMin <= otherCandidate) ? candidateMin : otherCandidate;
+        candidateMax = (candidateMax >= otherCandidate) ? candidateMax : otherCandidate;
       } else {
         // One of the iterators is DONE -- So, the conjunction is also done.
         return Long.MAX_VALUE;
@@ -127,7 +154,7 @@ public abstract class ConjunctionIterator implements BaseIterator {
     long min = Integer.MAX_VALUE;
     for (BaseIterator iterator : iterators) {
       long otherMin = iterator.totalEntries();
-      min = (min <= otherMin)? min : otherMin;
+      min = (min <= otherMin) ? min : otherMin;
     }
     return min;
   }

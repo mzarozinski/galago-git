@@ -70,14 +70,9 @@ public class MaxScoreAggressiveModel1 extends ProcessingModel {
       long candidate = Long.MAX_VALUE;
       for (int i = 0; i < scoringIterators.size(); i++) {
         // find a real candidate //
-        // TODO: add a function that does this more efficiently //
         DeltaScoringIterator dsi = scoringIterators.get(i);
-        scoringIterators.get(i).movePast(context.document);
+        dsi.findCandidatePast(context.document);
         long c = scoringIterators.get(i).currentCandidate();
-        while (!dsi.isDone() && !dsi.hasMatch(c)) {
-          scoringIterators.get(i).movePast(c);
-          c = scoringIterators.get(i).currentCandidate();
-        }
         if (!dsi.isDone()) {
           candidate = (candidate < c) ? candidate : c;
         }

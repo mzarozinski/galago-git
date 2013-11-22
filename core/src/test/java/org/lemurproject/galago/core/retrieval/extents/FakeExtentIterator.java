@@ -98,6 +98,11 @@ public class FakeExtentIterator implements ExtentIterator, CountIterator {
   }
 
   @Override
+  public void findCandidatePast(long identifier) throws IOException {
+    movePast(identifier);
+  }
+
+  @Override
   public long totalEntries() {
     return data.length;
   }

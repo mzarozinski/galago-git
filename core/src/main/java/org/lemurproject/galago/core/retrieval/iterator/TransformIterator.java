@@ -53,6 +53,11 @@ public abstract class TransformIterator implements BaseIterator {
   }
 
   @Override
+  public void findCandidatePast(long identifier) throws IOException {
+    iterator.findCandidatePast(identifier);
+  }
+
+  @Override
   public String getValueString(ScoringContext c) throws IOException {
     return iterator.getValueString(c);
   }

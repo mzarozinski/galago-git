@@ -324,7 +324,6 @@ public class InvertedSketchIndexReader extends KeyListReader implements Aggregat
         }
       }
 
-
       // linear from here
       while (!isDone() && document > currentDocument) {
         documentIndex = Math.min(documentIndex + 1, documentCount);
@@ -337,6 +336,11 @@ public class InvertedSketchIndexReader extends KeyListReader implements Aggregat
     @Override
     public void movePast(long document) throws IOException {
       syncTo(document + 1);
+    }
+
+    @Override
+    public void findCandidatePast(long identifier) throws IOException {
+      movePast(identifier);
     }
 
     // This only moves forward in tier 1, reads from tier 2 only when

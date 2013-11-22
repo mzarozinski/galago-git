@@ -101,4 +101,9 @@ public class FakeLengthIterator implements LengthsIterator {
 
     return new AnnotatedNode(type, className, parameters, document, atCandidate, returnValue, children);
   }
+
+  @Override
+  public void findCandidatePast(long identifier) throws IOException {
+    movePast(identifier);
+  }
 }

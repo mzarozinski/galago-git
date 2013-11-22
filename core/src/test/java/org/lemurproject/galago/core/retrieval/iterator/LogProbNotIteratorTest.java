@@ -101,6 +101,11 @@ public class LogProbNotIteratorTest extends TestCase {
     }
 
     @Override
+    public void findCandidatePast(long identifier) throws IOException {
+      movePast(identifier);
+    }
+
+    @Override
     public void syncTo(long identifier) throws IOException {
       while (index < docs.length - 1 && docs[index] < identifier) {
         index += 1;

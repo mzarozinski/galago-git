@@ -82,6 +82,10 @@ public class NullExtentIterator extends DiskIterator implements ExtentIterator, 
   @Override
   public void movePast(long identifier) throws IOException {
   }
+  
+  @Override
+  public void findCandidatePast(long identifier) throws IOException {
+  }
 
   @Override
   public int compareTo(BaseIterator t) {

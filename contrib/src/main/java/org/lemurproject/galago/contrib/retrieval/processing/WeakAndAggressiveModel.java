@@ -122,18 +122,6 @@ public class WeakAndAggressiveModel extends ProcessingModel {
     return toReversedList(queue);
   }
 
-//  private boolean hasMatch(DeltaScoringIteratorWrapper[] s, long doc) {
-//    for (int i = 0; i < s.length; i++) {
-//      if (s[i].currentCandidate <= doc) {
-//        if (s[i].itr.hasMatch(doc)) {
-//          return true;
-//        }
-//      } else {
-//        return false;
-//      }
-//    }
-//    return false;
-//  }
   // Premise here is that the 'start' iterator is the one that moved forward, but it was already behind
   // any other iterator at position n where 0 <= n < start. So we don't even look at those. Makes the sort
   // linear at worst.
@@ -154,26 +142,14 @@ public class WeakAndAggressiveModel extends ProcessingModel {
 
     // Setup to score
     double runningScore = maximumPossibleScore;
-
-//    if (annotate) {
-//      System.err.println("Scoring " + context.document);
-//    }
-//
     // now score all scorers
     int i;
     for (i = 0; i < sortedIterators.length; i++) {
       DeltaScoringIterator dsi = sortedIterators[i].itr;
       dsi.syncTo(context.document);
       runningScore -= dsi.deltaScore(context);
-
-//      if (annotate) {
-//        System.err.println(dsi.getAnnotatedNode(context));
-//      }
     }
 
-//    if (annotate) {
-//      System.err.println("Final Score " + runningScore);
-//    }
     return runningScore;
   }
 
@@ -295,10 +271,14 @@ public class WeakAndAggressiveModel extends ProcessingModel {
     }
 
     public void next() throws IOException {
-      do {
-        itr.movePast(currentCandidate);
-        currentCandidate = itr.currentCandidate();
-      } while (!itr.isDone() && !itr.hasMatch(currentCandidate));
+      itr.findCandidatePast(currentCandidate);
+      currentCandidate = itr.currentCandidate();
+      assert (itr.isDone() || itr.hasMatch(currentCandidate)) : "WEAK-AND -- iterator not done, and doesn't have a match.";
+
+//      do {
+//        itr.movePast(currentCandidate);
+//        currentCandidate = itr.currentCandidate();
+//      } while (!itr.isDone() && !itr.hasMatch(currentCandidate));
     }
 
     public void next(long doc) throws IOException {

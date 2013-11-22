@@ -26,7 +26,7 @@ public abstract class DisjointIndexesIterator extends DiskIterator {
     queue = new PriorityQueue(iterators);
     head = queue.poll();
   }
-  
+
   @Override
   public boolean isDone() {
     return queue.isEmpty() && head.isDone();
@@ -44,6 +44,11 @@ public abstract class DisjointIndexesIterator extends DiskIterator {
 
   @Override
   public void movePast(long identifier) throws IOException {
+    syncTo(identifier + 1);
+  }
+
+  @Override
+  public void findCandidatePast(long identifier) throws IOException {
     syncTo(identifier + 1);
   }
 

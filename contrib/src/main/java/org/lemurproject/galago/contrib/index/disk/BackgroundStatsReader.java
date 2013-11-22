@@ -175,6 +175,11 @@ public class BackgroundStatsReader extends KeyValueReader implements AggregateIn
     }
 
     @Override
+    public void findCandidatePast(long identifier) throws IOException {
+      throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public String getValueString(ScoringContext sc) throws IOException {
       throw new UnsupportedOperationException("Not supported yet.");
     }

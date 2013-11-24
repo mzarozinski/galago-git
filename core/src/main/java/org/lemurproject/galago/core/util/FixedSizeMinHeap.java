@@ -65,6 +65,11 @@ public class FixedSizeMinHeap<T> {
     return Arrays.asList(data);
   }
 
+  public T[] getUnsortedArray() {
+    T[] data = (T[]) Arrays.copyOf(_heap, _position);
+    return data;
+  }
+  
   private void bubbleUp(int pos) {
     int parent = (pos - 1) / 2;
     if (_cmp.compare(_heap[pos], _heap[parent]) < 0) {

@@ -40,12 +40,7 @@ public class WeakAndAggressiveModel extends ProcessingModel {
 
   @Override
   public List<ScoredDocument> executeQuery(Node queryTree, Parameters queryParams) throws Exception {
-    ScoringContext context = new ScoringContext();
     int requested = (int) queryParams.get("requested", 1000);
-    annotate = queryParams.get("annotate", false);
-
-    // 1.0 is rank-k-safe, higher values are not.
-    double factor = queryParams.get("weakandfactor", 1.0);
 
     // step one: find the set of deltaScoringNodes in the tree
     List<Node> scoringNodes = new ArrayList();
@@ -53,6 +48,17 @@ public class WeakAndAggressiveModel extends ProcessingModel {
     if (!canScore) {
       throw new IllegalArgumentException("Query tree does not support delta scoring interface.\n" + queryTree.toPrettyString());
     }
+
+    FixedSizeMinHeap<ScoredDocument> queue = weakAndAlgorithim(scoringNodes, requested, queryParams);
+    
+    return toReversedList(queue);
+  }
+
+  public FixedSizeMinHeap<ScoredDocument> weakAndAlgorithim(List<Node> scoringNodes, int requested, Parameters queryParams) throws Exception {
+    ScoringContext context = new ScoringContext();
+
+    // 1.0 is rank-k-safe, higher values are not.
+    double factor = queryParams.get("weakandfactor", 1.0);
 
     // step two: create an iterator for each node
     DeltaScoringIteratorWrapper[] sortedIterators = createScoringIterators(scoringNodes, retrieval);
@@ -119,7 +125,7 @@ public class WeakAndAggressiveModel extends ProcessingModel {
       }
     }
 
-    return toReversedList(queue);
+    return queue;
   }
 
   // Premise here is that the 'start' iterator is the one that moved forward, but it was already behind

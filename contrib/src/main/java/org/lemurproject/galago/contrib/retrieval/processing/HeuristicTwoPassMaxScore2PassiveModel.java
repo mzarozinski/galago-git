@@ -1,7 +1,10 @@
-// BSD License (http://lemurproject.org/galago-license)
+/*
+ *  BSD License (http://lemurproject.org/galago-license)
+ */
 package org.lemurproject.galago.contrib.retrieval.processing;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,21 +22,24 @@ import org.lemurproject.galago.core.util.FixedSizeMinHeap;
 import org.lemurproject.galago.utility.Parameters;
 
 /**
- * Assumes the use of delta functions for scoring, then prunes using Maxscore.
- * Generally this causes a substantial speedup in processing time.
  *
  * @author sjh
  */
-public class NaivePassiveModel extends ProcessingModel {
+public class HeuristicTwoPassMaxScore2PassiveModel extends ProcessingModel {
 
-  LocalRetrieval retrieval;
+  private LocalRetrieval retrieval;
+  private MaxScorePassiveModel2 maxScoreProcessor;
 
-  public NaivePassiveModel(LocalRetrieval lr) {
+  public HeuristicTwoPassMaxScore2PassiveModel(LocalRetrieval lr) {
     this.retrieval = lr;
+    this.maxScoreProcessor = new MaxScorePassiveModel2(lr);
   }
 
   @Override
   public List<ScoredDocument> executeQuery(Node queryTree, Parameters queryParams) throws Exception {
+
+    ScoringContext context = new ScoringContext();
+    int fpRequested = (int) queryParams.get("fpRequested", 1000);
     int requested = (int) queryParams.get("requested", 1000);
 
     // step one: find the set of deltaScoringNodes in the tree
@@ -43,66 +49,62 @@ public class NaivePassiveModel extends ProcessingModel {
       throw new IllegalArgumentException("Query tree does not support delta scoring interface.\n" + queryTree.toPrettyString());
     }
 
-    FixedSizeMinHeap<ScoredDocument> queue = naivePassiveAlgorithm(scoringNodes, requested, queryParams);
+    List<Node> simpleScoringNodes = new ArrayList();
+    for (Node scorer : scoringNodes) {
+      if (scorer.getChild(1).numChildren() == 0) {
+        simpleScoringNodes.add(scorer);
+      }
+    }
+
+    if (simpleScoringNodes.isEmpty()) {
+      simpleScoringNodes = scoringNodes;
+    }
+
+    if (simpleScoringNodes.size() == scoringNodes.size()) {
+      fpRequested = requested;
+    }
+
+    FixedSizeMinHeap<ScoredDocument> queue = maxScoreProcessor.maxScore2Algorithm(simpleScoringNodes, fpRequested, queryParams);
+
+    if (simpleScoringNodes.size() != scoringNodes.size()) {
+      queue = secondPass(queue, scoringNodes, requested, queryParams);
+    }
+
     return toReversedList(queue);
   }
 
-  public FixedSizeMinHeap<ScoredDocument> naivePassiveAlgorithm(List<Node> scoringNodes, int requested, Parameters queryParams) throws Exception {
+  private FixedSizeMinHeap<ScoredDocument> secondPass(FixedSizeMinHeap<ScoredDocument> workingSetQueue,
+          List<Node> scoringNodes,
+          int requested,
+          Parameters queryParams) throws Exception {
 
-    ScoringContext context = new ScoringContext();
-    // step two: create an iterator for each node
+    ScoredDocument[] unsortedList = workingSetQueue.getUnsortedArray();
+    List<Long> workingSet = new ArrayList(unsortedList.length);
+    for (ScoredDocument sd : unsortedList) {
+      workingSet.add(sd.document);
+    }
+    // ascending order
+    Collections.sort(workingSet);
+
+    FixedSizeMinHeap<ScoredDocument> queue = new FixedSizeMinHeap(ScoredDocument.class, requested,
+            new ScoredDocument.ScoredDocumentComparator());
+
+    // passive
     boolean shareNodes = true;
     List<DeltaScoringIterator> scoringIterators = createScoringIterators(scoringNodes, retrieval, shareNodes);
 
-    FixedSizeMinHeap<ScoredDocument> queue = new FixedSizeMinHeap(ScoredDocument.class, requested, new ScoredDocument.ScoredDocumentComparator());
+    ScoringContext sc = new ScoringContext();
 
-    // Main loop : 
-    context.document = -1;
-
-    while (true) {
-      long candidate = Long.MAX_VALUE;
-      for (int i = 0; i < scoringIterators.size(); i++) {
-        // move past previously scored document //
-        scoringIterators.get(i).movePast(context.document);
-        if (!scoringIterators.get(i).isDone()) {
-          long c = scoringIterators.get(i).currentCandidate();
-          candidate = (candidate < c) ? candidate : c;
-        }
+    for (Long doc : workingSet) {
+      sc.document = doc;
+      double score = 0;
+      for (DeltaScoringIterator dsi : scoringIterators) {
+        dsi.syncTo(doc);
+        score += dsi.score(sc) * dsi.getWeight();
       }
-
-      // Means sentinels are done, we can quit
-      if (candidate == Long.MAX_VALUE) {
-        break;
-      }
-
-      context.document = candidate;
-      // Due to different semantics between "currentCandidate" and 
-      // "hasMatch", we need to see if the candidate given actually matches
-      // properly before scoring.
-      boolean match = false;
-      int i = 0;
-      while (!match && i < scoringIterators.size()) {
-        match |= scoringIterators.get(i).hasMatch(candidate);
-        ++i;
-      }
-
-      if (match) {
-        // Setup to score
-        double runningScore = 0.0;
-
-        // score all iterators
-        i = 0;
-        while (i < scoringIterators.size()) {
-          DeltaScoringIterator dsi = scoringIterators.get(i);
-          dsi.syncTo(candidate);
-          runningScore += dsi.score(context) * dsi.getWeight();
-          ++i;
-        }
-
-        if (queue.size() < requested || runningScore > queue.peek().score) {
-          ScoredDocument scoredDocument = new ScoredDocument(candidate, runningScore);
-          queue.offer(scoredDocument);
-        }
+      if (queue.size() < requested || score > queue.peek().score) {
+        ScoredDocument scoredDocument = new ScoredDocument(doc, score);
+        queue.offer(scoredDocument);
       }
     }
 
@@ -148,4 +150,5 @@ public class NaivePassiveModel extends ProcessingModel {
     }
     return scoringIterators;
   }
+
 }

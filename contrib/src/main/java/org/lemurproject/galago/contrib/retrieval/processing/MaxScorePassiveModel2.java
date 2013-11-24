@@ -36,7 +36,6 @@ public class MaxScorePassiveModel2 extends ProcessingModel {
 
   @Override
   public List<ScoredDocument> executeQuery(Node queryTree, Parameters queryParams) throws Exception {
-    ScoringContext context = new ScoringContext();
     int requested = (int) queryParams.get("requested", 1000);
 
     // step one: find the set of deltaScoringNodes in the tree
@@ -46,7 +45,13 @@ public class MaxScorePassiveModel2 extends ProcessingModel {
       throw new IllegalArgumentException("Query tree does not support delta scoring interface.\n" + queryTree.toPrettyString());
     }
 
-    // step two: create an iterator for each node
+    FixedSizeMinHeap<ScoredDocument> queue = maxScore2Algorithm(scoringNodes, requested, queryParams);
+    return toReversedList(queue);
+  }
+
+  public FixedSizeMinHeap<ScoredDocument> maxScore2Algorithm(List<Node> scoringNodes, int requested, Parameters queryParams) throws Exception {
+    ScoringContext context = new ScoringContext();
+
     boolean shareNodes = true;
     List<DeltaScoringIterator> scoringIterators = createScoringIterators(scoringNodes, retrieval, shareNodes);
 
@@ -134,7 +139,7 @@ public class MaxScorePassiveModel2 extends ProcessingModel {
       }
     }
 
-    return toReversedList(queue);
+    return queue;
   }
 
   private boolean findDeltaNodes(Node n, List<Node> scorers, LocalRetrieval ret) throws Exception {
